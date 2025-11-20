@@ -88,5 +88,9 @@ router.get('/api/reports/kpis', requireAuth, requireAdmin, apiReportsController.
 router.get('/api/reports/sales-by-month', requireAuth, requireAdmin, apiReportsController.getSalesByMonth);
 router.get('/api/reports/sales-by-seller', requireAuth, requireAdmin, apiReportsController.getSalesBySeller);
 router.get('/api/reports/sales-status', requireAuth, requireAdmin, apiReportsController.getSalesStatus);
+router.get('/api/reports/thesis-kpis', requireAuth, requireAdmin, apiReportsController.getThesisKPIs);
+router.get('/api/reports/sales-by-category', requireAuth, requireAdmin, apiReportsController.getSalesByCategory);
+router.get('/api/reports/pre-test-detailed', requireAuth, requireAdmin, apiReportsController.getPreTestDetailed);
+router.get('/api/reports/post-test-detailed', requireAuth, requireAdmin, apiReportsController.getPostTestDetailed);
 
 module.exports = router;

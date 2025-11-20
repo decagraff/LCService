@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { FileText, Filter, Search, ShoppingCart, Eye, Trash2, Clock, CheckCircle, XCircle, AlertCircle } from 'lucide-react';
+import { FileText, Filter, Search, ShoppingCart, Eye, Trash2, Clock, CheckCircle, XCircle, AlertCircle, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { useToast } from '../contexts/ToastContext';
 import { cotizacionesService } from '../services/cotizacionesService';
@@ -25,24 +25,28 @@ const CotizacionesPage: React.FC = () => {
   });
   const [filters, setFilters] = useState<CotizacionFilters>({});
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [pagination, setPagination] = useState({ page: 1, limit: 10, total: 0, totalPages: 0 });
 
   useEffect(() => {
     if (user) {
       loadData();
     }
-  }, [user, filters]);
+  }, [user, filters, currentPage, itemsPerPage]);
 
   const loadData = async () => {
     if (!user) return;
 
     try {
       setLoading(true);
-      const [cotizacionesData, statsData] = await Promise.all([
-        cotizacionesService.getCotizaciones(user.role, filters),
+      const [cotizacionesResponse, statsData] = await Promise.all([
+        cotizacionesService.getCotizaciones(user.role, { ...filters, page: currentPage, limit: itemsPerPage }),
         cotizacionesService.getStats(user.role)
       ]);
 
-      setCotizaciones(cotizacionesData);
+      setCotizaciones(cotizacionesResponse.data);
+      setPagination(cotizacionesResponse.pagination);
       setStats(statsData);
     } catch (error) {
       showToast(error instanceof Error ? error.message : 'Error al cargar cotizaciones', 'error');
@@ -53,14 +57,17 @@ const CotizacionesPage: React.FC = () => {
 
   const handleFilterChange = (key: keyof CotizacionFilters, value: string) => {
     setFilters(prev => ({ ...prev, [key]: value || undefined }));
+    setCurrentPage(1); // Reset to first page when filters change
   };
 
   const handleClearFilters = () => {
     setFilters({});
+    setCurrentPage(1);
   };
 
   const handleFilterByStatus = (estado: CotizacionEstado) => {
     setFilters({ estado });
+    setCurrentPage(1);
   };
 
   const handleDelete = async (id: number) => {
@@ -336,7 +343,7 @@ const CotizacionesPage: React.FC = () => {
                           <div className="flex items-center gap-2">
                             <Link to={`/${user?.role}/cotizaciones/${cotizacion.id}`}>
                               <button className="p-2 text-primary hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors"
-                                      title="Ver detalles">
+                                title="Ver detalles">
                                 <Eye className="w-4 h-4" />
                               </button>
                             </Link>
@@ -373,6 +380,85 @@ const CotizacionesPage: React.FC = () => {
                     Ver Catálogo
                   </Button>
                 </Link>
+              </div>
+            )}
+
+            {/* Pagination Controls */}
+            {!loading && cotizaciones.length > 0 && (
+              <div className="px-6 py-4 border-t border-gray-200 dark:border-gray-700 flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <div className="text-sm text-gray-700 dark:text-gray-300">
+                    Mostrando <span className="font-medium">{((pagination.page - 1) * pagination.limit) + 1}</span> a{' '}
+                    <span className="font-medium">{Math.min(pagination.page * pagination.limit, pagination.total)}</span> de{' '}
+                    <span className="font-medium">{pagination.total}</span> resultados
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <label className="text-sm text-gray-700 dark:text-gray-300">Por página:</label>
+                    <select
+                      value={itemsPerPage}
+                      onChange={(e) => {
+                        setItemsPerPage(Number(e.target.value));
+                        setCurrentPage(1);
+                      }}
+                      className="px-3 py-1 border border-gray-300 dark:border-gray-600 rounded-lg
+                               bg-white dark:bg-background-dark-tertiary text-gray-900 dark:text-gray-100
+                               focus:ring-2 focus:ring-primary focus:border-transparent text-sm"
+                    >
+                      <option value="10">10</option>
+                      <option value="25">25</option>
+                      <option value="50">50</option>
+                      <option value="100">100</option>
+                    </select>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                    disabled={currentPage === 1}
+                    className="p-2 rounded-lg border border-gray-300 dark:border-gray-600
+                             bg-white dark:bg-background-dark text-gray-700 dark:text-gray-300
+                             hover:bg-gray-50 dark:hover:bg-background-dark-tertiary
+                             disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  >
+                    <ChevronLeft className="w-5 h-5" />
+                  </button>
+                  <div className="flex items-center gap-1">
+                    {Array.from({ length: Math.min(5, pagination.totalPages) }, (_, i) => {
+                      let pageNum;
+                      if (pagination.totalPages <= 5) {
+                        pageNum = i + 1;
+                      } else if (currentPage <= 3) {
+                        pageNum = i + 1;
+                      } else if (currentPage >= pagination.totalPages - 2) {
+                        pageNum = pagination.totalPages - 4 + i;
+                      } else {
+                        pageNum = currentPage - 2 + i;
+                      }
+                      return (
+                        <button
+                          key={pageNum}
+                          onClick={() => setCurrentPage(pageNum)}
+                          className={`px-3 py-1 rounded-lg text-sm font-medium transition-colors ${currentPage === pageNum
+                              ? 'bg-primary text-white'
+                              : 'bg-white dark:bg-background-dark text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-background-dark-tertiary'
+                            }`}
+                        >
+                          {pageNum}
+                        </button>
+                      );
+                    })}
+                  </div>
+                  <button
+                    onClick={() => setCurrentPage(prev => Math.min(pagination.totalPages, prev + 1))}
+                    disabled={currentPage === pagination.totalPages}
+                    className="p-2 rounded-lg border border-gray-300 dark:border-gray-600
+                             bg-white dark:bg-background-dark text-gray-700 dark:text-gray-300
+                             hover:bg-gray-50 dark:hover:bg-background-dark-tertiary
+                             disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  >
+                    <ChevronRight className="w-5 h-5" />
+                  </button>
+                </div>
               </div>
             )}
           </div>

@@ -188,4 +188,5 @@ export interface SalesStatus {
   name: string;
   value: number;
   color: string;
+  [key: string]: any; // Index signature for chart compatibility
 }

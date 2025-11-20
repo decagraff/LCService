@@ -22,14 +22,16 @@ const AdminDashboard: React.FC = () => {
       try {
         setLoading(true);
         // Ejecutar llamadas en paralelo para eficiencia
-        const [userStats, invStats, quoteStats, approvedQuotes] = await Promise.all([
+        const [userStats, invStats, quoteStats, approvedQuotesResponse] = await Promise.all([
           userService.getUserStats(),
           inventoryService.getInventoryStats(),
           cotizacionesService.getStats('admin'),
-          cotizacionesService.getCotizaciones('admin', { estado: 'aprobada' })
+          cotizacionesService.getCotizaciones('admin', { estado: 'aprobada', limit: 1000 })
         ]);
 
         // Calcular ventas totales sumando cotizaciones aprobadas
+        // Note: getCotizaciones now returns { data: [], pagination: {} }
+        const approvedQuotes = approvedQuotesResponse.data || [];
         const totalVentas = approvedQuotes.reduce((acc, curr) => acc + Number(curr.total), 0);
 
         setStats({

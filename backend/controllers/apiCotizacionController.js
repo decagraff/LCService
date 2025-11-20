@@ -2,18 +2,19 @@ const { pool } = require('../config/database');
 const Cotizacion = require('../models/Cotizacion'); // IMPORTANTE: Importar el modelo
 
 const apiCotizacionController = {
-  // Get all cotizaciones with filters
+  // Get all cotizaciones with filters and pagination
   getCotizaciones: async (req, res) => {
     try {
-      const { search, estado } = req.query;
+      const { search, estado, page = 1, limit = 10 } = req.query;
       const userId = req.user.id;
       const userRole = req.user.role;
 
-      let query = `
-        SELECT c.*,
-               u.nombre as cliente_nombre,
-               u.empresa as empresa_cliente,
-               v.nombre as vendedor_nombre
+      // Validar y parsear parámetros de paginación
+      const pageNum = Math.max(1, parseInt(page));
+      const limitNum = Math.min(100, Math.max(1, parseInt(limit))); // Máximo 100 por página
+      const offset = (pageNum - 1) * limitNum;
+
+      let baseQuery = `
         FROM cotizaciones c
         LEFT JOIN users u ON c.cliente_id = u.id
         LEFT JOIN users v ON c.vendedor_id = v.id
@@ -23,28 +24,51 @@ const apiCotizacionController = {
 
       // Filter by role
       if (userRole === 'cliente') {
-        query += ` AND c.cliente_id = ?`;
+        baseQuery += ` AND c.cliente_id = ?`;
         params.push(userId);
       } else if (userRole === 'vendedor') {
-        query += ` AND c.vendedor_id = ?`;
+        baseQuery += ` AND c.vendedor_id = ?`;
         params.push(userId);
       }
       // admin can see all
 
       if (search) {
-        query += ` AND c.numero_cotizacion LIKE ?`;
+        baseQuery += ` AND c.numero_cotizacion LIKE ?`;
         params.push(`%${search}%`);
       }
 
       if (estado) {
-        query += ` AND c.estado = ?`;
+        baseQuery += ` AND c.estado = ?`;
         params.push(estado);
       }
 
-      query += ` ORDER BY c.created_at DESC`;
+      // Obtener total de registros
+      const countQuery = `SELECT COUNT(*) as total ${baseQuery}`;
+      const [countResult] = await pool.query(countQuery, params);
+      const total = countResult[0].total;
 
-      const [cotizaciones] = await pool.query(query, params);
-      res.json(cotizaciones);
+      // Obtener registros paginados
+      const dataQuery = `
+        SELECT c.*,
+               u.nombre as cliente_nombre,
+               u.empresa as empresa_cliente,
+               v.nombre as vendedor_nombre
+        ${baseQuery}
+        ORDER BY c.created_at DESC
+        LIMIT ? OFFSET ?
+      `;
+      const [cotizaciones] = await pool.query(dataQuery, [...params, limitNum, offset]);
+
+      res.json({
+        success: true,
+        data: cotizaciones,
+        pagination: {
+          page: pageNum,
+          limit: limitNum,
+          total: total,
+          totalPages: Math.ceil(total / limitNum)
+        }
+      });
     } catch (error) {
       console.error('Error en getCotizaciones:', error);
       res.status(500).json({ success: false, error: 'Error al obtener cotizaciones' });

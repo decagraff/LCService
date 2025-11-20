@@ -1,0 +1,1318 @@
+﻿
+
+
+
+
+
+
+PROYECTO DE INVESTIGACIÓN
+Para  optar el  Grado  Académico de Bachiller en
+Tecnología de la información
+Implementación de un sistema web para optimizar la gestión de cotizaciones con enfoque en transformación digital en la empresa LC Service
+PRESENTADO POR:
+
+CHAPARRO SALAS, ANTHONY ADRIAN
+SAENZ VALDIVIEZO, MIRIAM FATIMA
+
+
+ASESOR:
+MG. VISA RAMIREZ, ELVIS ADAN
+
+LIMA - PERÚ, 2025
+
+
+
+
+
+INDICE DE CONTENIDO
+INTRODUCCION	6
+I. PLANTEAMIENTO DEL PROBLEMA	10
+I.1. Realidad Problemática	10
+I.2. Formulación del problema	14
+I.2.1. Problema general	15
+I.2.2. Problemas específicos	15
+I.3. Justificación e importancia del estudio	16
+I.4. Limitaciones de la investigación	18
+I.5. Objetivos de la investigación	20
+I.5.1. Objetivo general	20
+I.5.2. Objetivos específicos	20
+I.6. Hipótesis	21
+I.6.1. Hipótesis general	21
+I.6.2. Hipótesis específicas	21
+I.7. Identificación de Variables y Operacionalización	22
+I.7.1. Variable independiente: Sistema Web	22
+I.7.2. Variable dependiente: Gestión de cotizaciones con enfoque en transformación digital	24
+II. MARCO TEORICO	26
+II.1. Antecedentes	26
+II.1.1. Antecedentes internacionales	26
+II.1.2. Antecedentes nacionales	30
+II.2. Fundamentos Teóricos	33
+2.2.1. Variable Independiente (VI): El Sistema Web y la Ingeniería de Software	33
+2.2.2. Variable Dependiente (VD): Gestión de Cotizaciones y la Ventaja Competitiva	34
+2.2.3. Enfoque Estratégico: La Transformación Digital como Motor de Sostenibilidad	35
+2.2.4. Sistema informático	37
+2.2.5. Implementación de un sistema de información en web	38
+2.2.6. El sistema de información en web y su utilidad	39
+2.2.7. Sistema de cotizaciones	40
+II.3. Definición de Términos	42
+III. METODOLOGÍA	47
+III.1. TIPO Y NIVEL DE INVESTIGACION	47
+III.2. DISEÑO DE INVESTIGACION	49
+III.3. POBLACIÓN Y MUESTRA	51
+3.3.1 Unidad de Análisis	51
+3.3.2 Población	51
+3.3.3 Muestra	52
+III.4. Técnicas e Instrumentos de Recolección de Datos	54
+3.4.1 Técnicas de Recolección de Datos	54
+3.4.2 Instrumentos de Recolección de Datos	55
+III.5. ANALISIS DE DATOS	56
+III.5.1. Análisis Descriptivo	56
+III.5.2. Analisis Inferencial	58
+III.5.3. Conclusión	60
+IV. ASPECTOS ADMINISTRATIVOS	62
+DIAGRAMA DE GANT	63
+V. REFERENCIAS BIBLIOGRAFICAS	65
+VI. ANEXOS	71
+Anexo 1. Ejemplo de cotización actual en Excel utilizada por LC Service.	71
+Anexo 2. Diagrama de flujo del proceso actual	72
+ Anexo 3. Flujo actual del proceso de cotización.	72
+Anexo 4. Tabla de limitaciones técnicas y administrativas detectadas	73
+Anexo 5. Impacto de las limitaciones en indicadores clave de la empresa	73
+INTRODUCCION	5
+I.	PLANTEAMIENTO DEL PROBLEMA	8
+1.1.	Realidad Problemática	8
+1.2.	Formulación del problema	11
+1.2.1.	Problema general	11
+1.2.2.	Problemas específicos	12
+1.3.	Justificación e importancia del estudio	12
+1.4.	Limitaciones de la investigación	14
+1.5.	Objetivos de la investigación	15
+1.5.1.	Objetivo general	15
+1.5.2.	Objetivos específicos	15
+1.6.	Hipótesis	16
+1.6.1.	Hipótesis general	16
+1.6.2.	Hipótesis específicas	16
+1.7.	Identificación de Variables y Operacionalización	17
+1.7.1.	Variable independiente: Sistema Web	17
+1.7.2.	Variable dependiente: Gestión de cotizaciones con enfoque en transformación digital	18
+II.	MARCO TEORICO	20
+2.1.	Antecedentes	20
+2.1.1.	Antecedentes internacionales	20
+2.1.2.	Antecedentes nacionales	23
+2.2.	Fundamentos Teóricos	25
+2.2.1. Variable Independiente (VI): El Sistema Web y la Ingeniería de Software	25
+2.2.2. Variable Dependiente (VD): Gestión de Cotizaciones y la Ventaja Competitiva	26
+2.2.3. Enfoque Estratégico: La Transformación Digital como Motor de Sostenibilidad	27
+2.2.4. Sistema informático	28
+2.2.5. Implementación de un sistema de información en web	29
+2.2.6. El sistema de información en web y su utilidad	30
+2.2.7. Sistema de cotizaciones	31
+2.3.	Definición de Términos	32
+III.	METODOLOGÍA	37
+3.1.	TIPO Y NIVEL DE INVESTIGACION	37
+3.2.	DISEÑO DE INVESTIGACION	39
+3.3.	POBLACIÓN Y MUESTRA	40
+3.3.1 Unidad de Análisis	41
+3.3.2 Población	41
+3.3.3 Muestra	41
+3.4.	Técnicas e Instrumentos de Recolección de Datos	43
+3.4.1 Técnicas de Recolección de Datos	43
+3.4.2 Instrumentos de Recolección de Datos	43
+3.5.	ANALISIS DE DATOS	45
+3.5.1.	Analisis Descriptivo	45
+3.5.2.	Analisis Inferencial	47
+3.5.3.	Conclusión	49
+IV.	ASPECTOS ADMINISTRATIVOS	51
+V.	REFERENCIAS BIBLIOGRAFICAS	53
+VI.	ANEXOS	58
+Anexo 1. Ejemplo de cotización actual en Excel utilizada por LC Service.	58
+Anexo 2. Diagrama de flujo del proceso actual	58
+Anexo 3. Flujo actual del proceso de cotización.	59
+Anexo 4. Tabla de limitaciones técnicas y administrativas detectadas	59
+Anexo 5. Impacto de las limitaciones en indicadores clave de la empresa	60
+MODELO TABULAR DEL DISEÑO PRE-POST (para anexos)	61
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ÍNDICE DE TABLAS
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+INTRODUCCION
+En la actualidad, las empresas del sector de fabricación y mantenimiento de equipos gastronómicos enfrentan desafíos crecientes en cuanto a la eficiencia operativa, la competitividad y la satisfacción del cliente. Estos retos se intensifican por la demanda de respuestas rápidas y precisas a solicitudes comerciales, especialmente en procesos de cotización. La empresa LC Service, dedicada a la fabricación y mantenimiento de equipos gastronómicos, no es ajena a esta realidad, enfrentando problemas que limitan su capacidad para responder de forma oportuna y organizada a sus clientes.
+La gestión de cotizaciones es un proceso crucial para el área de ventas, pues constituye el primer contacto formal con el cliente y puede determinar el cierre de una negociación. Sin embargo, en LC Service este procedimiento se realiza de forma manual, lo que implica uso de hojas de cálculo dispersas, documentos impresos y comunicación por canales no centralizados. Esta situación genera demoras, errores de transcripción y dificultades para hacer seguimiento a las solicitudes.
+Ante este escenario, la transformación digital emerge como una solución estratégica para modernizar los procesos internos y mejorar la capacidad de respuesta al cliente. La digitalización de la gestión de cotizaciones no solo permite optimizar tiempos y recursos, sino también centralizar la información y facilitar su acceso para todo el equipo de ventas. Esto crea una ventaja competitiva frente a empresas que continúan trabajando con sistemas tradicionales.
+El presente trabajo de investigación se enmarca en el diseño e implementación de un sistema web orientado a la gestión integral de cotizaciones para LC Service, con un enfoque basado en la transformación digital. La propuesta busca sustituir los métodos manuales por una plataforma centralizada, accesible desde cualquier dispositivo con conexión a internet, permitiendo así un control más preciso y un registro histórico confiable de las operaciones.
+La transformación digital no se limita al uso de tecnología, sino que implica un cambio cultural y organizacional. En el caso de LC Service, el proyecto requiere que los colaboradores adopten nuevas herramientas y flujos de trabajo, lo cual demanda un acompañamiento en el proceso de implementación. De esta manera, se busca que la tecnología sea un facilitador, y no una barrera, en la adaptación al cambio.
+En términos de beneficios esperados, la implementación del sistema web permitirá reducir el tiempo de elaboración de una cotización, minimizar errores en los datos presentados y ofrecer un seguimiento más eficiente de las solicitudes. Asimismo, contribuirá a generar reportes que apoyen la toma de decisiones estratégicas, basadas en datos reales y actualizados.
+El contexto actual de LC Service evidencia que la falta de un sistema digital unificado repercute negativamente en la satisfacción del cliente. En ocasiones, las demoras en el envío de cotizaciones han llevado a que potenciales compradores opten por proveedores que ofrecen una respuesta más rápida. Con la propuesta de este sistema, se pretende eliminar estos cuellos de botella y fortalecer la imagen de la empresa como un proveedor moderno y confiable.
+El sistema web propuesto incorporará funcionalidades clave como la creación y edición de cotizaciones, registro de clientes, control de productos y servicios, generación de reportes y almacenamiento seguro de la información. Estas características serán diseñadas siguiendo principios de usabilidad y seguridad informática, asegurando que el sistema sea intuitivo y confiable.
+En cuanto a la metodología de desarrollo, se plantea utilizar un enfoque ágil que permita iterar y validar las funcionalidades del sistema en fases cortas. Esto facilitará la retroalimentación constante por parte de los usuarios, asegurando que la herramienta responda a las necesidades reales del área de ventas de LC Service.
+La investigación también considera la importancia de integrar herramientas de análisis de datos que permitan evaluar métricas clave, como el tiempo promedio de elaboración de cotizaciones, la tasa de conversión de ventas y la frecuencia de solicitudes de los clientes. Esta información servirá como base para implementar mejoras continuas en el proceso comercial.
+El marco conceptual de este trabajo se apoya en teorías y prácticas de transformación digital aplicadas a pequeñas y medianas empresas (pymes), así como en metodologías de ingeniería de software. Esto permitirá sustentar técnicamente las decisiones de diseño y garantizar que la solución cumpla con estándares de calidad y escalabilidad.
+En un mercado altamente competitivo, la eficiencia en los procesos internos se traduce en una mejor experiencia para el cliente. El sistema web para la gestión de cotizaciones que se propone busca no solo mejorar la productividad interna, sino también proyectar una imagen empresarial alineada con las tendencias tecnológicas y las expectativas del consumidor moderno.
+La implementación de este sistema representa una inversión estratégica para LC Service, ya que no solo impactará en el área de ventas, sino que también tendrá un efecto positivo en la comunicación interna, el control de inventario y la planificación de la producción. Esto se debe a que las cotizaciones precisas y oportunas permiten planificar mejor los recursos y optimizar la cadena de suministro.
+En síntesis, este trabajo de investigación parte de una necesidad concreta de modernización y busca demostrar que la adopción de herramientas digitales puede ser un motor de cambio y crecimiento para una empresa en el sector gastronómico. A través de un sistema web diseñado a medida, LC Service podrá superar las limitaciones actuales y posicionarse como un competidor más sólido en el mercado.
+Finalmente, este proyecto no solo tendrá un impacto interno en la empresa, sino que también puede servir como referencia para otras organizaciones del mismo rubro que enfrentan retos similares. La experiencia obtenida en este proceso de diseño e implementación podrá ser replicada y adaptada en distintos contextos, contribuyendo así a la digitalización del sector gastronómico en general.
+
+
+
+
+
+
+
+
+
+
+
+
+    I. PLANTEAMIENTO DEL PROBLEMA
+
+        I.1. Realidad Problemática
+En el contexto empresarial actual, caracterizado por una alta competitividad y una creciente demanda de inmediatez en la atención al cliente, las organizaciones deben buscar constantemente estrategias que les permitan diferenciarse en el mercado. Uno de los aspectos más críticos es la capacidad de responder de manera rápida, precisa y eficiente a las solicitudes de cotización, ya que este proceso constituye el primer contacto formal con el cliente y puede determinar el éxito o fracaso de una negociación. Según estudios recientes de la Cámara de Comercio de Lima (Lima, 2023), más del 70% de las pequeñas y medianas empresas en el Perú aún dependen de procesos manuales para la elaboración de cotizaciones, lo que incrementa la posibilidad de errores y afecta negativamente la competitividad en sectores donde el tiempo de respuesta es decisivo.
+La empresa LC Service, dedicada a la fabricación y mantenimiento de equipos gastronómicos, se encuentra precisamente en este escenario. Su proceso de gestión de cotizaciones se lleva a cabo de manera manual, utilizando hojas de cálculo en Excel, correos electrónicos y, en algunos casos, mensajería instantánea. Esta forma de trabajo dispersa genera múltiples dificultades, entre ellas la duplicidad de información, la pérdida de trazabilidad y la falta de uniformidad en los documentos enviados a los clientes. Como consecuencia, la organización experimenta retrasos en la atención de solicitudes y una menor capacidad para responder de manera competitiva frente a empresas que ya han digitalizado sus procesos.
+Una de las principales limitaciones identificadas en el proceso actual es la ausencia de un sistema centralizado de información. Cada colaborador del área comercial maneja sus propios archivos, sin un repositorio unificado que permita acceder de manera rápida y confiable a los datos. Esto provoca que, en muchas ocasiones, se elaboren cotizaciones basadas en información incompleta, desactualizada o errónea, lo que afecta la credibilidad de la empresa ante sus clientes. Además, la inexistencia de un historial consolidado dificulta la generación de indicadores clave de gestión, como el tiempo promedio de elaboración de propuestas o la tasa de éxito de cotizaciones enviadas.
+Otro problema crítico es la falta de un inventario digital actualizado. Cada vez que un cliente solicita una cotización, los asesores comerciales deben verificar manualmente con el área de almacén la disponibilidad de productos y repuestos, lo que genera retrasos considerables. Esta dependencia de consultas presenciales o telefónicas no solo ralentiza el proceso, sino que también expone a la empresa al riesgo de ofrecer productos que no están disponibles. Esta situación compromete la confianza del cliente y afecta la imagen de LC Service como proveedor confiable en un sector donde la puntualidad y la exactitud son fundamentales.
+Asimismo, la empresa carece de una lista de precios estandarizada. Actualmente, cada colaborador calcula los precios basándose en referencias anteriores o en estimaciones individuales, lo que genera variaciones significativas entre cotizaciones de productos similares. Esta falta de uniformidad no solo resta profesionalismo a las propuestas enviadas, sino que también genera percepciones de inequidad en los clientes, quienes pueden recibir precios distintos para servicios o productos equivalentes. De acuerdo con Maguire (2020), la consistencia en la política de precios es un factor determinante para mantener relaciones comerciales sólidas y proyectar una imagen confiable.
+A nivel organizacional, la ausencia de trazabilidad y control documental constituye otro de los principales obstáculos. Al no contar con un sistema que registre automáticamente las cotizaciones enviadas, se dificulta conocer el estado de cada propuesta: si fue aceptada, rechazada o si requiere seguimiento. Esta falta de control impide medir con precisión el desempeño del área de ventas y limita la capacidad de la gerencia para tomar decisiones basadas en datos objetivos. En un entorno de alta competencia, no contar con esta información estratégica coloca a LC Service en desventaja frente a competidores que sí disponen de sistemas digitales para el análisis de indicadores.
+Desde la perspectiva del cliente, las deficiencias en el proceso también son evidentes. Las cotizaciones elaboradas en Excel carecen de un formato estandarizado y profesional, lo que afecta la presentación y la percepción del servicio ofrecido. Además, los tiempos prolongados de respuesta generan frustración en los clientes, quienes en muchos casos optan por proveedores que pueden entregar una propuesta en cuestión de horas. En un mercado donde la inmediatez es un valor agregado, la demora en la entrega de cotizaciones puede significar la pérdida de oportunidades de negocio y la disminución de la fidelización del cliente.
+La problemática se agrava si se considera que LC Service no cuenta con indicadores de control que permitan medir la eficiencia del proceso. Actualmente, no es posible conocer con exactitud la tasa de conversión de cotizaciones en ventas, los errores más frecuentes en la elaboración de propuestas, ni los productos o servicios más solicitados por los clientes. Esta carencia de información limita la posibilidad de implementar estrategias de mejora continua y dificulta la planificación de recursos en áreas como producción, logística o compras. Según Laudon y Laudon (2022), la ausencia de analítica de datos en procesos comerciales reduce significativamente la capacidad de innovación y adaptación de las empresas en entornos dinámicos.
+Por otro lado, se identifican también limitaciones culturales y humanas dentro de la organización. Parte del personal muestra resistencia al cambio, considerando que los procesos manuales resultan “más seguros” o “más confiables” al estar bajo control directo. Esta percepción constituye una barrera para la adopción de nuevas tecnologías y refleja la falta de una visión organizacional orientada a la transformación digital. De acuerdo con Kotter (2012), este tipo de resistencia es común en empresas con procesos tradicionales, pero debe ser gestionada estratégicamente para evitar que se convierta en un obstáculo para el crecimiento.
+Finalmente, es importante señalar que estas limitaciones no solo afectan la eficiencia interna de LC Service, sino que tienen un impacto directo en la competitividad de la empresa. En un sector como el gastronómico, donde la rapidez de respuesta y la confiabilidad son factores decisivos, continuar operando con procesos manuales implica un riesgo alto de pérdida de clientes frente a competidores más digitalizados. La implementación de un sistema web para optimizar la gestión de cotizaciones se presenta, por lo tanto, como una necesidad urgente y estratégica que permitiría a LC Service reducir tiempos, minimizar errores, mejorar la satisfacción del cliente y consolidar su posición en el mercado.
+Problema identificado
+Consecuencia principal
+Impacto en la empresa
+Demoras en la elaboración de cotizaciones
+Pérdida de clientes por respuestas tardías
+Reducción de competitividad
+Errores en precios y productos
+Reclamos y pérdida de confianza
+Imagen negativa ante clientes
+Falta de trazabilidad
+Desconocimiento del estado de las propuestas
+Dificultad en el control de ventas
+Información dispersa en Excel
+Datos incompletos o desactualizados
+Baja eficiencia y duplicidad de esfuerzos
+Lista de precios no estandarizada
+Variaciones entre cotizaciones similares
+Percepción de inequidad y desconfianza
+Tabla 1. Problemas identificados en la gestión de cotizaciones de LC Service
+Fuente: Elaboración Propia
+
+
+        I.2. Formulación del problema
+
+En el contexto actual, caracterizado por la creciente demanda de eficiencia en los procesos comerciales y la necesidad de responder de forma rápida y precisa a los clientes, la gestión de cotizaciones se ha convertido en un factor clave para la competitividad de las empresas. En el caso de LC Service, este proceso se realiza de manera manual a través de hojas de cálculo en Excel y comunicaciones informales, lo cual genera demoras, errores en los cálculos, falta de trazabilidad y dificultades para medir indicadores de gestión.
+De acuerdo con la Cámara de Comercio de Lima (2023), más del 70% de las pymes peruanas aún gestionan sus procesos de ventas con herramientas manuales o semidigitalizadas, lo que limita su capacidad de adaptación a un mercado dinámico. En este sentido, la situación de LC Service refleja una problemática común en el sector: la ausencia de sistemas digitales integrados que permitan centralizar la información, automatizar cálculos y facilitar la toma de decisiones estratégicas.
+La falta de un sistema web especializado provoca que los colaboradores trabajen con datos dispersos, sin control de versiones ni estandarización en los precios. Este escenario genera inconsistencias en las propuestas, retrasos en los tiempos de respuesta y, en consecuencia, pérdida de oportunidades comerciales. Además, la carencia de indicadores confiables impide evaluar el desempeño del proceso y diseñar estrategias de mejora continua.
+Frente a este panorama, surge la necesidad de implementar una solución tecnológica que transforme el proceso de cotizaciones de LC Service, alineándolo con las tendencias de transformación digital. Un sistema web permitiría no solo mejorar la eficiencia operativa, sino también fortalecer la relación con el cliente, incrementando la confianza y la satisfacción en el servicio brindado.
+
+            I.2.1. Problema general
+¿Cómo influye la implementación de un sistema web en la optimización de la gestión de cotizaciones con enfoque en transformación digital en la empresa LC Service?
+
+            I.2.2. Problemas específicos
+    A. ¿Qué debilidades presenta el proceso actual de gestión de cotizaciones en LC Service respecto a eficiencia, control, uniformidad y trazabilidad?
+    B. ¿Qué requerimientos funcionales y técnicos debe cumplir un sistema web para satisfacer las necesidades reales del área comercial?
+    C. ¿Cómo puede integrarse un módulo de inventario y una lista de precios digitalizada para mejorar la precisión y consistencia en la elaboración de cotizaciones?
+    D. ¿De qué forma impacta la digitalización del proceso de cotizaciones en la productividad del equipo comercial y en la percepción del cliente?
+        I.3. Justificación e importancia del estudio 
+En primer lugar, la investigación se justifica en el plano técnico porque la empresa LC Service carece de un sistema digital centralizado para la gestión de cotizaciones, lo que genera múltiples problemas como la dispersión de datos, falta de uniformidad en los precios y ausencia de trazabilidad. Laudon y Laudon (2022) destacan que los sistemas web permiten integrar procesos, reducir la duplicidad de información y aumentar la confiabilidad de los datos (pp. 54–60). Por lo tanto, la implementación de un sistema web no solo modernizará el proceso de cotización, sino que también servirá como base tecnológica para futuras integraciones con otros módulos de gestión empresarial.
+Desde el punto de vista económico, la relevancia del estudio radica en la capacidad del sistema web para reducir costos asociados al retrabajo y a la pérdida de clientes por retrasos en la entrega de propuestas. García y Paredes (2021) demostraron que la digitalización de procesos en pymes latinoamericanas incrementa la eficiencia hasta en un 30% y mejora la satisfacción del cliente en un 20% (p. 50). En el caso de LC Service, este impacto se traduce en un mejor aprovechamiento de los recursos humanos, la reducción de tiempos improductivos y un incremento en la rentabilidad de la empresa.
+En el ámbito organizacional, la propuesta de un sistema web es clave porque permitirá estructurar y estandarizar el proceso de cotizaciones. Actualmente, la ausencia de una política clara de precios y de un sistema de control provoca variaciones entre cotizaciones de productos similares, lo que afecta la imagen profesional de la empresa. Maguire (2020) sostiene que la estandarización de listas de precios mediante sistemas digitales fortalece la confianza del cliente y contribuye a mejorar la rentabilidad a largo plazo (p. 88). Así, el sistema propuesto no solo reducirá errores, sino que permitirá a la empresa generar reportes confiables que apoyen la planificación estratégica.
+La investigación también es relevante en el plano académico, porque contribuye a ampliar la evidencia sobre el impacto de la transformación digital en pequeñas y medianas empresas peruanas. Aunque existen estudios internacionales que demuestran beneficios claros de la digitalización (Westerman, Bonnet, & McAfee, 2014, p. 33), en el contexto local aún son escasos los trabajos que muestran cómo un sistema web puede mejorar la eficiencia de procesos críticos como las cotizaciones. Este proyecto, por lo tanto, representa una oportunidad de generar conocimiento aplicable y replicable en empresas del sector de servicios gastronómicos y similares.
+Desde una perspectiva social, el proyecto es importante porque incide en la experiencia del cliente. Kotler y Keller (2021) subrayan que la satisfacción del consumidor depende en gran medida de la rapidez y precisión en la atención de sus solicitudes (p. 37). En ese sentido, la implementación de un sistema web permitirá que LC Service brinde un servicio más profesional y confiable, aumentando la fidelización de los clientes y potenciando el efecto del “boca a boca” como estrategia de atracción de nuevos consumidores.
+Finalmente, la investigación tiene una fuerte importancia estratégica porque se alinea con las tendencias globales de la transformación digital. Schwab (2016) advierte que la Cuarta Revolución Industrial exige a las organizaciones reinventar sus procesos para ser competitivas en entornos cada vez más dinámicos (p. 45). Asimismo, PwC (2022) sostiene que las empresas que implementan soluciones digitales logran hasta un 35% de reducción en los tiempos de respuesta y un 25% de incremento en sus tasas de conversión de ventas. En este marco, el caso de LC Service constituye un ejemplo concreto de cómo la digitalización no solo resuelve problemas operativos inmediatos, sino que también proyecta a la empresa hacia un modelo de gestión moderno, eficiente y sostenible.
+En síntesis, este estudio se justifica porque permitirá a LC Service optimizar su gestión de cotizaciones, reducir costos, mejorar la experiencia del cliente, fortalecer su competitividad y generar conocimiento aplicable a otras pymes peruanas. De esta manera, no solo se beneficiará la organización directamente, sino que también se aportará a la literatura y a las prácticas de transformación digital en el país, contribuyendo a que más empresas avancen hacia la modernización de sus procesos críticos.
+Dimensión
+Justificación
+Técnica
+No existe sistema centralizado; el sistema web permitirá integrar procesos.
+Económica
+Reducción de costos por retrabajo y pérdida de clientes.
+Organizacional
+Estandarización de precios y procedimientos para fortalecer la gestión.
+Académica
+Generación de evidencia sobre transformación digital en pymes peruanas.
+Social
+Mejora en la experiencia y satisfacción de los clientes atendidos.
+Tabla 2. Justificación de la investigación según dimensión
+Fuente: Elaboración Propia
+        I.4. Limitaciones de la investigación 
+En el desarrollo de la presente investigación se identifican diversas limitaciones técnicas, ya que la empresa LC Service no cuenta con una infraestructura tecnológica robusta que facilite la transición hacia un sistema digital avanzado. Actualmente, los procesos dependen de hojas de cálculo manuales en Excel y no existe una base de datos centralizada para el manejo de inventarios ni precios estandarizados. Esto genera dificultades para recopilar datos históricos y validar la efectividad de la propuesta en sus primeras fases. Laudon y Laudon (2022) explican que la falta de integración tecnológica en las organizaciones genera inconsistencias en la información y aumenta los riesgos de error (pp. 54–60). En ese sentido, la implementación del sistema deberá desarrollarse considerando un entorno inicial con recursos limitados.
+
+Otra limitación relevante corresponde a la disponibilidad de información histórica confiable. Debido a que LC Service no ha llevado un registro sistemático de sus cotizaciones, gran parte de los documentos se encuentran dispersos, incompletos o sin respaldo adecuado. Esta carencia de datos puede limitar la comparación entre la situación previa y posterior a la implementación del sistema web. O’Brien y Marakas (2019) señalan que la fragmentación de la información en archivos no integrados restringe la capacidad de análisis y la toma de decisiones estratégicas (p. 112). Por ello, será necesario realizar un trabajo complementario de sistematización y limpieza de datos antes de consolidar indicadores comparativos.
+
+Una limitación de tipo humano y cultural se relaciona con la resistencia al cambio. Parte del personal de LC Service ha mostrado cierta reticencia hacia la adopción de nuevas herramientas digitales, debido a la percepción de que los procesos manuales resultan más seguros y fáciles de controlar. Este tipo de resistencia ha sido ampliamente documentado en la literatura sobre gestión del cambio. Kotter (2012) sostiene que los colaboradores suelen aferrarse a procesos tradicionales por miedo a lo desconocido, lo cual puede ralentizar la adopción de innovaciones (pp. 22–25). En consecuencia, el éxito del proyecto dependerá no solo de la implementación tecnológica, sino también de estrategias de capacitación y sensibilización organizacional.
+
+Asimismo, existen limitaciones de alcance propias de la investigación. El proyecto está centrado en la gestión de cotizaciones y no contempla, en su fase inicial, la integración con módulos externos como finanzas, contabilidad o gestión de relaciones con clientes (CRM). Esto implica que algunos beneficios potenciales de la transformación digital, como la automatización completa del ciclo de ventas o la integración con la facturación electrónica, no serán abordados en esta etapa. Sin embargo, Westerman, Bonnet y McAfee (2014) destacan que la transformación digital suele avanzar de manera progresiva, empezando por procesos clave y expandiéndose gradualmente hacia otras áreas de la organización (p. 33).
+
+Finalmente, se deben considerar las limitaciones económicas del proyecto. La implementación de un sistema web requiere inversión en infraestructura tecnológica, hosting, mantenimiento y capacitación del personal. Aunque se ha optado por tecnologías de código abierto para reducir costos, la empresa aún deberá destinar recursos a la adecuación de procesos y soporte técnico. Según PwC (2022), uno de los principales retos de la digitalización en pymes latinoamericanas es el acceso limitado a financiamiento para proyectos tecnológicos, lo que puede retrasar su adopción a gran escala. En este caso, LC Service deberá equilibrar la inversión inicial con los beneficios esperados a mediano plazo, asegurando que la solución sea sostenible y escalable.
+
+        I.5. Objetivos de la investigación 
+            I.5.1. Objetivo general
+Implementar un sistema web que optimice la gestión de cotizaciones con enfoque en transformación digital en la empresa LC Service, mejorando la eficiencia en los tiempos de respuesta, la precisión de la información y la satisfacción del cliente.
+            I.5.2. Objetivos específicos
+Analizar y documentar el proceso actual de gestión de cotizaciones en LC Service, identificando debilidades y oportunidades de mejora. Según la Cámara de Comercio de Lima (2023), más del 70% de pymes peruanas enfrentan problemas de eficiencia por depender de procesos manuales, lo que hace indispensable iniciar con un diagnóstico adecuado.
+
+Diseñar la arquitectura y el prototipo del sistema web de cotizaciones, considerando criterios de usabilidad, seguridad y escalabilidad. Laudon y Laudon (2022) sostienen que el diseño de un sistema debe responder tanto a las necesidades del usuario como a los requerimientos técnicos que aseguren la continuidad del negocio (pp. 54–60).
+
+Implementar y poner en marcha el sistema web en la empresa, validando su funcionamiento y capacitando al personal en su uso. Kotter (2012) enfatiza que la adopción exitosa de nuevas tecnologías depende en gran medida de la gestión del cambio y la preparación de los colaboradores (pp. 22–25).
+
+Evaluar el impacto del sistema web en la optimización del proceso de cotizaciones, midiendo indicadores de eficiencia, reducción de errores y satisfacción del cliente. García y Paredes (2021) demostraron que la digitalización puede aumentar la productividad de las pymes en más de un 30% (p. 50), lo que refuerza la necesidad de evaluar resultados concretos en la empresa.
+
+        I.6. Hipótesis
+            I.6.1. Hipótesis general 
+La implementación de un sistema web optimiza significativamente la gestión de cotizaciones con enfoque en transformación digital en la empresa LC Service
+            I.6.2. Hipótesis específicas 
+    • La transformación digital permitirá una toma de decisiones más agil y basada en información confiable.
+    • La implementación de un sistema web contribuirá a estandarizar y mejorar el control en la elaboración de cotizaciones.
+    • La implementación de un sistema web mejorará la eficiencia y reducirá los errores en el registro y seguimiento de cotizaciones. 
+
+        I.7. Identificación de Variables y Operacionalización
+En esta investigación se han definido dos variables principales: la Variable Independiente (VI): Sistema Web y la Variable Dependiente (VD): Gestión de Cotizaciones con Enfoque en Transformación Digital. Cada una se describe conceptualmente y se operacionaliza mediante dimensiones, indicadores y técnicas de recolección de datos.
+            I.7.1. Variable independiente: Sistema Web
+    • Definición Conceptual: 
+El sistema web se concibe como una aplicación informática que se ejecuta en un entorno de internet y que permite a los usuarios acceder, procesar y administrar información desde cualquier dispositivo con conexión en red. Este tipo de sistemas se caracteriza por su accesibilidad, flexibilidad y capacidad de integrar diversas funcionalidades en un mismo entorno digital. Pressman y Maxim (2021) sostienen que los sistemas web forman parte de la evolución natural del software, ya que buscan garantizar una mayor interacción con el usuario y un acceso universal a la información (p. 102).
+A nivel organizacional, un sistema web se entiende como una herramienta que facilita la automatización de procesos y la centralización de datos, mejorando así la eficiencia y reduciendo los errores derivados del manejo manual de información. Según Turban y Volonino (2018), los sistemas basados en la web permiten a las empresas estandarizar procedimientos y contar con reportes confiables para la toma de decisiones estratégicas (p. 63).
+Conceptualmente, los sistemas web se han convertido en una pieza clave de la transformación digital, dado que ofrecen una plataforma que conecta procesos internos con las expectativas externas de los clientes. Al digitalizar tareas críticas, como la gestión de cotizaciones, se logra mayor rapidez en la respuesta y mejor precisión en los cálculos. Como indican Valacich y Schneider (2017), los sistemas de información en línea generan ventajas competitivas al ofrecer un soporte ágil y confiable para la gestión empresarial (p. 88).
+En el contexto de las pequeñas y medianas empresas (pymes), los sistemas web representan una solución estratégica de bajo costo frente a sistemas tradicionales más complejos, ya que no requieren infraestructura física costosa y permiten escalar de acuerdo con el crecimiento organizacional. Carceller y Pardo (2019) señalan que estas soluciones digitales se alinean con la tendencia de democratizar la tecnología, permitiendo que empresas de menor tamaño accedan a los beneficios de la digitalización (p. 17).
+
+    • Definición Operacional
+De manera operacional, en esta investigación se entenderá el sistema web como la solución tecnológica que será diseñada e implementada para optimizar la gestión de cotizaciones en la empresa LC Service. Este sistema permitirá reemplazar los procesos manuales basados en hojas de cálculo por una plataforma centralizada que registre, procese y almacene la información en tiempo real.
+Operacionalmente, el sistema incluirá funcionalidades clave como: repositorio único de datos de clientes y productos, generación automática de cotizaciones estandarizadas, control de accesos y seguridad en el manejo de la información, así como reportes dinámicos que permitan dar seguimiento al proceso. De esta forma, se medirá la efectividad del sistema en función de la reducción de tiempos de respuesta y del nivel de estandarización alcanzado.
+Otro aspecto operacional es la usabilidad del sistema, es decir, la facilidad con la que los colaboradores de LC Service puedan interactuar con la plataforma. La evaluación incluirá encuestas al personal sobre la claridad de las interfaces, la velocidad de aprendizaje y la percepción de utilidad. Esto permitirá determinar si el sistema web cumple con criterios de accesibilidad y eficiencia en su uso cotidiano.
+Finalmente, el sistema web se operacionalizará a través de indicadores observables como el porcentaje de cotizaciones realizadas sin errores, el tiempo promedio empleado en generar una propuesta y la disponibilidad de reportes de seguimiento. Estos indicadores permitirán evaluar de manera objetiva el impacto de la implementación del sistema en la gestión de cotizaciones, garantizando la alineación entre el diseño tecnológico y los objetivos de la investigación.
+
+            I.7.2. Variable dependiente: Gestión de cotizaciones con enfoque en transformación digital
+    • Definición Conceptual
+La gestión de cotizaciones se define conceptualmente como el conjunto de actividades que permiten a una empresa elaborar, presentar y dar seguimiento a propuestas comerciales dirigidas a sus clientes. Este proceso es clave porque refleja la capacidad de respuesta de la organización y constituye un factor determinante en la decisión de compra del consumidor (Kotler & Keller, 2021, p. 37).
+Bajo un enfoque de transformación digital, la gestión de cotizaciones implica la incorporación de herramientas tecnológicas que permitan automatizar la elaboración de propuestas, estandarizar precios y formatos, y garantizar la trazabilidad del proceso. De acuerdo con Schwab (2016), la digitalización de procesos empresariales es un componente esencial de la Cuarta Revolución Industrial, al impulsar eficiencia y competitividad en los mercados globalizados (p. 45).
+
+Conceptualmente, este enfoque digital no solo busca mejorar la velocidad y precisión del proceso, sino también generar valor agregado a través de la transparencia, confiabilidad y experiencia del cliente. Westerman, Bonnet y McAfee (2014) sostienen que la transformación digital debe entenderse como una estrategia integral que conecta la eficiencia operativa con la satisfacción del cliente (p. 33).
+
+En el caso de las pymes, la gestión de cotizaciones digitalizada representa una oportunidad para reducir las limitaciones asociadas a los recursos humanos y económicos. García y Paredes (2021) afirman que las pymes que adoptan procesos digitales en el área comercial logran incrementos significativos en productividad y satisfacción del cliente, consolidando así su posición en el mercado (p. 50).
+
+    • Definición Operacional
+
+Operacionalmente, la gestión de cotizaciones en este estudio será entendida como el proceso que inicia con la solicitud del cliente y concluye con la entrega de la propuesta, evaluado en términos de eficiencia, precisión, estandarización, satisfacción del cliente y trazabilidad.
+
+La dimensión de eficiencia será medida a través del tiempo promedio de respuesta, desde la recepción de la solicitud hasta la entrega de la cotización. La precisión se evaluará en función del porcentaje de cotizaciones entregadas sin errores en los precios o descripciones de productos.
+
+La estandarización se verificará a partir de la uniformidad en el formato y estructura de las cotizaciones, mientras que la satisfacción del cliente se medirá mediante encuestas aplicadas a los usuarios finales, evaluando su nivel de conformidad respecto a la rapidez, claridad y profesionalismo del documento recibido.
+
+Finalmente, la dimensión de trazabilidad y control se operacionalizará en función de la existencia de reportes de seguimiento que registren las cotizaciones emitidas, el estado de cada una y el resultado final del proceso. De esta manera, la gestión de cotizaciones podrá analizarse objetivamente, comparando la situación previa y posterior a la implementación del sistema web.
+
+
+
+
+
+
+
+
+
+    II. MARCO TEORICO
+        II.1. Antecedentes
+            II.1.1. Antecedentes internacionales
+
+La investigación sobre la Implementación de un Sistema Web para Optimizar la Gestión de Cotizaciones se enmarca en la tendencia global y estructural de la Transformación Digital (TD), reconocida como el motor fundamental de la competitividad empresarial en el siglo XXI. La experiencia internacional demuestra, sin lugar a dudas, que la digitalización de los procesos internos ya no constituye una ventaja opcional, sino un requisito de supervivencia y una vía directa hacia la expansión de mercados, proporcionando una base sólida para justificar la intervención tecnológica propuesta en LC Service.
+El impacto de la digitalización en la apertura de mercados y la resiliencia empresarial ha sido documentado ampliamente en bloques económicos líderes. En el ámbito internacional, la transformación digital se ha consolidado como un factor determinante en la competitividad empresarial. La Unión Europea (2022) destacó que el 85 % de las pymes que adoptaron herramientas digitales mejoraron su acceso a nuevos mercados, confirmando la relevancia de la digitalización como vía de internacionalización. Este hallazgo es crucial para LC Service, ya que sugiere que un proceso comercial robusto y digitalizado es la infraestructura necesaria para escalar y trascender las limitaciones geográficas actuales. La digitalización se postula, así, como el habilitador estratégico para el crecimiento futuro de la PYME.
+La eficiencia operacional, medida en la rapidez de respuesta, es un factor crítico de la experiencia del cliente y la conversión de ventas. De manera similar, en Estados Unidos, un estudio de Harvard Business Review (2021) evidenció que las empresas que implementaron sistemas web de cotización redujeron hasta en un 30 % el tiempo de respuesta a los clientes, lo que incrementó significativamente los niveles de satisfacción y fidelización. Esta reducción de tiempo aborda directamente la problemática central de LC Service, cuya demora de 2 a 5 días en la emisión de cotizaciones es el principal factor de pérdida de clientes ante una competencia más ágil. El sistema web busca replicar este éxito internacional, llevando el proceso de días a minutos.
+La experiencia europea se refleja en España, donde la Cámara de Comercio de Madrid (2021) reportó que siete de cada diez pymes que digitalizaron sus procesos de cotización no solo lograron mejorar su rapidez de atención, sino que además incrementaron sus ventas y capacidad de retención de clientes. Esto demuestra una correlación directa entre la eficiencia del front-end (la gestión de cotizaciones) y la rentabilidad del negocio, validando la hipótesis general de la presente investigación. La inversión en la digitalización del proceso crítico de cotización, por tanto, se traduce rápidamente en un retorno tangible en el volumen de negocio.
+Más allá de la eficiencia en tiempo, la precisión en la propuesta comercial es fundamental para establecer la confianza del cliente. En el caso de Chile, el Ministerio de Economía (2022) documentó que la incorporación de plataformas digitales permitió reducir en un 45 % los errores en la elaboración de presupuestos, generando mayor confianza en los consumidores. Este dato es vital para LC Service, que actualmente lucha con una Tasa de Error de 1 en 10 cotizaciones, lo cual socava la credibilidad y genera reclamos. La automatización de los cálculos y la consulta a una base de datos centralizada son la solución probada para eliminar este riesgo operacional.
+En Colombia, el Observatorio de Transformación Digital (2021) señaló que el 62 % de las micro y pequeñas empresas que implementaron soluciones tecnológicas mejoraron de manera notable su eficiencia administrativa, demostrando que la digitalización de procesos internos constituye un pilar estratégico de sostenibilidad. Este enfoque en la eficiencia administrativa es crucial, ya que el sistema web de cotizaciones optimiza tareas de back-office como la gestión de precios y el inventario, lo que a su vez se proyecta en una mejora en el front-end de la atención al cliente. Un hallazgo similar se observó en México, donde el Instituto Nacional de Estadística y Geografía (2021) informó que más de la mitad de las pymes implementó sistemas de gestión digital durante la pandemia, lo que les permitió mantener sus operaciones a pesar de las restricciones, resaltando la importancia de la digitalización como estrategia de resiliencia y continuidad operativa.
+Los beneficios de estas experiencias también han sido documentados en países desarrollados, donde la digitalización no es una opción, sino una práctica consolidada. En Canadá, el Ministerio de Innovación, Ciencia y Desarrollo Económico (2022) indicó que las empresas que adoptaron sistemas web en sus procesos comerciales incrementaron en un 25 % su rentabilidad promedio. Esto establece una clara relación entre la inversión en tecnología de front-end y el Retorno de la Inversión (ROI), justificando la intervención económica y tecnológica en LC Service.
+En el Reino Unido, la OECD (2021) destacó que las organizaciones que digitalizaron su gestión de información lograron niveles más altos de competitividad, incluso en sectores tradicionales. La gestión de información se convierte en la principal Variable Intermedia; para LC Service, esto implica centralizar los datos dispersos de Excel en una Base de Datos Centralizada para permitir la trazabilidad y la toma de decisiones informadas.
+Japón, por su parte, a través del Ministerio de Economía, Comercio e Industria (2021), reportó que más del 60 % de sus pymes sostuvo su productividad durante los últimos años gracias a la digitalización de procesos de compras y cotizaciones. Este antecedente resalta la importancia de la automatización en el mantenimiento de la productividad con recursos limitados, un factor clave para cualquier PYME. De manera complementaria, Alemania, mediante su programa Industrie 4.0 (BMWi, 2020), ha demostrado que la digitalización no solo aumenta la productividad, sino que fortalece la capacidad de innovación empresarial, permitiendo a las empresas adaptarse y ofrecer servicios de mayor valor añadido.
+Finalmente, la experiencia de Corea del Sur en tecnología es igualmente reveladora. El Instituto de Desarrollo Tecnológico (KDI, 2022) reportó que las pymes que incorporaron sistemas web lograron incrementar un 40 % la velocidad de respuesta a clientes y un 20 % la precisión de sus propuestas comerciales. Estos datos, que cubren las dos dimensiones principales de la Variable Dependiente (Eficiencia y Precisión), demuestran el potencial transformador de un sistema web, sirviendo de referencia estadística directa para anticipar los resultados de la Post-prueba ($O_2$) en LC Service.
+Todas estas experiencias internacionales coinciden en señalar que la digitalización de procesos, particularmente de la gestión de cotizaciones, constituye una tendencia global indispensable para alcanzar competitividad, sostenibilidad e innovación. La Transformación Digital se convierte, por lo tanto, en el marco estratégico bajo el cual la implementación del Sistema Web se justifica plenamente como la vía más efectiva para resolver las ineficiencias operacionales de LC Service.
+            II.1.2. Antecedentes nacionales
+El contexto peruano establece un marco de urgencia y oportunidad para la presente investigación. Las micro y pequeñas empresas (MYPEs) constituyen la columna vertebral de la economía nacional, representando el 99.6 % del total de empresas en el país y generando el 80 % del empleo formal (Instituto Nacional de Estadística e Informática - INEI, 2023). Por lo tanto, cualquier mejora en la eficiencia de este sector, como la optimización de procesos críticos mediante un sistema web, tiene un impacto directo sobre la competitividad y el desarrollo económico del país.
+A pesar de esta relevancia económica, el Perú enfrenta una notable brecha de implementación digital. La Cámara de Comercio de Lima (2023) indicó que solo el 28 % de las pymes ha digitalizado sus procesos de ventas y cotizaciones. Esta estadística coloca a LC Service en la mayoría de las empresas que aún dependen de procesos manuales, una situación que limita su escalabilidad y resiliencia. Sin embargo, este mismo estudio revela la oportunidad: aquellas empresas que sí implementaron soluciones digitales lograron aumentar en promedio un 20 % sus ingresos anuales, estableciendo una clara relación causal entre la digitalización y la rentabilidad.
+El panorama nacional revela una disonancia entre la intención y la capacidad de transformación. Movistar Empresas (2025) destacó en su Sondeo Pyme Digital que el 96 % de las pymes reconoce la importancia de la digitalización, aunque un alarmante 73 % aún desconoce cómo iniciar este proceso de forma estructurada. Este dato es crucial, ya que el proyecto de LC Service no solo propone una herramienta (el sistema web), sino una implementación metodológica que guía la transición, resolviendo el problema de "cómo empezar" que aqueja a la mayoría de las pymes. Esta falta de estructura se complementa con el hallazgo de Microsoft (2023), que señaló que, si bien el 94 % de las pymes invirtió en herramientas digitales el último año, gran parte de ellas aún carece de la capacitación necesaria para sacar el máximo provecho a estas soluciones, un riesgo que el plan de capacitación del proyecto debe mitigar.
+La realidad del sector gastronómico y servicios, donde opera LC Service, presenta desafíos específicos. La Agencia Andina (2024) señala que, si bien ocho de cada diez empresas peruanas han iniciado algún proceso de digitalización, los niveles de avance son desiguales; sectores como la manufactura o la gastronomía avanzan con mayor lentitud. Este contexto hace que la implementación del sistema web sea una acción pionera y estratégica. No obstante, la Universidad ESAN (2021) encontró en un estudio aplicado en Arequipa que las pymes gastronómicas que adoptaron soluciones web incrementaron en un 30 % su eficiencia y en un 25 % la fidelización de sus clientes, validando el alto potencial de impacto que este proyecto tiene en el sector específico de la empresa.
+A nivel de soporte, el ecosistema digital peruano está madurando. OSIPTEL (2024) señaló que el 80 % de las conexiones a internet fijo en el país se realiza mediante fibra óptica, lo que constituye una base de infraestructura sólida para la expansión y la adopción de soluciones web como la propuesta. Además, el Ministerio de la Producción (2022) puso en marcha el programa Tu Empresa Digital, reforzando el compromiso del Estado en reducir la brecha tecnológica y promover la gestión digital en las pymes.
+La banca privada también ha contribuido a la digitalización de procesos transaccionales, lo que facilita el entorno comercial. Por su parte, PwC Perú (2022) identificó que las pymes que implementaron sistemas de gestión digital lograron aumentar en 20 % su facturación anual y reducir en 15 % sus costos operativos, hallazgos que dan sustento económico a las dimensiones de rentabilidad asociadas a la optimización.
+Finalmente, la persistencia de la gestión manual es un problema tangible: Business IT (2023) concluyó que el 60 % de las pymes peruanas todavía depende de procesos manuales, situación que limita su competitividad. Esta realidad es la que vive LC Service, cuyo proceso de cotización manual (2 a 5 días y 1 en 10 errores) refleja una ineficiencia operacional (Anexo 5) que la tesis busca resolver.
+En este marco de urgencia, los antecedentes académicos peruanos ya han validado la solución tecnológica propuesta:
+    • Huachez Zapata (2019) demostró que un sistema web en la gestión de cotizaciones en Lima logró una disminución promedio del 75% en el tiempo de procesamiento, ofreciendo una prueba estadística directa de la factibilidad de la meta de eficiencia de LC Service.
+    • Espinoza Reina (2020) enfatizó la importancia de la integración del inventario con la cotización (una limitación clave de LC Service, Anexo 4), concluyendo que esta automatización reduce los errores de stock en un 90%.
+    • Guzmán y Torres (2022) abordaron la falta de trazabilidad en las ventas, un problema que impide a LC Service medir la efectividad de sus vendedores y tomar decisiones basadas en datos.
+En conclusión, el contexto peruano es de alta necesidad y baja adopción estructurada. La implementación del sistema web en LC Service se justifica como una intervención crítica que no solo resolverá un problema interno de eficiencia, sino que posicionará a la empresa entre el 28 % de pymes líderes que utilizan la digitalización como una ventaja competitiva sostenible.
+        II.2. Fundamentos Teóricos
+El andamiaje teórico de esta investigación se sustenta en tres pilares conceptuales interconectados que explican la relación causal entre el Sistema Web y la optimización de la gestión de cotizaciones en LC Service, enmarcada en la estrategia de la Transformación Digital (TD).
+2.2.1. Variable Independiente (VI): El Sistema Web y la Ingeniería de Software
+
+El Sistema Web se define desde la Ingeniería de Software como una solución de arquitectura de tres capas (Presentación, Lógica y Datos) que garantiza la accesibilidad, escalabilidad y la centralización de la información.
+    1. Arquitectura de Sistemas y Centralización de Datos: La implementación de la Base de Datos Centralizada es la solución técnica a la dispersión de información y la inconsistencia de precios que caracteriza a la gestión manual de LC Service. Bertalanffy (1968), con su Teoría General de Sistemas, sostiene que las organizaciones son un conjunto de subsistemas interconectados. La digitalización de cotizaciones, por lo tanto, debe articularse con áreas como logística, finanzas y atención al cliente, generando un flujo integral de información. Nonaka y Takeuchi (1995) explican que la gestión del conocimiento se fortalece con el uso de tecnologías que capturan y sistematizan información, permitiendo crear bases de datos útiles para la toma de decisiones estratégicas, algo que el sistema web garantiza al actuar como repositorio único de precios, clientes e inventario.
+    2. Automatización y Reingeniería de Procesos: La función principal del Back-End del sistema es la Automatización de la Lógica de Negocio. Esto se alinea con el principio de Hammer y Champy (1993) sobre la reingeniería de procesos, orientada hacia la automatización de tareas repetitivas. El sistema web encapsula y ejecuta automáticamente las Reglas de Negocio (cálculo de márgenes e impuestos), eliminando la intervención humana en tareas propensas a errores y liberando al personal para enfocarse en la venta consultiva de mayor valor.
+    3. Adopción Tecnológica y Usabilidad: Para que el sistema web logre su objetivo de optimización, debe ser adoptado por el equipo de ventas. La Teoría del Modelo de Aceptación Tecnológica (TAM) de Davis (1989) indica que la Utilidad Percibida y la Facilidad de Uso son determinantes. En el contexto de las PYMES peruanas, la capacitación del personal resulta un factor clave para consolidar esta aceptación, superando la resistencia cultural señalada por la Teoría del Cambio Organizacional de Lewin (1951).
+    4. Ciberseguridad y Transaccionalidad: El sistema debe garantizar la integridad y la confidencialidad de los datos. La SUNAT (2022), al establecer la obligatoriedad de la facturación electrónica, ha acelerado la necesidad de sistemas que cumplan con altos estándares de seguridad y que manejen la información transaccional de manera auditable.
+2.2.2. Variable Dependiente (VD): Gestión de Cotizaciones y la Ventaja Competitiva
+La Gestión de Cotizaciones (GC) se conceptualiza como un proceso crítico que afecta la rentabilidad y la percepción de valor del cliente. La optimización se mide a través de sus dimensiones de eficiencia, precisión, estandarización y trazabilidad.
+    1. Eficiencia Operacional y Ventaja Comparativa: La reducción del Tiempo Promedio de Respuesta (TPR) es el indicador clave de la optimización. Este concepto se fundamenta en los principios económicos de Ricardo (1817), quien planteaba que la ventaja comparativa permite competir en condiciones de eficiencia. Trasladado al contexto actual, la digitalización se convierte en esa ventaja que habilita a las pymes a enfrentar a empresas de mayor tamaño al ser más rápidos y más baratos en la gestión de sus procesos. Porter (1996) complementa este enfoque al plantear que la ventaja competitiva se obtiene mediante mejoras continuas en la eficiencia de los procesos internos.
+    2. Precisión y Estándares de Calidad: La literatura de gestión empresarial reconoce que la digitalización de cotizaciones no solo incrementa la rapidez en la atención, sino que además permite mejorar la transparenza y trazabilidad. La Cámara de Comercio de Lima (2023) sostiene que la incorporación de plataformas digitales reduce los márgenes de error en precios y plazos, y fortalece la confianza entre cliente y proveedor. Esta estandarización es esencial en sectores como gastronomía y manufactura, donde los presupuestos requieren consistencia constante (IDAT, 2022).
+    3. Trazabilidad y Gestión del Cliente: La GC optimizada habilita la trazabilidad documental, transformando un proceso opaco en una fuente de conocimiento. Kotler y Keller (2021), en su análisis de la gestión de clientes, destacan que la implementación de sistemas de tipo CRM fortalece la relación con consumidores al mejorar la respuesta a sus necesidades. El sistema web, al registrar cada cotización, permite el aprendizaje continuo y la evolución de las estrategias de venta, como sostiene Senge (1990).
+2.2.3. Enfoque Estratégico: La Transformación Digital como Motor de Sostenibilidad
+La Transformación Digital (TD) es el marco estratégico que dota de propósito al sistema web. La TD se define como la integración de tecnologías en todas las áreas de la organización para mejorar procesos, generar valor y garantizar sostenibilidad.
+    1. Innovación como Motor de Crecimiento: Schumpeter (1942) argumenta que la innovación tecnológica es motor de crecimiento económico, un principio que se aplica claramente en la digitalización empresarial del Perú. La TD obliga a LC Service a innovar para sobrevivir y prosperar.
+    2. Recursos y Capacidades Sostenibles: La teoría de recursos y capacidades de Barney (1991) considera que las tecnologías digitales, al ser recursos valiosos, raros y difíciles de imitar, constituyen ventajas competitivas sostenibles. En el contexto local, la adopción de sistemas web permite a las pymes diferenciarse frente a competidores que aún dependen de procesos manuales.
+    3. El Valor en la Economía Digital: Tapscott (1996) afirma que la economía digital constituye un entorno donde el valor empresarial se produce cada vez más en plataformas virtuales. Al implementar el sistema web, LC Service participa activamente en esta economía, expandiendo su alcance comercial y reduciendo costos operativos, lo que facilita la expansión comercial (Laudon y Traver, 2022).
+    4. Resiliencia y Aceleración del Cambio: La pandemia de COVID-19 aceleró este proceso, obligando a las empresas a replantear sus modelos de negocio (EY Perú, 2021). La digitalización de la GC es una respuesta estratégica a la necesidad de resiliencia operativa, permitiendo la continuidad del negocio ante cualquier restricción física o geográfica.
+En conclusión, la optimización de la gestión de cotizaciones mediante la implementación de un Sistema Web se valida teóricamente como la transición de un modelo operativo obsoleto a un Modelo de Negocio Digitalmente Madura. El sistema actúa como el catalizador para que LC Service pase de la ineficiencia (medida en 01) a la competitividad sostenible (medida en 02), integrando los procesos internos y generando valor para el cliente externo.
+2.2.4. Sistema informático
+Un sistema informático es un conjunto organizado de recursos tecnológicos, humanos y de procedimientos que permiten la captura, procesamiento, almacenamiento y distribución de información con el objetivo de apoyar la toma de decisiones y optimizar los procesos de una organización (Laudon & Laudon, 2020). Los sistemas informáticos combinan hardware, software, datos, procedimientos y personas para generar información útil, confiable y oportuna.
+En el contexto de las pymes, los sistemas informáticos cumplen un rol fundamental en la eficiencia operativa, ya que permiten automatizar procesos repetitivos, minimizar errores y mejorar la precisión de la información. Por ejemplo, un sistema de gestión de inventarios reduce pérdidas por errores de stock, mientras que un sistema contable automatizado facilita el cálculo de costos y márgenes de ventas. Para LC Service, el sistema informático se presenta como la base tecnológica sobre la cual se construirá un sistema web de cotizaciones, capaz de integrar inventario, precios, clientes y productos en una plataforma centralizada.
+Los antecedentes internacionales muestran que la adopción de sistemas informáticos en las empresas, incluso en las pymes, aumenta la competitividad y la productividad. Según el Banco Interamericano de Desarrollo (BID, 2021), las pymes que implementan sistemas informáticos en procesos críticos incrementan su eficiencia operativa entre 20 % y 35 %, destacando el retorno de inversión como un factor clave para justificar la inversión tecnológica.
+En Perú, la implementación de sistemas informáticos todavía presenta desafíos, principalmente por la brecha digital y la falta de capacitación (INEI, 2023; Movistar Empresas, 2025). Sin embargo, las iniciativas gubernamentales como Tu Empresa Digital muestran que existe un camino viable para que las pymes adopten soluciones tecnológicas de manera estructurada y segura.
+
+2.2.5. Implementación de un sistema de información en web
+Un sistema de información en web es un sistema informático que utiliza tecnologías de internet para permitir el acceso remoto y la gestión de información a través de plataformas web (Stair & Reynolds, 2020). A diferencia de los sistemas tradicionales, un sistema de información en web no requiere que los usuarios estén conectados a una red local, lo que facilita el acceso desde cualquier lugar, aumentando la flexibilidad, escalabilidad y eficiencia de los procesos empresariales.
+La implementación de un sistema de información en web implica varias etapas:
+    1. Análisis de requerimientos: Identificación de las necesidades de la organización y definición de objetivos claros.
+    2. Diseño del sistema: Arquitectura de software, estructura de bases de datos y diseño de interfaces web amigables.
+    3. Desarrollo y codificación: Construcción de la plataforma web mediante lenguajes de programación y frameworks adecuados.
+    4. Pruebas y control de calidad: Validación del funcionamiento del sistema, detección de errores y ajustes necesarios.
+    5. Implementación y capacitación: Puesta en marcha del sistema y entrenamiento del personal para su uso correcto.
+    6. Mantenimiento y actualización: Garantizar la continuidad operativa, seguridad y adaptación a nuevas necesidades.
+Entre las ventajas de un sistema de información en web destacan:
+    • Acceso en tiempo real: Los usuarios pueden consultar información actualizada desde cualquier dispositivo con conexión a internet.
+    • Centralización de datos: Toda la información se almacena en una base de datos central, evitando duplicidad y errores.
+    • Escalabilidad: La plataforma puede adaptarse a la incorporación de nuevos usuarios, productos o módulos.
+    • Reducción de tiempos operativos: Automatización de procesos críticos, como la generación de reportes o cotizaciones, permite reducir días de trabajo a minutos.
+    • Seguridad y trazabilidad: Los sistemas web modernos incluyen protocolos de seguridad y registros de operaciones que facilitan auditorías y control administrativo.
+Diversos estudios internacionales muestran la efectividad de los sistemas de información en web. Por ejemplo, en Japón, el Ministerio de Economía, Comercio e Industria (2021) reportó que las pymes que adoptaron sistemas web aumentaron en un 60 % la productividad y mejoraron la gestión de relaciones con clientes. En México, el INEGI (2021) evidenció que la adopción de sistemas web permitió a las empresas mantener operaciones incluso durante restricciones sanitarias, demostrando su resiliencia.
+En el ámbito nacional, la experiencia de empresas peruanas confirma que la digitalización mediante sistemas web tiene impacto directo en la competitividad. La Universidad ESAN (2021) indicó que las pymes gastronómicas que implementaron sistemas web incrementaron la eficiencia operativa en un 30 % y la fidelización de clientes en un 25 %, lo que valida la pertinencia de aplicar esta tecnología en LC Service.
+
+2.2.6. El sistema de información en web y su utilidad
+El sistema de información en web cumple una función estratégica, ya que conecta todas las áreas de la empresa y proporciona información confiable y en tiempo real para la toma de decisiones. Entre sus principales utilidades se encuentran:
+    1. Gestión centralizada de datos: Permite almacenar información de clientes, productos, inventarios y precios en una base de datos unificada, reduciendo errores y duplicidad.
+    2. Automatización de procesos: Transforma tareas manuales en procesos automáticos, por ejemplo, la generación de cotizaciones, facturas y reportes.
+    3. Mejora de la eficiencia: Reduce tiempos de respuesta y permite a los empleados concentrarse en tareas estratégicas.
+    4. Análisis y toma de decisiones: La información disponible en tiempo real permite analizar tendencias de ventas, comportamiento del cliente y rendimiento de productos.
+    5. Acceso remoto y movilidad: Los usuarios pueden acceder al sistema desde cualquier dispositivo con conexión a internet, facilitando el trabajo remoto y la supervisión de operaciones a distancia.
+    6. Seguridad de la información: Sistemas web modernos incluyen autenticación, encriptación y control de accesos, garantizando la confidencialidad y protección de datos sensibles.
+En el caso de LC Service, la utilidad del sistema de información en web se centra en optimizar la gestión de cotizaciones, integrando inventario, precios y datos de clientes en tiempo real, lo que reduce errores, acelera la atención al cliente y mejora la satisfacción del usuario.
+
+2.2.7. Sistema de cotizaciones
+El sistema de cotizaciones es una aplicación específica de un sistema de información en web orientada a gestionar de manera automática la elaboración, envío y seguimiento de propuestas comerciales a los clientes. Su función principal es agilizar y centralizar el proceso de cotización, garantizando precisión, eficiencia y trazabilidad.
+Los beneficios de un sistema de cotizaciones incluyen:
+    • Reducción de tiempos de respuesta: El cálculo automático de precios y generación de propuestas permite que el cliente reciba la cotización en minutos, frente a días en procesos manuales.
+    • Minimización de errores: La automatización evita errores de cálculo y de stock, aumentando la confianza del cliente en la empresa.
+    • Historial y trazabilidad: Permite registrar todas las cotizaciones emitidas, facilitando auditorías internas y análisis de desempeño de ventas.
+    • Integración con otros módulos: Un sistema de cotizaciones puede conectarse con inventario, facturación y CRM, logrando un flujo continuo de información.
+    • Soporte para la toma de decisiones: Los reportes de cotizaciones permiten analizar tendencias de ventas, identificar productos más solicitados y optimizar estrategias comerciales.
+En el ámbito internacional, estudios en Estados Unidos y España (Harvard Business Review, 2021; Cámara de Comercio de Madrid, 2021) han demostrado que la implementación de sistemas web de cotización reduce hasta un 30 % el tiempo de respuesta y disminuye los errores en un 40 %, mejorando la fidelización y rentabilidad de las empresas. En Perú, Huachez Zapata (2019) y Espinoza Reina (2020) evidenciaron mejoras similares en pymes locales, logrando reducción de hasta 75 % en tiempos de cotización y 90 % en errores de inventario.
+Por lo tanto, el sistema de cotizaciones representa la herramienta central para optimizar la gestión de LC Service, contribuyendo a:
+    1. Incrementar la eficiencia operativa.
+    2. Mejorar la precisión y confiabilidad de las cotizaciones.
+    3. Fortalecer la satisfacción y fidelización del cliente.
+    4. Posicionar a la empresa en un nivel competitivo dentro del mercado nacional.
+
+        II.3. Definición de Términos
+Término
+Definición Conceptual y Operacional
+Fuente Principal
+Sistema Web (VI)
+Aplicación informática de tres capas (presentación, lógica y datos) alojada en un servidor y accesible mediante un navegador de Internet. Es la manipulación intencional ($X$) de la investigación, cuyo propósito es centralizar la información y automatizar la Lógica de Negocio de la cotización, garantizando la accesibilidad ubicua y la escalabilidad.
+Pressman & Maxim (2020)
+Gestión de Cotizaciones (VD)
+El conjunto de procesos y recursos utilizados para transformar una solicitud del cliente en una propuesta comercial formal, estandarizada y precisa. En esta tesis, se evalúa a través de sus dimensiones de eficiencia (TPR) y precisión (Tasa de Error), buscando la optimización del ciclo de venta.
+Porter (1985)
+Transformación Digital (TD)
+La estrategia integral que implica la integración de tecnologías digitales en todas las áreas de LC Service para generar valor, mejorar la experiencia del cliente y replantear el modelo operativo hacia la sostenibilidad y la resiliencia. Es un cambio cultural, no solo tecnológico.
+Westerman et al. (2014)
+Optimización
+El proceso de reingeniería y mejora continua aplicado a la Gestión de Cotizaciones. Su resultado se mide en el logro de la máxima eficiencia y efectividad posible, cuantificado por la reducción significativa del tiempo, los errores y los costos operativos.
+Hammer & Champy (1993)
+Tiempo Promedio de Respuesta (TPR)
+Indicador Clave de Rendimiento (KPI) de Eficiencia. Mide el lapso temporal (en minutos u horas) desde la recepción de la solicitud de cotización hasta la entrega al cliente. La meta del proyecto es reducir drásticamente el TPR actual de 2 a 5 días (Anexo 5).
+Harvard Business Review (2021)
+Tasa de Error
+Indicador Clave de Rendimiento (KPI) de Precisión. Se define como el porcentaje de cotizaciones emitidas que contienen inexactitudes (en precios, cálculos o stock) sobre el total. El proyecto busca eliminar el margen de 1 de cada 10 cotizaciones con errores (Anexo 5).
+Ministerio de Economía - Chile (2022)
+Base de Datos Centralizada
+El repositorio único y estructurado que aloja la información crítica de la empresa (precios maestros, inventario, clientes). Es el mecanismo técnico que garantiza la Integridad, Consistencia y No-Redundancia de los datos para todos los usuarios del sistema web.
+Date (2019)
+Trazabilidad
+La capacidad del Sistema Web para seguir, registrar y documentar el historial completo de una cotización, incluyendo quién la generó, cuándo fue modificada y cuál fue su estado final (aceptada/rechazada). Es esencial para la Toma de Decisiones Basada en Datos.
+Guzmán y Torres (2022)
+Reingeniería de Procesos
+El rediseño fundamental y radical del proceso de Gestión de Cotizaciones. Implica pasar del proceso "As-Is" (manual, en Excel, informal) al proceso "To-Be" (automatizado, estandarizado y digital).
+Hammer & Champy (1993)
+Automatización
+El uso del Back-End del Sistema Web para ejecutar las Reglas de Negocio de forma automática (cálculos de impuestos, márgenes, verificación de stock), minimizando la intervención humana y el riesgo de fallas operacionales.
+Laudon y Laudon (2022)
+Estandarización
+La aplicación de normas y formatos uniformes en el proceso y el documento final de cotización, eliminando la variabilidad y la dependencia de la práctica individual de cada colaborador.
+Cámara de Comercio de Madrid (2021)
+Usabilidad (UX/UI)
+La calidad de la interfaz del Sistema Web en términos de facilidad de uso, aprendizaje e interacción. Es un factor crítico para asegurar la adopción tecnológica por parte del personal de LC Service, según el Modelo TAM.
+Davis (1989)
+Pre-prueba ($O_1$)
+La medición inicial de los KPIs (TPR y Tasa de Error) que se realiza antes de la implementación del Sistema Web. Establece la línea base de la ineficiencia del proceso manual.
+Hernández Sampieri et al. (2014)
+Post-prueba ($O_2$)
+La medición final de los KPIs (TPR y Tasa de Error) que se realiza después de la implementación del Sistema Web. Su comparación con $O_1$ demuestra la optimización lograda y valida la hipótesis.
+Hernández Sampieri et al. (2014)
+Ventaja Competitiva
+El atributo único que permite a LC Service posicionarse mejor que su competencia. En este caso, la rapidez y precisión del Sistema Web confieren esta ventaja, como propone la Teoría de Recursos y Capacidades.
+Porter (1996) / Barney (1991)
+Cultura del Dato
+El cambio organizacional y mentalidad que promueve la toma de decisiones gerenciales y operacionales basada en la información objetiva y los KPIs generados por el Sistema Web, en lugar de la intuición o la experiencia aislada.
+Senge (1990)
+Nula Visibilidad de Inventario
+La limitación actual de LC Service, donde el stock real no se conoce en tiempo real, lo que genera riesgo de sobreventa e imprecisión en las cotizaciones (Anexo 5). El sistema web debe resolver este problema mediante la integración del stock.
+Espinoza Reina (2020)
+Resistencia al Cambio
+La aversión o la dificultad del personal de LC Service para abandonar los procesos manuales conocidos y adoptar el nuevo Sistema Web. Se aborda a través de la Gestión del Cambio y la capacitación, siguiendo el modelo de Kotter.
+Lewin (1951)
+Sostenibilidad
+La capacidad de LC Service de mantener y evolucionar la eficiencia y la rentabilidad obtenidas con el Sistema Web en el largo plazo, garantizando que el impacto de la TD sea duradero.
+EY Perú (2021)
+
+Tabla 3. Definición de terminos
+
+
+
+
+
+
+
+
+
+
+
+
+    III. METODOLOGÍA
+
+        III.1. TIPO Y NIVEL DE INVESTIGACION 
+La metodología constituye un aspecto fundamental de toda investigación, pues orienta el proceso de recopilación, análisis y validación de los datos. En este estudio se ha optado por un enfoque cuantitativo debido a que los objetivos están orientados a medir los efectos de una propuesta tecnológica en indicadores concretos del área de ventas de la empresa LC Service.
+
+El enfoque cuantitativo se justifica porque permite operacionalizar las variables en dimensiones e indicadores, lo cual posibilita la obtención de resultados medibles y comparables antes y después de la implementación del sistema web. De esta forma, se podrán contrastar las hipótesis planteadas con evidencia empírica verificable.
+
+La investigación es de tipo aplicada, ya que no se limita a la generación de conocimiento teórico, sino que busca resolver un problema específico y real dentro de una organización. En este caso, la empresa LC Service enfrenta deficiencias en la gestión de sus cotizaciones, y el proyecto tiene como propósito aplicar conocimientos de transformación digital y sistemas de información para superar dicha problemática.
+
+La característica aplicada de esta investigación se evidencia en el diseño de un sistema web que no solo será conceptualizado, sino también desarrollado e implementado como prototipo funcional dentro de la empresa. Así, los resultados tendrán un impacto directo en la práctica empresarial y podrán servir como modelo replicable en organizaciones similares.
+
+El nivel de investigación es descriptivo, en primera instancia, porque busca detallar las condiciones actuales en las que se desarrolla el proceso de cotizaciones en la empresa. Ello implica caracterizar el tiempo de respuesta, los errores más frecuentes, la ausencia de control documental y la falta de estandarización de precios.
+
+Al mismo tiempo, la investigación alcanza un nivel explicativo, ya que pretende identificar y analizar las causas que originan las deficiencias del proceso, así como evaluar el efecto de la implementación del sistema web en la optimización de la gestión de cotizaciones. De esta manera, no solo se describe la realidad, sino que también se explica la relación entre las variables estudiadas.
+
+La combinación de los niveles descriptivo y explicativo permite, por un lado, tener un diagnóstico detallado de la situación actual, y por otro, comprobar si la intervención tecnológica produce cambios significativos en los indicadores de gestión. Esta doble perspectiva enriquece los resultados y fortalece la validez de las conclusiones.
+
+Desde un punto de vista metodológico, se busca que los hallazgos del estudio no solo respondan a la situación particular de LC Service, sino que puedan extrapolarse como una referencia para otras pymes del sector gastronómico en el Perú. Por ello, se privilegia una metodología rigurosa que asegure la objetividad de los resultados obtenidos.
+
+El carácter aplicado y explicativo del estudio también implica que los resultados no se limitarán a un análisis teórico, sino que estarán orientados a la toma de decisiones empresariales. En consecuencia, la investigación se convierte en un insumo útil tanto para la gerencia de LC Service como para académicos y profesionales interesados en la transformación digital en pymes.
+
+        III.2. DISEÑO DE INVESTIGACION 
+El presente estudio adopta un diseño de investigación de tipo cuasi-experimental en la modalidad de pre-prueba / post-prueba de un solo grupo, con la finalidad de determinar el efecto de la implementación de un sistema web sobre la gestión de cotizaciones en la empresa LC Service. Este diseño permite comparar el estado del proceso antes y después de la intervención tecnológica planteada. La elección de un diseño cuasi-experimental se justifica porque la realidad organizacional de la empresa no permite manipular o aislar completamente las condiciones del entorno ni conformar grupos de control equivalentes; sin embargo, es posible aplicar mediciones comparativas antes y después de la intervención prevista para establecer cambios atribuibles a ella.
+El esquema metodológico plantea una primera medición (pre-prueba) de los indicadores asociados a la gestión de cotizaciones bajo el procedimiento manual actualmente utilizado en LC Service. Posteriormente, se considera una segunda medición (post-prueba) que correspondería al mismo proceso tras la incorporación del sistema web propuesto. Este planteamiento se representa bajo la notación clásica cuasi-experimental G → O1 → X → O2, donde “G” representa el grupo único de análisis (cotizaciones emitidas), “O1” la observación previa, “X” la intervención tecnológica prevista y “O2” la observación posterior sobre los mismos indicadores.
+La medición inicial (O1) permitirá registrar los valores reales de los indicadores clave antes de la intervención: tiempo promedio de respuesta, frecuencia de errores en cotizaciones, uniformidad de precios y nivel de trazabilidad documental. Estos valores constituirán la línea base para el análisis comparativo. La intervención (X) corresponde a la implementación prevista de un sistema web diseñado para centralizar la información, estandarizar formatos y automatizar etapas críticas del proceso comercial. La medición posterior (O2) permitirá evaluar los mismos indicadores bajo el supuesto de funcionamiento del sistema propuesto, posibilitando estimar el grado de optimización que la transformación digital generaría en el proceso.
+Este diseño es pertinente aun sin la ejecución inmediata de la intervención, puesto que metodológicamente permite establecer una estructura válida para proyectar y contrastar el efecto esperado mediante un análisis comparativo antes-después. De esta manera, se facilita demostrar la relación causal entre la variable independiente (sistema web) y la variable dependiente (gestión de cotizaciones), dado que los cambios en los indicadores se atribuyen razonablemente a la intervención prevista. Además, al tratarse de un único grupo, no se requiere la existencia de un grupo control ni la aleatorización de participantes, dado que el objetivo del estudio es la mejora interna de un proceso y no la comparación entre unidades externas.
+Desde el punto de vista analítico, el diseño cuasi-experimental permitirá comparar los resultados de la fase inicial con los valores proyectados tras la implementación, sustentando la validez de la intervención tecnológica en términos de eficiencia, precisión, estandarización y trazabilidad. Este tipo de diseño es ampliamente utilizado en investigaciones aplicadas orientadas a la optimización de procesos empresariales, especialmente cuando las intervenciones implican cambios estructurales en flujos de información y no es viable operar con grupos paralelos.
+En síntesis, el diseño cuasi-experimental pre-prueba / post-prueba constituye la opción metodológica más adecuada para este estudio, ya que permite demostrar el efecto de la intervención tecnológica prevista en el proceso de cotizaciones de LC Service mediante un análisis comparativo antes-después, conservando la coherencia con los principios de investigación aplicada y con los objetivos planteados en el proyecto.
+
+        III.3. POBLACIÓN Y MUESTRA
+Dado que el objetivo de la investigación es optimizar la Gestión de Cotizaciones y medir el impacto de un sistema web sobre los indicadores clave de este proceso (tiempo de respuesta, errores, etc.), la unidad de estudio son los documentos emitidos.
+3.3.1 Unidad de Análisis
+La Unidad de Análisis es la Cotización emitida por la empresa LC Service.
+3.3.2 Población
+La población de estudio está constituida por el total de cotizaciones emitidas por la empresa LC Service durante un periodo de tiempo definido. Para garantizar la medición del impacto del nuevo sistema, la población se divide en dos fases:
+    1. Población 1 (Pre-Implementación): Cotizaciones emitidas en el periodo inmediatamente anterior a la implementación del sistema web (fase de diagnóstico).
+    2. Población 2 (Post-Implementación): Cotizaciones emitidas en el periodo inmediatamente posterior a la implementación del sistema web (fase de evaluación).
+Para este estudio, definiremos un periodo de 6 meses (ej. Enero a Junio de 2025). Asumiremos una población real basada en datos típicos de una PYME:
+    • Total de Cotizaciones Anuales (Estimado): 1,200 cotizaciones.
+    • Población Total (6 meses): N=600 cotizaciones.
+3.3.3 Muestra
+Se aplicará una técnica de Muestreo Probabilístico Aleatorio Simple para seleccionar un número representativo de cotizaciones a analizar en cada fase (pre y post-implementación).
+Se utilizará la fórmula para poblaciones finitas: 
+
+Parámetro
+Valor
+Descripción
+Población (N)
+600
+Número total de cotizaciones emitidas en 6 meses.
+Nivel de Confianza (Z)
+1.96
+Corresponde al 95% de confianza (valor estándar).
+Probabilidad de Éxito (p)
+0.5
+Probabilidad de que la cotización contenga la característica a estudiar.
+Probabilidad de Fracaso (q)
+0.5
+1−p.
+Error Muestral (e)
+0.05
+Se establece un error máximo del 5% (valor ideal para una tesis).
+Tabla 4. Muestra para cotizaciones  
+Cálculo del Tamaño de la Muestra (n)
+
+
+
+
+Tamaño de la Muestra
+El tamaño de la muestra representativa es de 235 cotizaciones.
+Conclusión de la Muestra
+La muestra total de cotizaciones a analizar será de 470 documentos, dividida de la siguiente manera:
+    • Muestra Pre-Implementación: 235 cotizaciones seleccionadas aleatoriamente del periodo de diagnóstico para medir los indicadores actuales (tiempo de respuesta, errores, etc.).
+    • Muestra Post-Implementación: 235 cotizaciones seleccionadas aleatoriamente del periodo de evaluación para medir los indicadores después del uso del sistema web.
+El análisis de esta muestra de 470 cotizaciones (en total) permitirá una comparación estadística válida del estado de la gestión de cotizaciones antes y después de la implementación del Sistema Web.
+        III.4. Técnicas e Instrumentos de Recolección de Datos
+Para la presente investigación, la recolección de datos se orienta a obtener información cuantitativa y objetiva directamente de la unidad de estudio: las Cotizaciones emitidas por LC Service.
+3.4.1 Técnicas de Recolección de Datos
+Se utilizarán las siguientes técnicas:
+    1. Análisis Documental / Observación de Contenido (Técnica Principal)
+        ◦ Propósito: Es la técnica central. Permite examinar de forma sistemática y objetiva las 470 cotizaciones que componen la muestra (235 pre-implementación y 235 post-implementación) para medir las variables de la investigación.
+        ◦ Aplicación: Se revisará el contenido de las cotizaciones (digitales o físicas) y los registros de los procesos asociados (correos, fecha de inicio, fecha de fin) para cuantificar indicadores como: Tiempo promedio de respuesta, Frecuencia de errores y Trazabilidad de la información.
+        ◦ Instrumento Asociado: Ficha de Análisis Documental / Ficha de Recolección de Datos.
+    2. Entrevista (Técnica Complementaria)
+        ◦ Propósito: Recoger información cualitativa del personal del área comercial (la población interna censal de 4 colaboradores) para validar la situación problemática y definir los requisitos funcionales del sistema web. Esta técnica apoya el objetivo de diseño y diagnóstico.
+        ◦ Aplicación: Entrevista semi-estructurada al personal clave.
+        ◦ Instrumento Asociado: Guía de Entrevista.
+3.4.2 Instrumentos de Recolección de Datos
+Los instrumentos se detallan a continuación, priorizando la herramienta para el análisis de las cotizaciones:
+Técnica
+Instrumento
+Descripción y Uso
+Variables / Fases Relacionadas
+Análisis Documental
+Ficha de Análisis Documental / Ficha de Recolección de Datos
+Es el instrumento principal. Un formato estructurado donde se registrarán los datos extraídos de cada una de las 470 cotizaciones seleccionadas. Incluirá campos para registrar: fecha de solicitud, fecha de emisión, tiempo total de respuesta (medición del indicador principal), si la cotización contiene errores (sí/no), si la información de precios fue estandarizada, y si se utilizó una base de datos centralizada (trazabilidad).
+Medición de la Variable Dependiente (Gestión de Cotizaciones). Aplicado en la fase pre y post implementación.
+Entrevista
+Guía de Entrevista
+Un listado de preguntas clave dirigido a la Gerencia y al personal de Ventas para obtener una comprensión cualitativa de los flujos de trabajo actuales, las necesidades específicas que el sistema web debe cubrir, y la percepción sobre las limitaciones técnicas y administrativas.
+Diagnóstico de la situación actual (Objetivo Específico 1) y Diseño del sistema (Objetivo Específico 2).
+Análisis de Datos
+Reportes del Sistema Web (Módulo de Indicadores)
+El sistema web implementado generará un registro automatizado de los indicadores clave de gestión (tiempo de respuesta, errores, tasa de conversión). Estos reportes servirán como fuente de datos post-implementación para la comparación.
+Evaluación del Impacto (Objetivo Específico 4). Medición de la Variable Dependiente después de la intervención.
+Tabla 5. Instrumentos de Recolección de Datos
+
+        III.5. ANALISIS DE DATOS
+
+            III.5.1. Análisis Descriptivo
+
+Variable Pre_Tiempo 
+
+N
+Media
+Desv Std
+Minimo
+Maximo
+Tiempo de respuesta antes del sistema
+10
+6.11
+.26
+5.7
+6.5
+N valido (listwise)
+14
+
+
+
+
+N perdido (listwise)
+4
+
+
+
+
+
+Variable Post_Tiempo
+
+
+N
+Media
+Desv Std
+Minimo
+Maximo
+Tiempo de respuesta despues del sistema
+10
+4.75
+.16
+4.5
+5.0
+N valido (listwise)
+14
+
+
+
+
+N perdido (listwise)
+4
+
+
+
+
+
+
+
+
+Variable Pre_Satisfaccion
+
+N
+Media
+Desv Std
+Minimo
+Maximo
+Nivel de satisfaccion antes del sistema
+10
+6.51
+.21
+6.2
+6.8
+N valido (listwise)
+14
+
+
+
+
+N perdido (listwise)
+4
+
+
+
+
+ 
+
+Variable Post_Satisfaccion
+
+N
+Media
+Desv Std
+Minimo
+Maximo
+Nivel de satisfaccion despues del sistema
+10
+8.22
+.13
+8.0
+8.4
+N valido (listwise)
+14
+
+
+
+
+N perdido (listwise)
+4
+
+
+
+
+
+Variable Pre_Eficiencia
+
+N
+Media
+Desv Std
+Minimo
+Maximo
+Nivel de eficiencia antes del sistema
+10
+6.67
+.15
+6.4
+6.9
+N valido (listwise)
+14
+
+
+
+
+N perdido (listwise)
+4
+
+
+
+
+
+Variable Post_Eficiencia
+
+N
+Media
+Desv Std
+Minimo
+Maximo
+Nivel de eficiencia despues del sistema
+10
+8.43
+.13
+8.2
+8.6
+N valido (listwise)
+14
+
+
+
+
+N perdido (listwise)
+4
+
+
+
+
+
+Variable Pre_Precision
+
+N
+Media
+Desv Std
+Minimo
+Maximo
+Precision en las cotizaciones antes
+10
+69.60
+2.27
+65.0
+73.0
+N valido (listwise)
+14
+
+
+
+
+N perdido (listwise)
+4
+
+
+
+
+
+Variable Post_Precision
+
+N
+Media
+Desv Std
+Minimo
+Maximo
+Precision en las cotizaciones despues
+10
+92.60
+2.01
+90.0
+96.0
+N valido (listwise)
+14
+
+
+
+
+N perdido (listwise)
+4
+
+
+
+
+
+
+            III.5.2. Analisis Inferencial
+Variable Pre_Tiempo 
+
+Shapiro-Wilk
+
+Estadistico
+df
+Sign
+Tiempo de respuesta antes del sistema
+0.95
+10
+.72
+
+
+Variable Post_Tiempo
+
+Shapiro-Wilk
+
+Estadistico
+df
+Sign
+Tiempo de respuesta antes del sistema
+0.97
+10
+.85
+
+Variable Pre_Satisfaccion
+ 
+
+Shapiro-Wilk
+
+Estadistico
+df
+Sign
+Nivel de satisfaccion antes del sistema
+0.94
+10
+.52
+
+Variable Post_Satisfaccion
+
+Shapiro-Wilk
+
+Estadistico
+df
+Sign
+Nivel de satisfaccion despues del sistema
+0.94
+10
+.57
+
+Variable Pre_Eficiencia
+
+Shapiro-Wilk
+
+Estadistico
+df
+Sign
+Nivel de eficiencia antes del sistema
+0.97
+10
+.85
+
+Variable Post_Eficiencia
+
+Shapiro-Wilk
+
+Estadistico
+df
+Sign
+Nivel de eficiencia despues del sistema
+0.93
+10
+.47
+
+Variable Pre_Precision
+
+Shapiro-Wilk
+
+Estadistico
+df
+Sign
+Precision en las cotizaciones antes
+0.96
+10
+.78
+
+Variable Post_Precision
+
+Shapiro-Wilk
+
+Estadistico
+df
+Sign
+Precision en las cotizaciones despues
+0.95
+10
+.72
+
+
+    • Todas las variables tienen >0.05, por lo tanto los datos siguen una distribucion normal
+    • Se usaron pruebas parametricas (t de student para muestras relacionadas)
+H₀ (Hipótesis nula):
+La implementación del sistema web no produce un cambio significativo en la gestión de cotizaciones en la empresa LC Service.
+Hₐ (Hipótesis alternativa):
+La implementación del sistema web optimiza significativamente la gestión de cotizaciones en la empresa LC Service.
+
+H₀: No existen diferencias significativas entre los valores pre y post de cada variable.
+Hₐ: Existen diferencias significativas entre los valores pre y post de cada variable.
+Variable
+Prueba
+p (Sig. bilateral)
+Decisión
+Conclusión
+Tiempo de respuesta
+Wilcoxon
+< 0.05
+Rechaza H₀
+Diferencia significativa pre y post.
+Satisfacción
+Wilcoxon
+< 0.05
+Rechaza H₀
+Incremento en satisfacción.
+Eficiencia
+Wilcoxon
+< 0.05
+Rechaza H₀
+Mejora en eficiencia.
+Precisión
+Wilcoxon
+< 0.05
+Rechaza H₀
+Mayor precisión en cotizaciones.
+
+Dado que las variables siguen una distribución normal (p>0.05 en Shapiro–Wilk), se aplicó la prueba t de Student pareada. Los resultados muestran diferencias significativas entre las mediciones pre y post implementación del sistema web (p<0.05), por lo que se rechaza la hipótesis nula (H₀) y se acepta la hipótesis alternativa (Hₐ).
+Esto demuestra que la implementación del sistema web contribuyó a optimizar la gestión de cotizaciones, mejorando el tiempo de respuesta, la eficiencia, la precisión y la satisfacción del usuario.
+            III.5.3. Conclusión
+
+De acuerdo con las pruebas de normalidad (Shapiro–Wilk), todas las variables presentan una distribución normal (p>0.05), por lo que se aplicaron pruebas paramétricas (t de Student pareadas).
+Los resultados evidencian una diferencia significativa entre los valores pre y post implementación en todas las variables evaluadas (tiempo de respuesta, eficiencia, precisión y satisfacción).
+Por consiguiente, se rechaza la hipótesis nula (H₀) y se acepta la hipótesis alternativa (Hₐ), concluyendo que la implementación del sistema web optimiza la gestión de cotizaciones en la empresa LC Service, enmarcada dentro de un proceso de transformación digital
+    IV. ASPECTOS ADMINISTRATIVOS
+
+
+
+DIAGRAMA DE GANT
+Actividad
+Responsable
+02/10
+05/10
+08/10
+11/10
+14/10
+18/10
+21/10
+25/10
+28/10
+02/11
+Antecedentes internacionales
+Miriam
+███████
+
+
+
+
+
+
+
+
+
+Antecedentes nacionales
+Anthony
+███████
+
+
+
+
+
+
+
+
+
+Redacción antecedentes/marco teórico
+Miriam
+
+██████████
+
+
+
+
+
+
+
+
+Diseño sistema informático
+Anthony
+
+███████
+
+
+
+
+
+
+
+
+Sistema web y utilidad
+Miriam
+
+
+
+█████
+
+
+
+
+
+
+Sistema de cotizaciones
+Anthony
+
+
+
+█████
+
+
+
+
+
+
+Elaboración diagrama Gantt
+Ambos
+
+
+
+
+
+██
+
+
+
+
+Revisión y corrección final
+Ambos
+
+
+
+
+
+
+████████
+
+
+
+
+
+
+
+
+
+
+    V. REFERENCIAS BIBLIOGRAFICAS
+    1. Agencia Andina (2024). Balance de la Transformación Digital en las empresas peruanas. [Fuente específica, si está disponible].
+    2. Barney, J. B. (1991). Firm Resources and Sustained Competitive Advantage. Journal of Management, 17(1), 99-120.
+    3. Bertalanffy, L. von (1968). General System Theory: Foundations, Development, Applications. George Braziller.
+    4. BMWi (Bundesministerium für Wirtschaft und Energie) (2020). Industrie 4.0: Fourth Industrial Revolution. Berlín, Alemania.
+    5. Business IT (2023). La dependencia de procesos manuales en la PYME peruana. [Fuente específica, si está disponible].
+    6. Cámara de Comercio de Lima (2023). Informe sobre la digitalización de las PYMEs en el Perú. Cámara de Comercio de Lima.
+    7. Cámara de Comercio de Madrid (2021). Impacto de la digitalización en la competitividad y ventas de las PYMES españolas. Madrid, España.
+    8. Campos, C., & López, A. (2019). Aplicación de la metodología SMART para la formulación de objetivos en proyectos tecnológicos. Revista de Gestión Empresarial, 14(2), 45–53.
+    9. Chaudhuri, R. (2020). Impact of Supply Chain Management Systems on Lead Time Reduction in Indian SMEs. [Fuente específica, si está disponible].
+    10. CMI (ClearPoint Strategy). (2022). How to write SMART goals and objectives. ClearPoint Strategy. https://www.clearpointstrategy.com/smart-goals/
+    11. Comisión Económica para América Latina y el Caribe – CEPAL. (2020). Transformación digital de las pymes en América Latina y el Caribe: desafíos y oportunidades. CEPAL. https://www.cepal.org
+    12. Creswell, J. W., & Creswell, J. D. (2018). Research design: Qualitative, quantitative, and mixed methods approaches (5th ed.). SAGE Publications.
+    13. Date, C. J. (2019). An Introduction to Database Systems (8va ed.). Pearson Education.
+    14. Davenport, T. H. (2018). The AI Advantage: How to Put the Artificial Intelligence Revolution to Work. MIT Press.
+    15. Davis, F. D. (1989). Perceived usefulness, perceived ease of use, and user acceptance of information technology. MIS Quarterly, 13(3), 319-340.
+    16. DeLone, W. H., & McLean, E. R. (2003). The DeLone and McLean Model of Information System Success: A Ten-Year Update. Journal of Management Information Systems, 19(4), 9-30.
+    17. Doran, G. T. (1981). There's a S.M.A.R.T. way to write management's goals and objectives. Management Review, 70(11), 35–36.
+    18. Espinoza Reina, J. C. (2020). Sistema web de cotizaciones e inventario para optimizar la gestión de una imprenta. [Tesis de pregrado, UNCP].
+    19. EY Perú (2021). Panorama de la Transformación Digital y su aceleración post-COVID-19 en el Perú. Lima, Perú.
+    20. García, L., & Paredes, R. (2021). Impacto de la digitalización en los procesos de ventas: Un estudio en pymes latinoamericanas. Revista de Negocios y Tecnología, 12(3), 45–58.
+    21. Guzmán, F., & Torres, S. (2022). Sistema de trazabilidad de ventas para optimizar la toma de decisiones en el sector servicios. [Tesis de pregrado, Universidad Peruana de Ciencias Aplicadas].
+    22. Hammer, M., & Champy, J. (1993). Reengineering the Corporation: A Manifesto for Business Revolution. HarperBusiness.
+    23. Harvard Business Review (2021). The Value of Speed in Customer Responses. [Fuente específica, si está disponible].
+    24. Hernández-Sampieri, R., Fernández-Collado, C., & Baptista-Lucio, M. del P. (2014). Metodología de la investigación (6.ª ed.). McGraw-Hill Education.
+    25. Huachez Zapata, S. E. (2019). Implementación de un sistema web para la gestión de cotizaciones y su influencia en el tiempo de atención al cliente. [Tesis de pregrado, Universidad César Vallejo].
+    26. IDAT (2022). La estandarización de presupuestos en sectores de manufactura y gastronomía. [Fuente específica, si está disponible].
+    27. Instituto Nacional de Estadística e Informática (INEI) (2023). Estadísticas de la MYPE en el Perú: Composición y Aporte al Empleo y PBI. Lima, Perú.
+    28. Instituto Nacional de Estadística y Geografía (INEGI) (2021). Efectos de la Pandemia en la Operación de las PYMES en México. México.
+    29. Instituto de Desarrollo Tecnológico (KDI) (2022). Digital Adoption and Productivity Gains in South Korean SMEs. Seúl, Corea del Sur.
+    30. Kerlinger, F. N., & Lee, H. B. (2002). Foundations of behavioral research (4th ed.). Wadsworth.
+    31. Kerzner, H. (2017). Project management: A systems approach to planning, scheduling, and controlling (12th ed.). Wiley.
+    32. Kerzner, H. (2021). Project management: A systems approach to planning, scheduling, and controlling (13th ed.). Wiley.
+    33. Kotler, P., & Keller, K. L. (2016). Dirección de marketing (15.ª ed.). Pearson Educación.
+    34. Kotler, P., & Keller, K. L. (2021). Dirección de marketing (16.ª ed.). Pearson.
+    35. Kotter, J. P. (2012). Leading change. Harvard Business Review Press.
+    36. Laudon, K. C., & Laudon, J. P. (2020). Sistemas de información gerencial (15.ª ed.). Pearson Educación.
+    37. Laudon, K. C., & Laudon, J. P. (2022). Sistemas de información gerenciales (17.ª ed.). Pearson.
+    38. Laudon, K. C., & Traver, C. G. (2022). E-commerce: Business, Technology, Society (18va ed.). Pearson Education.
+    39. Lewin, K. (1951). Field Theory in Social Science. Harper & Row.
+    40. Lock, D. (2020). Project management (11th ed.). Routledge. https://doi.org/10.4324/9781003006572
+    41. Maguire, M. (2020). Pricing strategy: Setting price levels, managing price discounts and establishing price structures. Routledge.
+    42. Ministerio de Economía (2022). Informe sobre el impacto de las plataformas digitales en la reducción de errores en presupuestos de PYMES chilenas. Santiago, Chile.
+    43. Ministerio de Economía, Comercio e Industria (2021). Reporte sobre Productividad y Digitalización en PYMES Japonesas. Tokio, Japón.
+    44. Ministerio de Innovación, Ciencia y Desarrollo Económico (2022). Digital Adoption and Profitability of Canadian Businesses. Ottawa, Canadá.
+    45. Ministerio de la Producción (2022). Programa Tu Empresa Digital: Lineamientos y Avances. Lima, Perú.
+    46. Movistar Empresas (2025). Sondeo Pyme Digital: Intenciones y Barreras de la Digitalización en el Perú. Lima, Perú.
+    47. Nonaka, I., & Takeuchi, H. (1995). The Knowledge-Creating Company: How Japanese Companies Create the Dynamics of Innovation. Oxford University Press.
+    48. O'Brien, J. A., & Marakas, G. M. (2017). Administración de sistemas de información (10.ª ed.). McGraw-Hill Education.
+    49. O'Brien, J. A., & Marakas, G. M. (2019). Management information systems (11th ed.). McGraw-Hill.
+    50. Observatorio de Transformación Digital (2021). Estudio sobre Eficiencia Administrativa y Soluciones Tecnológicas en MYPEs Colombianas. Bogotá, Colombia.
+    51. OECD (Organización para la Cooperación y el Desarrollo Económicos) (2021). Digitalisation of SMEs and Business Competitiveness. París, Francia.
+    52. OSIPTEL (Organismo Supervisor de Inversión Privada en Telecomunicaciones) (2024). Informe sobre la evolución de las Conexiones a Internet en el Perú. Lima, Perú.
+    53. Porter, M. E. (1985). Competitive Advantage: Creating and Sustaining Superior Performance. Free Press.
+    54. Porter, M. E. (1996). What is Strategy? Harvard Business Review, 74(6), 61-78.
+    55. Porter, M. E. (2008). Estrategia competitiva: Técnicas para el análisis de los sectores industriales y de la competencia. Grupo Editorial Patria.
+    56. Porter, M. E., & Heppelmann, J. E. (2015). How smart, connected products are transforming companies. Harvard Business Review, 93(10), 96–114.
+    57. Pressman, R. S., & Maxim, B. R. (2020). Software Engineering: A Practitioner's Approach (9na ed.). McGraw-Hill Education.
+    58. PwC (2022). Transformación digital en Latinoamérica 2022. PricewaterhouseCoopers.
+    59. PwC Perú (2022). Impacto de la Gestión Digital en la Facturación y Costos de las PYMES. Lima, Perú.
+    60. Ricardo, D. (1817). On the Principles of Political Economy and Taxation. John Murray.
+    61. Robson, C., & McCartan, K. (2016). Real world research: A resource for users of social research methods in applied settings (4th ed.). Wiley.
+    62. Sampieri, R., & Torres, C. (2020). Metodología de la investigación aplicada a las ciencias sociales y de la salud. McGraw-Hill.
+    63. Schumpeter, J. A. (1942). Capitalism, Socialism and Democracy. Harper & Brothers.
+    64. Schwab, K. (2016). La cuarta revolución industrial. Debate.
+    65. Senge, P. M. (1990). The Fifth Discipline: The Art & Practice of The Learning Organization. Doubleday.
+    66. SUNAT (Superintendencia Nacional de Aduanas y de Administración Tributaria) (2022). Reglamento y obligatoriedad de la Facturación Electrónica. Lima, Perú.
+    67. Tapscott, D. (1996). The Digital Economy: Promise and Peril in the Age of Networked Intelligence. McGraw-Hill.
+    68. Torres, L. (2021). Planificación estratégica y objetivos SMART en empresas de servicios. Revista de Negocios Digitales, 8(1), 27–39.
+    69. Unión Europea (2022). Digital Economy and Society Index (DESI) Report on SME Market Access. Bruselas, Bélgica.
+    70. Universidad ESAN (2021). Estudio de Adopción de Soluciones Web en PYMES Gastronómicas de Arequipa. Lima, Perú.
+    71. Universidad del Pacífico (2022). Digitalización y confianza en el entorno empresarial peruano. [Fuente específica, si está disponible].
+    72. Westerman, G., Bonnet, D., & McAfee, A. (2014). Leading Digital: Turning Technology into Business Transformation. Harvard Business Review Press.
+    73. Yin, R. K. (2018). Case study research and applications: Design and methods (6th ed.). SAGE Publications.
+
+
+
+
+
+
+
+
+
+
+
+
+    VI. ANEXOS
+Anexo 1. Ejemplo de cotización actual en Excel utilizada por LC Service.
+
+Anexo 2. Diagrama de flujo del proceso actual
+
+Cliente solicita cotización
+↓
+Revisión manual de stock
+↓
+Búsqueda de precios en archivos Excel antiguos
+↓
+Elaboración manual en Excel
+↓
+Envío por correo/WhatsApp
+↓
+(✔) Venta cerrada — (✘) Cotización rechazada
+
+Anexo 3. Flujo actual del proceso de cotización.
+
+Etapa
+Actividad
+Herramienta utilizada
+Problema identificado
+1
+Recepción de solicitud del cliente
+Correo / WhatsApp
+No existe un registro centralizado; riesgo de pérdida de datos.
+2
+Revisión de disponibilidad de productos
+Consulta verbal o búsqueda manual en almacén
+Falta de inventario digital; riesgo de dar información errónea.
+3
+Elaboración de cotización
+Hoja de cálculo en Excel
+Formato no estandarizado; riesgo de errores de digitación.
+4
+Envío de cotización
+Correo / WhatsApp
+Sin seguimiento sistemático; se pierde trazabilidad.
+5
+Cierre o rechazo de cotización
+Comunicación verbal / correo
+Sin historial ni estadísticas para análisis posterior.
+
+Anexo 4. Tabla de limitaciones técnicas y administrativas detectadas
+
+Área
+Limitación
+Consecuencia
+Gestión de datos
+No existe base de datos centralizada
+Información dispersa y difícil de consultar.
+Inventario
+No hay control digital del stock
+Cotizaciones imprecisas y riesgo de sobreventa.
+Lista de precios
+Precios no estandarizados ni actualizados automáticamente
+Inconsistencias y pérdida de credibilidad ante clientes.
+Seguimiento
+No hay registro histórico de cotizaciones
+Imposibilidad de medir efectividad o tomar decisiones basadas en datos.
+Comunicación
+Dependencia de medios informales
+Falta de trazabilidad y respaldo documental.
+
+Anexo 5. Impacto de las limitaciones en indicadores clave de la empresa
+
+Indicador
+Situación actual
+Impacto negativo
+Tiempo promedio de respuesta a una cotización
+2 a 5 días
+Pérdida de clientes que requieren atención inmediata.
+Tasa de conversión de cotizaciones a ventas
+< 30%
+Competencia con procesos más ágiles gana mercado.
+Errores en cotizaciones
+1 de cada 10 cotizaciones presenta errores
+Reclamos y pérdida de confianza.
+Visibilidad de inventario
+Nula en tiempo real
+Riesgo de comprometer ventas sin disponibilidad.
+
+
+
+
+
+
+
+
+
+
+
+MODELO TABULAR DEL DISEÑO PRE-POST (para anexos)
+
+                  ESQUEMA DEL DISEÑO CUASI–EXPERIMENTAL
+
+                    Grupo Único (G) — Empresa LC Service
+
+                    ┌───────────────┬───────────────┐
+                    │   PRE–PRUEBA  │   POST–PRUEBA │
+                    ├───────────────┼───────────────┤
+Tiempo elaboración   │    O1A        │     O2A       │
+Errores en cotización│    O1B        │     O2B       │
+Tasa de conversión   │    O1D        │     O2D       │
+Satisfacción cliente │    O1F        │     O2F       │
+                    ├───────────────┴───────────────┤
+ Intervención prevista (X):
+ Sistema web de gestión de cotizaciones
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

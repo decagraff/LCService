@@ -9,15 +9,28 @@ interface CreateCotizacionParams {
 }
 
 export const cotizacionesService = {
-  // Get all cotizaciones for user with filters
-  getCotizaciones: async (role: UserRole, filters?: CotizacionFilters): Promise<Cotizacion[]> => {
+  // Get all cotizaciones for user with filters and pagination
+  getCotizaciones: async (
+    role: UserRole,
+    filters?: CotizacionFilters & { page?: number; limit?: number }
+  ): Promise<{ data: Cotizacion[]; pagination: { page: number; limit: number; total: number; totalPages: number } }> => {
     try {
       const params = new URLSearchParams();
       if (filters?.search) params.append('search', filters.search);
       if (filters?.estado) params.append('estado', filters.estado);
+      if (filters?.page) params.append('page', filters.page.toString());
+      if (filters?.limit) params.append('limit', filters.limit.toString());
 
-      const response = await api.get<Cotizacion[]>(`/${role}/api/cotizaciones?${params.toString()}`);
-      return response.data;
+      const response = await api.get<{
+        success: boolean;
+        data: Cotizacion[];
+        pagination: { page: number; limit: number; total: number; totalPages: number };
+      }>(`/${role}/api/cotizaciones?${params.toString()}`);
+
+      return {
+        data: response.data.data,
+        pagination: response.data.pagination
+      };
     } catch (error) {
       throw new Error(handleApiError(error));
     }
@@ -50,11 +63,8 @@ export const cotizacionesService = {
   },
 
   // Create nueva cotizacion from cart
-  // NOTA: Aquí cambiamos 'notas?: string' por 'params: CreateCotizacionParams'
   createCotizacion: async (role: UserRole, params: CreateCotizacionParams): Promise<Cotizacion> => {
     try {
-      // Enviamos 'params' directamente. Como 'params' ya es un objeto { notas: "...", ... },
-      // el backend recibirá req.body.notas correctamente como string.
       const response = await api.post<ApiResponse<Cotizacion>>(`/${role}/api/cotizaciones/nueva`, params);
 
       if (response.data.success && response.data.data) {
@@ -110,6 +120,81 @@ export const cotizacionesService = {
     try {
       const response = await api.get<ApiResponse<any[]>>(`/${role}/api/reports/sales-status`);
       return response.data.data || [];
+    } catch (error) {
+      throw new Error(handleApiError(error));
+    }
+  },
+
+  getThesisKPIs: async (role: UserRole): Promise<any> => {
+    try {
+      const response = await api.get<ApiResponse<any>>(`/${role}/api/reports/thesis-kpis`);
+      return response.data.data || {};
+    } catch (error) {
+      throw new Error(handleApiError(error));
+    }
+  },
+
+  // NEW: Filtered Report Methods
+  getFilteredReportKPIs: async (role: UserRole, filters: any): Promise<any> => {
+    try {
+      const params = new URLSearchParams();
+      Object.keys(filters).forEach(key => {
+        if (filters[key]) params.append(key, filters[key]);
+      });
+      const response = await api.get<ApiResponse<any>>(`/${role}/api/reports/kpis?${params.toString()}`);
+      return response.data.data || {};
+    } catch (error) {
+      throw new Error(handleApiError(error));
+    }
+  },
+
+  getFilteredSalesByPeriod: async (role: UserRole, filters: any): Promise<any> => {
+    try {
+      const params = new URLSearchParams();
+      Object.keys(filters).forEach(key => {
+        if (filters[key]) params.append(key, filters[key]);
+      });
+      const response = await api.get<ApiResponse<any>>(`/${role}/api/reports/sales-by-month?${params.toString()}`);
+      return response.data.data || [];
+    } catch (error) {
+      throw new Error(handleApiError(error));
+    }
+  },
+
+  getSalesByCategory: async (role: UserRole, filters: any = {}): Promise<any[]> => {
+    try {
+      const params = new URLSearchParams();
+      Object.keys(filters).forEach(key => {
+        if (filters[key]) params.append(key, filters[key]);
+      });
+      const response = await api.get<ApiResponse<any[]>>(`/${role}/api/reports/sales-by-category?${params.toString()}`);
+      return response.data.data || [];
+    } catch (error) {
+      throw new Error(handleApiError(error));
+    }
+  },
+
+  getPreTestDetailed: async (role: UserRole, filters: any = {}): Promise<any> => {
+    try {
+      const params = new URLSearchParams();
+      Object.keys(filters).forEach(key => {
+        if (filters[key]) params.append(key, filters[key]);
+      });
+      const response = await api.get<ApiResponse<any>>(`/${role}/api/reports/pre-test-detailed?${params.toString()}`);
+      return response.data.data || {};
+    } catch (error) {
+      throw new Error(handleApiError(error));
+    }
+  },
+
+  getPostTestDetailed: async (role: UserRole, filters: any = {}): Promise<any> => {
+    try {
+      const params = new URLSearchParams();
+      Object.keys(filters).forEach(key => {
+        if (filters[key]) params.append(key, filters[key]);
+      });
+      const response = await api.get<ApiResponse<any>>(`/${role}/api/reports/post-test-detailed?${params.toString()}`);
+      return response.data.data || {};
     } catch (error) {
       throw new Error(handleApiError(error));
     }
