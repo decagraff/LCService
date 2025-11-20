@@ -1,12 +1,11 @@
 const { pool } = require('../config/database');
 
 const apiReportsController = {
-    // KPI: Total Ventas, Total Ordenes, Ticket Promedio, Conversion Rate (with filters)
+    // KPI: Total Ventas, Total Ordenes, Ticket Promedio, Conversion Rate (con filtros)
     getKPIs: async (req, res) => {
         try {
             const { startDate, endDate, vendorId, clientId, categoryId, estado } = req.query;
 
-            // Build WHERE clause for filters
             let whereConditions = [];
             let params = [];
 
@@ -38,7 +37,7 @@ const apiReportsController = {
                 ? `SELECT COUNT(DISTINCT c.id) as totalOrdenes, COALESCE(SUM(c.total), 0) as totalVentas
                    FROM cotizaciones c
                    JOIN cotizacion_detalles cd ON c.id = cd.cotizacion_id
-                   ${whereClause} AND c.estado = 'aprobada'`
+                   ${whereClause} ${whereClause ? 'AND' : 'WHERE'} c.estado = 'aprobada'`
                 : `SELECT COUNT(*) as totalOrdenes, COALESCE(SUM(total), 0) as totalVentas
                    FROM cotizaciones c
                    ${whereClause}${whereClause ? ' AND' : 'WHERE'} c.estado = 'aprobada'`;
@@ -59,10 +58,10 @@ const apiReportsController = {
 
             const [conversionStats] = await pool.query(conversionQuery, params);
 
-            const totalVentas = Number(salesStats[0].totalVentas);
-            const totalOrdenes = Number(salesStats[0].totalOrdenes);
-            const totalCotizaciones = Number(conversionStats[0].total);
-            const totalAprobadas = Number(conversionStats[0].aprobadas);
+            const totalVentas = Number(salesStats[0].totalVentas || 0);
+            const totalOrdenes = Number(salesStats[0].totalOrdenes || 0);
+            const totalCotizaciones = Number(conversionStats[0].total || 0);
+            const totalAprobadas = Number(conversionStats[0].aprobadas || 0);
 
             const ticketPromedio = totalOrdenes > 0 ? totalVentas / totalOrdenes : 0;
             const conversionRate = totalCotizaciones > 0 ? (totalAprobadas / totalCotizaciones) * 100 : 0;
@@ -82,7 +81,7 @@ const apiReportsController = {
         }
     },
 
-    // Gráfico 1: Ventas por Período (with filters and configurable grouping)
+    // Gráfico 1: Ventas por Período (con filtros y agrupación)
     getSalesByMonth: async (req, res) => {
         try {
             const { startDate, endDate, vendorId, clientId, categoryId, estado, groupBy = 'month' } = req.query;
@@ -112,7 +111,8 @@ const apiReportsController = {
                 params.push(categoryId);
             }
             if (estado) {
-                whereConditions.splice(0, 1); // Remove default 'aprobada' filter
+                // Si se filtra por estado específico, removemos el filtro por defecto 'aprobada'
+                whereConditions = whereConditions.filter(c => !c.includes("c.estado = 'aprobada'"));
                 whereConditions.push('c.estado = ?');
                 params.push(estado);
             }
@@ -123,12 +123,12 @@ const apiReportsController = {
             let dateFormat, sortFormat, groupLabel;
             switch (groupBy) {
                 case 'day':
-                    dateFormat = '%d/%m/%Y';
+                    dateFormat = '%d/%m';
                     sortFormat = '%Y-%m-%d';
                     groupLabel = 'Día';
                     break;
                 case 'week':
-                    dateFormat = 'Semana %v/%Y';
+                    dateFormat = 'Sem %v';
                     sortFormat = '%Y-%v';
                     groupLabel = 'Semana';
                     break;
@@ -243,95 +243,7 @@ const apiReportsController = {
         }
     },
 
-    // Thesis KPIs: Pre vs Post Comparison
-    getThesisKPIs: async (req, res) => {
-        try {
-            // Pre-Test: Older than 30 days
-            // Post-Test: Last 30 days
-
-            // 1. Response Time (Avg Minutes for Approved Quotes)
-            const [responseStats] = await pool.query(`
-                SELECT 
-                    CASE WHEN created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY) THEN 'post' ELSE 'pre' END as period,
-                    AVG(TIMESTAMPDIFF(MINUTE, created_at, updated_at)) as avgMinutes
-                FROM cotizaciones
-                WHERE estado = 'aprobada'
-                GROUP BY period
-            `);
-
-            // 2. Error Rate (Rejected / Total)
-            const [errorStats] = await pool.query(`
-                SELECT 
-                    CASE WHEN created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY) THEN 'post' ELSE 'pre' END as period,
-                    COUNT(*) as total,
-                    SUM(CASE WHEN estado = 'rechazada' THEN 1 ELSE 0 END) as rejected
-                FROM cotizaciones
-                GROUP BY period
-            `);
-
-            // Helper to extract value
-            const getValue = (arr, period, key) => {
-                const row = arr.find(r => r.period === period);
-                return row ? Number(row[key]) : 0;
-            };
-
-            const preMinutes = getValue(responseStats, 'pre', 'avgMinutes');
-            const postMinutes = getValue(responseStats, 'post', 'avgMinutes');
-
-            const preTotal = getValue(errorStats, 'pre', 'total');
-            const preRejected = getValue(errorStats, 'pre', 'rejected');
-            const postTotal = getValue(errorStats, 'post', 'total');
-            const postRejected = getValue(errorStats, 'post', 'rejected');
-
-            const preErrorRate = preTotal > 0 ? (preRejected / preTotal) * 100 : 0;
-            const postErrorRate = postTotal > 0 ? (postRejected / postTotal) * 100 : 0;
-
-            // Convert minutes to days for Pre, keep minutes/hours for Post if small
-            const preDays = preMinutes / 1440; // 60 * 24
-            const postDays = postMinutes / 1440;
-
-            // 3. Pre-Test Distribution (Scatter Plot Data)
-            const [distributionRows] = await pool.query(`
-                SELECT 
-                    id,
-                    TIMESTAMPDIFF(MINUTE, created_at, updated_at) / 1440 as days
-                FROM cotizaciones
-                WHERE estado = 'aprobada'
-                AND created_at < DATE_SUB(NOW(), INTERVAL 30 DAY)
-                LIMIT 50
-            `);
-
-            const preTestDistribution = distributionRows.map(row => ({
-                id: row.id,
-                days: Number(row.days)
-            }));
-
-            res.json({
-                success: true,
-                data: {
-                    pre: {
-                        avgResponseTime: preDays, // In Days
-                        errorRate: preErrorRate,
-                        satisfaction: 6.5, // Hardcoded baseline
-                        efficiency: 6.0,   // Hardcoded baseline
-                        distribution: preTestDistribution // New data for scatter chart
-                    },
-                    post: {
-                        avgResponseTime: postDays, // In Days (will be fractional)
-                        errorRate: postErrorRate,
-                        satisfaction: 9.2, // Projected
-                        efficiency: 9.5    // Projected
-                    }
-                }
-            });
-
-        } catch (error) {
-            console.error('Error en getThesisKPIs:', error);
-            res.status(500).json({ success: false, error: 'Error al obtener KPIs de tesis' });
-        }
-    },
-
-    // NEW: Ventas por Categoría (with filters)
+    // Ventas por Categoría (with filters)
     getSalesByCategory: async (req, res) => {
         try {
             const { startDate, endDate, vendorId, clientId, estado } = req.query;
@@ -390,178 +302,126 @@ const apiReportsController = {
         }
     },
 
-    // NEW: Pre-Test Detailed Data (with filters)
+    // ==========================================
+    // FUNCIONES AUXILIARES PARA CÁLCULOS REALES
+    // ==========================================
+
+    // Función para calcular eficiencia (0-10) basada en tiempo (minutos)
+    _calculateEfficiency: (avgMinutes) => {
+        if (!avgMinutes && avgMinutes !== 0) return 0;
+        // Base: 2 horas (120 min) = 9.5 puntos. 1 día (1440 min) = 8 puntos.
+        if (avgMinutes <= 120) return 9.5; // Muy eficiente
+        if (avgMinutes <= 1440) return 8.0; // 1 día
+        if (avgMinutes <= 4320) return 5.0; // 3 días
+        return 2.0; // > 3 días
+    },
+
+    // Función para calcular satisfacción (0-10) basada en tasa de aprobación y tiempo
+    _calculateSatisfaction: (approvalRate, efficiencyScore) => {
+        // Ponderado: 70% Tasa de Aprobación, 30% Eficiencia percibida
+        const approvalScore = approvalRate / 10; // Convertir % a 0-10
+        return (approvalScore * 0.7) + (efficiencyScore * 0.3);
+    },
+
+    // Función genérica para extraer datos Pre/Post
+    _getTestData: async (req, res, baseWhereCondition) => {
+        const { startDate, endDate, vendorId, clientId } = req.query;
+        let whereConditions = [baseWhereCondition];
+        let params = [];
+
+        // Aplicar filtros extras sobre el conjunto base
+        if (startDate) { whereConditions.push('created_at >= ?'); params.push(startDate); }
+        if (endDate) { whereConditions.push('created_at <= ?'); params.push(endDate); }
+        if (vendorId) { whereConditions.push('vendedor_id = ?'); params.push(vendorId); }
+        if (clientId) { whereConditions.push('cliente_id = ?'); params.push(clientId); }
+
+        const whereClause = `WHERE ${whereConditions.join(' AND ')}`;
+
+        // 1. Tiempo Promedio (Minutos) - Solo de las aprobadas (ciclo cerrado)
+        const [timeRows] = await pool.query(`
+            SELECT AVG(TIMESTAMPDIFF(MINUTE, created_at, updated_at)) as avgMinutes
+            FROM cotizaciones ${whereClause} AND estado = 'aprobada'
+        `, params);
+
+        // 2. Tasas (Total, Aprobadas, Rechazadas)
+        const [rateRows] = await pool.query(`
+            SELECT 
+                COUNT(*) as total,
+                SUM(CASE WHEN estado = 'aprobada' THEN 1 ELSE 0 END) as approved,
+                SUM(CASE WHEN estado = 'rechazada' THEN 1 ELSE 0 END) as rejected
+            FROM cotizaciones ${whereClause}
+        `, params);
+
+        // 3. Distribución para Gráfico de Dispersión
+        const [distRows] = await pool.query(`
+            SELECT id, TIMESTAMPDIFF(MINUTE, created_at, updated_at) / 60 as hours
+            FROM cotizaciones ${whereClause} AND estado = 'aprobada'
+            LIMIT 100
+        `, params);
+
+        // 4. Evolución Temporal
+        const [evolRows] = await pool.query(`
+            SELECT DATE_FORMAT(created_at, '%d/%m') as name, SUM(total) as ventas
+            FROM cotizaciones ${whereClause} AND estado = 'aprobada'
+            GROUP BY DATE_FORMAT(created_at, '%d/%m'), DATE(created_at)
+            ORDER BY DATE(created_at) ASC LIMIT 20
+        `, params);
+
+        // Cálculos
+        const avgResponseTime = Number(timeRows[0].avgMinutes) || 0;
+        const total = Number(rateRows[0].total) || 0;
+        const approved = Number(rateRows[0].approved) || 0;
+        const rejected = Number(rateRows[0].rejected) || 0;
+
+        const errorRate = total > 0 ? (rejected / total) * 100 : 0;
+        const approvalRate = total > 0 ? (approved / total) * 100 : 0;
+
+        // Calcular métricas dinámicas
+        const efficiency = apiReportsController._calculateEfficiency(avgResponseTime);
+        const satisfaction = apiReportsController._calculateSatisfaction(approvalRate, efficiency);
+
+        res.json({
+            success: true,
+            data: {
+                avgResponseTime, // En minutos
+                errorRate,
+                satisfaction: Number(satisfaction.toFixed(1)), // 0-10
+                efficiency: Number(efficiency.toFixed(1)),     // 0-10
+                distribution: distRows.map(r => ({ id: r.id, hours: Number(r.hours) })),
+                salesByPeriod: evolRows.map(r => ({ name: r.name, ventas: Number(r.ventas) }))
+            }
+        });
+    },
+
+    // ==========================================
+    // DATOS DETALLADOS PRE Y POST TEST (REALES)
+    // ==========================================
+
+    // Pre-Test Detailed Data (Datos ANTIGUOS > 30 días)
     getPreTestDetailed: async (req, res) => {
         try {
-            const { startDate, endDate, vendorId, clientId, categoryId } = req.query;
-
-            let whereConditions = ["created_at < DATE_SUB(NOW(), INTERVAL 30 DAY)"];
-            let params = [];
-
-            if (startDate) {
-                whereConditions.push('created_at >= ?');
-                params.push(startDate);
-            }
-            if (endDate) {
-                whereConditions.push('created_at <= ?');
-                params.push(endDate);
-            }
-            if (vendorId) {
-                whereConditions.push('vendedor_id = ?');
-                params.push(vendorId);
-            }
-            if (clientId) {
-                whereConditions.push('cliente_id = ?');
-                params.push(clientId);
-            }
-
-            const whereClause = `WHERE ${whereConditions.join(' AND ')}`;
-
-            // Response Time
-            const [responseStats] = await pool.query(`
-                SELECT AVG(TIMESTAMPDIFF(DAY, created_at, updated_at)) as avgDays
-                FROM cotizaciones
-                ${whereClause} AND estado = 'aprobada'
-            `, params);
-
-            // Error Rate
-            const [errorStats] = await pool.query(`
-                SELECT 
-                    COUNT(*) as total,
-                    SUM(CASE WHEN estado = 'rechazada' THEN 1 ELSE 0 END) as rejected
-                FROM cotizaciones
-                ${whereClause}
-            `, params);
-
-            // Distribution for Scatter Chart
-            const [distribution] = await pool.query(`
-                SELECT 
-                    id,
-                    TIMESTAMPDIFF(DAY, created_at, updated_at) as days
-                FROM cotizaciones
-                ${whereClause} AND estado = 'aprobada'
-                LIMIT 100
-            `, params);
-
-            // Sales by Period
-            const [salesByPeriod] = await pool.query(`
-                SELECT 
-                    DATE_FORMAT(created_at, '%m/%Y') as name,
-                    DATE_FORMAT(created_at, '%Y-%m') as sortKey,
-                    SUM(total) as ventas
-                FROM cotizaciones
-                ${whereClause} AND estado = 'aprobada'
-                GROUP BY sortKey, name
-                ORDER BY sortKey ASC
-            `, params);
-
-            const avgResponseTime = Number(responseStats[0].avgDays) || 0;
-            const errorRate = errorStats[0].total > 0
-                ? (errorStats[0].rejected / errorStats[0].total) * 100
-                : 0;
-
-            res.json({
-                success: true,
-                data: {
-                    avgResponseTime,
-                    errorRate,
-                    satisfaction: 6.5,
-                    efficiency: 6.0,
-                    distribution: distribution.map(r => ({ id: r.id, days: Number(r.days) })),
-                    salesByPeriod: salesByPeriod.map(r => ({ name: r.name, ventas: Number(r.ventas) }))
-                }
-            });
+            const whereBase = "created_at < DATE_SUB(NOW(), INTERVAL 30 DAY)";
+            await apiReportsController._getTestData(req, res, whereBase);
         } catch (error) {
-            console.error('Error en getPreTestDetailed:', error);
-            res.status(500).json({ success: false, error: 'Error al obtener datos Pre-Test' });
+            console.error('Error Pre-Test:', error);
+            res.status(500).json({ success: false, error: 'Error Pre-Test' });
         }
     },
 
-    // NEW: Post-Test Detailed Data (with filters)
+    // Post-Test Detailed Data (Datos RECIENTES <= 30 días)
     getPostTestDetailed: async (req, res) => {
         try {
-            const { startDate, endDate, vendorId, clientId, categoryId } = req.query;
-
-            let whereConditions = ["created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)"];
-            let params = [];
-
-            if (startDate) {
-                whereConditions.push('created_at >= ?');
-                params.push(startDate);
-            }
-            if (endDate) {
-                whereConditions.push('created_at <= ?');
-                params.push(endDate);
-            }
-            if (vendorId) {
-                whereConditions.push('vendedor_id = ?');
-                params.push(vendorId);
-            }
-            if (clientId) {
-                whereConditions.push('cliente_id = ?');
-                params.push(clientId);
-            }
-
-            const whereClause = `WHERE ${whereConditions.join(' AND ')}`;
-
-            // Response Time (in minutes)
-            const [responseStats] = await pool.query(`
-                SELECT AVG(TIMESTAMPDIFF(MINUTE, created_at, updated_at)) as avgMinutes
-                FROM cotizaciones
-                ${whereClause} AND estado = 'aprobada'
-            `, params);
-
-            // Error Rate
-            const [errorStats] = await pool.query(`
-                SELECT 
-                    COUNT(*) as total,
-                    SUM(CASE WHEN estado = 'rechazada' THEN 1 ELSE 0 END) as rejected
-                FROM cotizaciones
-                ${whereClause}
-            `, params);
-
-            // Distribution for Scatter Chart (in hours)
-            const [distribution] = await pool.query(`
-                SELECT 
-                    id,
-                    TIMESTAMPDIFF(MINUTE, created_at, updated_at) / 60 as hours
-                FROM cotizaciones
-                ${whereClause} AND estado = 'aprobada'
-                LIMIT 100
-            `, params);
-
-            // Sales by Period
-            const [salesByPeriod] = await pool.query(`
-                SELECT 
-                    DATE_FORMAT(created_at, '%d/%m') as name,
-                    DATE_FORMAT(created_at, '%Y-%m-%d') as sortKey,
-                    SUM(total) as ventas
-                FROM cotizaciones
-                ${whereClause} AND estado = 'aprobada'
-                GROUP BY sortKey, name
-                ORDER BY sortKey ASC
-            `, params);
-
-            const avgResponseTime = Number(responseStats[0].avgMinutes) || 0;
-            const errorRate = errorStats[0].total > 0
-                ? (errorStats[0].rejected / errorStats[0].total) * 100
-                : 0;
-
-            res.json({
-                success: true,
-                data: {
-                    avgResponseTime, // in minutes
-                    errorRate,
-                    satisfaction: 9.2,
-                    efficiency: 9.5,
-                    distribution: distribution.map(r => ({ id: r.id, hours: Number(r.hours) })),
-                    salesByPeriod: salesByPeriod.map(r => ({ name: r.name, ventas: Number(r.ventas) }))
-                }
-            });
+            const whereBase = "created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)";
+            await apiReportsController._getTestData(req, res, whereBase);
         } catch (error) {
-            console.error('Error en getPostTestDetailed:', error);
-            res.status(500).json({ success: false, error: 'Error al obtener datos Post-Test' });
+            console.error('Error Post-Test:', error);
+            res.status(500).json({ success: false, error: 'Error Post-Test' });
         }
+    },
+
+    // Thesis KPIs wrapper (Mantenido por compatibilidad, pero devuelve objeto vacío)
+    getThesisKPIs: async (req, res) => {
+        res.json({ success: true, data: {} });
     }
 };
 

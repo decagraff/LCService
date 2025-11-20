@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Folder, FilterX, DollarSign } from 'lucide-react';
+import { Search, FilterX, DollarSign, Folder } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import type { Categoria, CatalogFilters as FilterType } from '../../types';
 import Input from '../common/Input';
@@ -43,13 +43,13 @@ const CatalogFilters: React.FC<CatalogFiltersProps> = ({ categorias, onFilterCha
   }));
 
   return (
-    // FIX: w-80 fijo y flex-shrink-0 para que no se aplaste. Sticky para que baje con el scroll.
-    <aside className="w-full lg:w-72 flex-shrink-0 space-y-6">
-      <div className="bg-white dark:bg-background-dark rounded-xl border border-gray-200 dark:border-gray-700 p-5 shadow-sm sticky top-6">
-        
+    // FIX: Aplicamos 'sticky' directamente aquí y 'h-fit' o 'self-start' implícito.
+    <aside className="w-full lg:w-72 flex-shrink-0 space-y-6 lg:sticky lg:top-6">
+      <div className="bg-white dark:bg-background-dark rounded-xl border border-gray-200 dark:border-gray-700 p-5 shadow-sm">
+
         <div className="flex items-center justify-between mb-6">
           <h3 className="font-bold text-gray-900 dark:text-gray-100 flex items-center gap-2">
-             <Search className="w-4 h-4" /> Filtros
+            <Search className="w-4 h-4" /> Filtros
           </h3>
           {(filters.search || filters.categoria_id || filters.min_precio) && (
             <button onClick={handleClear} className="text-xs text-red-500 hover:underline flex items-center gap-1">
@@ -123,8 +123,8 @@ const CatalogFilters: React.FC<CatalogFiltersProps> = ({ categorias, onFilterCha
                   onFilterChange({ ...filters, categoria_id: categoria.id });
                 }}
                 className={`w-full text-left px-2 py-1.5 rounded text-sm transition-colors flex items-center gap-2
-                  ${filters.categoria_id === categoria.id 
-                    ? 'bg-blue-50 dark:bg-blue-900/20 text-primary font-medium' 
+                  ${filters.categoria_id === categoria.id
+                    ? 'bg-blue-50 dark:bg-blue-900/20 text-primary font-medium'
                     : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800'
                   }`}
               >

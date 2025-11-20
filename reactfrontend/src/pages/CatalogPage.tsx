@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ShoppingCart, ArrowRight } from 'lucide-react';
+import { ShoppingCart, ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { useCart } from '../contexts/CartContext';
 import { catalogService } from '../services/catalogService';
@@ -26,43 +26,70 @@ const CatalogPage: React.FC = () => {
     precio_min: 0,
     precio_max: 0,
   });
+
   const [filters, setFilters] = useState<CatalogFiltersType>({});
   const [loading, setLoading] = useState(true);
+
+  // Pagination State
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pagination, setPagination] = useState({ total: 0, totalPages: 1, limit: 12 });
 
   useEffect(() => {
     loadCatalogData();
   }, [user]);
 
+  useEffect(() => {
+    if (user) {
+      fetchEquipos();
+    }
+  }, [filters, currentPage, user]);
+
   const loadCatalogData = async () => {
     if (!user) return;
     try {
-      setLoading(true);
-      const [equiposData, categoriasData, statsData] = await Promise.all([
-        catalogService.getEquipos(user.role, filters),
+      const [categoriasData, statsData] = await Promise.all([
         catalogService.getCategorias(user.role),
         catalogService.getStats(user.role),
       ]);
-      setEquipos(equiposData);
       setCategorias(categoriasData);
       setStats(statsData);
     } catch (error) {
-      console.error('Error loading catalog:', error);
+      console.error('Error loading catalog init data:', error);
+    }
+  };
+
+  const fetchEquipos = async () => {
+    if (!user) return;
+    try {
+      setLoading(true);
+      const response = await catalogService.getEquipos(user.role, {
+        ...filters,
+        page: currentPage,
+        limit: pagination.limit
+      });
+
+      setEquipos(response.data);
+      setPagination(prev => ({
+        ...prev,
+        total: response.pagination.total,
+        totalPages: response.pagination.totalPages
+      }));
+    } catch (error) {
+      console.error('Error loading equipments:', error);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleFilterChange = async (newFilters: CatalogFiltersType) => {
-    if (!user) return;
+  const handleFilterChange = (newFilters: CatalogFiltersType) => {
     setFilters(newFilters);
-    try {
-      setLoading(true);
-      const equiposData = await catalogService.getEquipos(user.role, newFilters);
-      setEquipos(equiposData);
-    } catch (error) {
-      console.error('Error filtering catalog:', error);
-    } finally {
-      setLoading(false);
+    setCurrentPage(1);
+  };
+
+  const handlePageChange = (newPage: number) => {
+    if (newPage >= 1 && newPage <= pagination.totalPages) {
+      setCurrentPage(newPage);
+      document.getElementById('catalog-grid-top')?.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
@@ -70,40 +97,86 @@ const CatalogPage: React.FC = () => {
     filters.search || filters.categoria_id || filters.min_precio || filters.max_precio
   );
 
-  if (loading && equipos.length === 0) {
-    return (
-      <div className="flex min-h-screen bg-gray-50 dark:bg-background-dark-secondary">
-        <Sidebar />
-        <div className="flex-1 flex items-center justify-center">
-          <Loading message="Cargando catálogo..." />
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="flex min-h-screen bg-gray-50 dark:bg-background-dark-secondary">
       <Sidebar />
 
       <div className="flex-1 flex flex-col overflow-hidden relative">
-        <main className="flex-1 p-6 overflow-y-auto pb-24">
+        <main className="flex-1 p-6 overflow-y-auto pb-24 scroll-smooth">
           <DashboardHeader title="Catálogo" />
           <CatalogHero stats={stats} />
 
-          <div className="flex flex-col lg:flex-row gap-6">
+          <div id="catalog-grid-top" className="flex flex-col lg:flex-row gap-6 items-start">
             <CatalogFilters
               categorias={categorias}
               onFilterChange={handleFilterChange}
               initialFilters={filters}
             />
 
-            {loading ? (
-              <div className="flex-1 flex items-center justify-center">
-                <Loading message="Filtrando equipos..." />
-              </div>
-            ) : (
-              <CatalogGrid equipos={equipos} hasFilters={hasFilters} />
-            )}
+            <div className="flex-1 flex flex-col w-full">
+              {loading ? (
+                <div className="flex-1 flex items-center justify-center py-20">
+                  <Loading message="Cargando productos..." />
+                </div>
+              ) : (
+                <>
+                  <CatalogGrid equipos={equipos} hasFilters={hasFilters} />
+
+                  {equipos.length > 0 && (
+                    <div className="mt-8 flex items-center justify-between border-t border-gray-200 dark:border-gray-700 pt-6">
+                      <div className="text-sm text-gray-600 dark:text-gray-400">
+                        Mostrando página <span className="font-medium">{currentPage}</span> de <span className="font-medium">{pagination.totalPages}</span>
+                        <span className="hidden sm:inline"> ({pagination.total} productos en total)</span>
+                      </div>
+
+                      <div className="flex gap-2">
+                        <Button
+                          variant="secondary"
+                          size="sm"
+                          onClick={() => handlePageChange(currentPage - 1)}
+                          disabled={currentPage === 1}
+                          className="flex items-center gap-1"
+                        >
+                          <ChevronLeft className="w-4 h-4" /> Anterior
+                        </Button>
+
+                        <div className="hidden sm:flex gap-1">
+                          {Array.from({ length: Math.min(5, pagination.totalPages) }, (_, i) => {
+                            let p = i + 1;
+                            if (pagination.totalPages > 5 && currentPage > 3) {
+                              p = currentPage - 2 + i;
+                              if (p > pagination.totalPages) p = pagination.totalPages - (4 - i);
+                            }
+                            return (
+                              <button
+                                key={p}
+                                onClick={() => handlePageChange(p)}
+                                className={`w-8 h-8 flex items-center justify-center rounded-lg text-sm font-medium transition-colors ${currentPage === p
+                                    ? 'bg-primary text-white'
+                                    : 'bg-white dark:bg-background-dark-tertiary text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 border border-gray-300 dark:border-gray-600'
+                                  }`}
+                              >
+                                {p}
+                              </button>
+                            );
+                          })}
+                        </div>
+
+                        <Button
+                          variant="secondary"
+                          size="sm"
+                          onClick={() => handlePageChange(currentPage + 1)}
+                          disabled={currentPage === pagination.totalPages}
+                          className="flex items-center gap-1"
+                        >
+                          Siguiente <ChevronRight className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    </div>
+                  )}
+                </>
+              )}
+            </div>
           </div>
         </main>
 

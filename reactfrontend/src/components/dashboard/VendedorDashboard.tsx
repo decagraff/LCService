@@ -25,9 +25,12 @@ const VendedorDashboard: React.FC = () => {
         setLoading(true);
         // 1. Obtener estadísticas generales
         const countStats = await cotizacionesService.getStats('vendedor');
-        
+
         // 2. Obtener cotizaciones aprobadas para calcular el valor monetario
-        const aprobadas = await cotizacionesService.getCotizaciones('vendedor', { estado: 'aprobada' });
+        // FIX: Accedemos a .data del objeto paginado
+        const response = await cotizacionesService.getCotizaciones('vendedor', { estado: 'aprobada', limit: 1000 });
+        const aprobadas = response.data || [];
+
         const totalVentas = aprobadas.reduce((acc, curr) => acc + Number(curr.total), 0);
 
         setStats({
@@ -39,14 +42,14 @@ const VendedorDashboard: React.FC = () => {
 
       } catch (error) {
         console.error('Error fetching dashboard data:', error);
-        showToast('Error al cargar datos del dashboard', 'error');
+        // Sin toast para evitar spam en carga inicial
       } finally {
         setLoading(false);
       }
     };
 
     fetchDashboardData();
-  }, [user, showToast]);
+  }, [user]);
 
   return (
     <div className="flex-1 p-5 bg-gray-50 dark:bg-background-dark-secondary">
@@ -73,7 +76,6 @@ const VendedorDashboard: React.FC = () => {
             change="En seguimiento"
             changeType="neutral"
           />
-          {/* Reemplazamos "Comisión" por "Ventas Totales" para reflejar datos reales de la BD */}
           <StatCard
             title="Ventas Totales"
             value={loading ? "..." : `S/. ${stats.total_ventas_valor.toLocaleString('es-PE', { minimumFractionDigits: 2 })}`}

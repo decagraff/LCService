@@ -20,33 +20,35 @@ const ClienteDashboard: React.FC = () => {
   useEffect(() => {
     const fetchDashboardData = async () => {
       if (!user) return;
-      
+
       try {
         setLoading(true);
         // 1. Obtener contadores de estado
         const countStats = await cotizacionesService.getStats('cliente');
-        
-        // 2. Obtener cotizaciones aprobadas para calcular el total invertido
-        const aprobadas = await cotizacionesService.getCotizaciones('cliente', { estado: 'aprobada' });
+
+        // 2. Obtener cotizaciones aprobadas (FIX: Desestructurar response.data)
+        const response = await cotizacionesService.getCotizaciones('cliente', { estado: 'aprobada' });
+        const aprobadas = response.data || [];
+
         const totalInvertido = aprobadas.reduce((acc, curr) => acc + Number(curr.total), 0);
 
         setStats({
           cotizaciones_solicitadas: countStats.total,
-          cotizaciones_pendientes: countStats.enviada, // Asumimos 'enviada' como pendiente de respuesta
+          cotizaciones_pendientes: countStats.enviada,
           cotizaciones_aprobadas: countStats.aprobada,
           total_invertido: totalInvertido
         });
 
       } catch (error) {
         console.error('Error fetching dashboard data:', error);
-        showToast('Error al cargar datos del dashboard', 'error');
+        // No mostramos toast para evitar ruido en la carga inicial si falla algo menor
       } finally {
         setLoading(false);
       }
     };
 
     fetchDashboardData();
-  }, [user, showToast]);
+  }, [user]);
 
   return (
     <div className="flex-1 p-5 bg-gray-50 dark:bg-background-dark-secondary">

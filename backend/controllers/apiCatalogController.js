@@ -1,44 +1,69 @@
 const { pool } = require('../config/database');
 
 const apiCatalogController = {
-  // Get all equipos with filters
+  // Get all equipos with filters and pagination
   getEquipos: async (req, res) => {
     try {
-      const { search, categoria, min_precio, max_precio } = req.query;
+      const { search, categoria, min_precio, max_precio, page = 1, limit = 12 } = req.query;
 
-      let query = `
-        SELECT e.*, c.nombre as categoria_nombre
+      // Paginación
+      const pageNum = Math.max(1, parseInt(page));
+      const limitNum = Math.max(1, parseInt(limit));
+      const offset = (pageNum - 1) * limitNum;
+
+      let baseQuery = `
         FROM equipos e
         LEFT JOIN categorias c ON e.categoria_id = c.id
-        WHERE 1=1
+        WHERE e.estado = 'activo'
       `;
       const params = [];
 
       if (search) {
-        query += ` AND (e.nombre LIKE ? OR e.codigo LIKE ? OR e.descripcion LIKE ?)`;
+        baseQuery += ` AND (e.nombre LIKE ? OR e.codigo LIKE ? OR e.descripcion LIKE ?)`;
         const searchTerm = `%${search}%`;
         params.push(searchTerm, searchTerm, searchTerm);
       }
 
       if (categoria) {
-        query += ` AND e.categoria_id = ?`;
+        baseQuery += ` AND e.categoria_id = ?`;
         params.push(categoria);
       }
 
       if (min_precio) {
-        query += ` AND e.precio >= ?`;
+        baseQuery += ` AND e.precio >= ?`;
         params.push(parseFloat(min_precio));
       }
 
       if (max_precio) {
-        query += ` AND e.precio <= ?`;
+        baseQuery += ` AND e.precio <= ?`;
         params.push(parseFloat(max_precio));
       }
 
-      query += ` ORDER BY e.created_at DESC`;
+      // 1. Obtener total de registros para paginación
+      const countQuery = `SELECT COUNT(*) as total ${baseQuery}`;
+      const [countResult] = await pool.query(countQuery, params);
+      const total = countResult[0].total;
 
-      const [equipos] = await pool.query(query, params);
-      res.json(equipos);
+      // 2. Obtener datos paginados
+      const dataQuery = `
+        SELECT e.*, c.nombre as categoria_nombre
+        ${baseQuery}
+        ORDER BY e.created_at DESC
+        LIMIT ? OFFSET ?
+      `;
+
+      const [equipos] = await pool.query(dataQuery, [...params, limitNum, offset]);
+
+      res.json({
+        success: true,
+        data: equipos,
+        pagination: {
+          page: pageNum,
+          limit: limitNum,
+          total: total,
+          totalPages: Math.ceil(total / limitNum)
+        }
+      });
     } catch (error) {
       console.error('Error en getEquipos:', error);
       res.status(500).json({ success: false, error: 'Error al obtener equipos' });
@@ -51,7 +76,8 @@ const apiCatalogController = {
       const [categorias] = await pool.query(`
         SELECT c.*, COUNT(e.id) as equipment_count
         FROM categorias c
-        LEFT JOIN equipos e ON c.id = e.categoria_id
+        LEFT JOIN equipos e ON c.id = e.categoria_id AND e.estado = 'activo'
+        WHERE c.estado = 'activo'
         GROUP BY c.id
         ORDER BY c.nombre
       `);
@@ -65,9 +91,9 @@ const apiCatalogController = {
   // Get catalog stats
   getStats: async (req, res) => {
     try {
-      const [equiposCount] = await pool.query('SELECT COUNT(*) as total FROM equipos');
-      const [categoriasCount] = await pool.query('SELECT COUNT(*) as total FROM categorias');
-      const [precioRange] = await pool.query('SELECT MIN(precio) as min, MAX(precio) as max FROM equipos');
+      const [equiposCount] = await pool.query("SELECT COUNT(*) as total FROM equipos WHERE estado = 'activo'");
+      const [categoriasCount] = await pool.query("SELECT COUNT(*) as total FROM categorias WHERE estado = 'activo'");
+      const [precioRange] = await pool.query("SELECT MIN(precio) as min, MAX(precio) as max FROM equipos WHERE estado = 'activo'");
 
       res.json({
         success: true,

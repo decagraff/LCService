@@ -3,11 +3,12 @@ import { type InputHTMLAttributes, forwardRef } from 'react';
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   error?: string;
+  helperText?: string; // Agregamos esta propiedad
   fullWidth?: boolean;
 }
 
 const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ label, error, fullWidth = false, className = '', ...props }, ref) => {
+  ({ label, error, helperText, fullWidth = false, className = '', ...props }, ref) => {
     const inputStyles = `
       block px-4 py-2 text-base
       bg-white dark:bg-background-dark-tertiary
@@ -37,6 +38,12 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           autoComplete={props.type === 'password' ? 'new-password' : props.type === 'email' ? 'email' : undefined}
           {...props}
         />
+        {/* Mostrar helperText si existe y no hay error */}
+        {helperText && !error && (
+          <span className="text-xs text-gray-500 dark:text-gray-400">
+            {helperText}
+          </span>
+        )}
         {error && (
           <span className="text-sm text-red-600 dark:text-red-400">
             {error}

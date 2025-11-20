@@ -33,20 +33,20 @@ const ReportsPage: React.FC = () => {
     const [salesStatus, setSalesStatus] = useState<SalesStatus[]>([]);
     const [salesByCategory, setSalesByCategory] = useState<any[]>([]);
 
-    // Thesis Data State
+    // Thesis Data State (Inicializado en 0)
     const [preTestData, setPreTestData] = useState<any>({
         avgResponseTime: 0,
         errorRate: 0,
-        satisfaction: 6.5,
-        efficiency: 6.0,
+        satisfaction: 0,
+        efficiency: 0,
         distribution: [],
         salesByPeriod: []
     });
     const [postTestData, setPostTestData] = useState<any>({
         avgResponseTime: 0,
         errorRate: 0,
-        satisfaction: 9.2,
-        efficiency: 9.5,
+        satisfaction: 0,
+        efficiency: 0,
         distribution: [],
         salesByPeriod: []
     });
@@ -56,7 +56,7 @@ const ReportsPage: React.FC = () => {
 
     useEffect(() => {
         fetchData();
-    }, [user, filters]);
+    }, [user, filters, activeTab]);
 
     const fetchData = async () => {
         if (!user) return;
@@ -108,13 +108,20 @@ const ReportsPage: React.FC = () => {
         setFilters({});
     };
 
-    // Dynamic Comparative Data
+    // Helper para formatear tiempo dinámicamente
+    const formatTime = (minutes: number) => {
+        if (minutes > 1440) return `${(minutes / 1440).toFixed(1)} días`;
+        if (minutes > 60) return `${(minutes / 60).toFixed(1)} hrs`;
+        return `${minutes.toFixed(0)} min`;
+    };
+
+    // Datos dinámicos para gráfico comparativo (Normalizados a horas para visualización)
     const comparativeData = [
         {
-            metric: 'Tiempo Respuesta',
-            pre: Number(preTestData.avgResponseTime.toFixed(2)),
-            post: Number(postTestData.avgResponseTime.toFixed(2)),
-            unit: activeTab === 'comparative' ? 'días/min' : ''
+            metric: 'Tiempo Respuesta (hrs)',
+            pre: Number((preTestData.avgResponseTime / 60).toFixed(1)),
+            post: Number((postTestData.avgResponseTime / 60).toFixed(1)),
+            unit: 'hrs'
         },
         {
             metric: 'Tasa de Error (%)',
@@ -123,24 +130,45 @@ const ReportsPage: React.FC = () => {
             unit: '%'
         },
         {
-            metric: 'Satisfacción',
+            metric: 'Satisfacción (0-10)',
             pre: preTestData.satisfaction,
             post: postTestData.satisfaction,
             unit: '/10'
         },
         {
-            metric: 'Eficiencia',
+            metric: 'Eficiencia (0-10)',
             pre: preTestData.efficiency,
             post: postTestData.efficiency,
             unit: '/10'
         }
     ];
 
+    // Datos para el radar (Normalizados 0-100 para visualización relativa)
     const radarData = [
-        { metric: 'Tiempo', pre: 10 - (preTestData.avgResponseTime / 10), post: 10 },
-        { metric: 'Precisión', pre: 100 - preTestData.errorRate, post: 100 - postTestData.errorRate },
-        { metric: 'Satisfacción', pre: preTestData.satisfaction * 10, post: postTestData.satisfaction * 10 },
-        { metric: 'Eficiencia', pre: preTestData.efficiency * 10, post: postTestData.efficiency * 10 }
+        {
+            subject: 'Tiempo',
+            A: Math.max(0, 10 - (preTestData.avgResponseTime / 600)),
+            B: Math.max(0, 10 - (postTestData.avgResponseTime / 600)),
+            fullMark: 10
+        },
+        {
+            subject: 'Precisión',
+            A: (100 - preTestData.errorRate) / 10,
+            B: (100 - postTestData.errorRate) / 10,
+            fullMark: 10
+        },
+        {
+            subject: 'Satisfacción',
+            A: preTestData.satisfaction,
+            B: postTestData.satisfaction,
+            fullMark: 10
+        },
+        {
+            subject: 'Eficiencia',
+            A: preTestData.efficiency,
+            B: postTestData.efficiency,
+            fullMark: 10
+        }
     ];
 
     const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8'];
@@ -176,9 +204,9 @@ const ReportsPage: React.FC = () => {
                                         }`}
                                 >
                                     {tab === 'general' && '📊 General'}
-                                    {tab === 'pre' && '📉 Pre-Test'}
-                                    {tab === 'post' && '📈 Post-Test'}
-                                    {tab === 'comparative' && '🔄 Comparativo'}
+                                    {tab === 'pre' && '📉 Situación Inicial (Pre-Test)'}
+                                    {tab === 'post' && '📈 Situación Actual (Post-Test)'}
+                                    {tab === 'comparative' && '🔄 Comparativo Final'}
                                 </button>
                             ))}
                         </nav>
@@ -195,7 +223,7 @@ const ReportsPage: React.FC = () => {
 
                     {/* Tab Content */}
                     {activeTab === 'general' && (
-                        <div className="space-y-6">
+                        <div className="space-y-6 animate-fade-in">
                             {/* KPIs */}
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
                                 <StatCard
@@ -237,18 +265,19 @@ const ReportsPage: React.FC = () => {
                                     </h3>
                                     <ResponsiveContainer width="100%" height={300}>
                                         <BarChart data={salesByMonth}>
-                                            <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+                                            <CartesianGrid strokeDasharray="3 3" stroke="#374151" opacity={0.1} />
                                             <XAxis dataKey="name" stroke="#9CA3AF" />
                                             <YAxis stroke="#9CA3AF" />
                                             <Tooltip
                                                 contentStyle={{
-                                                    backgroundColor: '#1F2937',
-                                                    border: '1px solid #374151',
-                                                    borderRadius: '8px'
+                                                    backgroundColor: '#fff',
+                                                    border: '1px solid #e5e7eb',
+                                                    borderRadius: '8px',
+                                                    color: '#374151'
                                                 }}
                                             />
                                             <Legend />
-                                            <Bar dataKey="ventas" fill="#3B82F6" name="Ventas (S/.)" />
+                                            <Bar dataKey="ventas" fill="#3B82F6" name="Ventas (S/.)" radius={[4, 4, 0, 0]} />
                                         </BarChart>
                                     </ResponsiveContainer>
                                 </div>
@@ -260,18 +289,19 @@ const ReportsPage: React.FC = () => {
                                     </h3>
                                     <ResponsiveContainer width="100%" height={300}>
                                         <BarChart data={salesByCategory}>
-                                            <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+                                            <CartesianGrid strokeDasharray="3 3" stroke="#374151" opacity={0.1} />
                                             <XAxis dataKey="name" stroke="#9CA3AF" />
                                             <YAxis stroke="#9CA3AF" />
                                             <Tooltip
                                                 contentStyle={{
-                                                    backgroundColor: '#1F2937',
-                                                    border: '1px solid #374151',
-                                                    borderRadius: '8px'
+                                                    backgroundColor: '#fff',
+                                                    border: '1px solid #e5e7eb',
+                                                    borderRadius: '8px',
+                                                    color: '#374151'
                                                 }}
                                             />
                                             <Legend />
-                                            <Bar dataKey="ventas" fill="#10B981" name="Ventas (S/.)" />
+                                            <Bar dataKey="ventas" fill="#10B981" name="Ventas (S/.)" radius={[4, 4, 0, 0]} />
                                         </BarChart>
                                     </ResponsiveContainer>
                                 </div>
@@ -283,18 +313,19 @@ const ReportsPage: React.FC = () => {
                                     </h3>
                                     <ResponsiveContainer width="100%" height={300}>
                                         <BarChart data={salesBySeller} layout="vertical">
-                                            <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+                                            <CartesianGrid strokeDasharray="3 3" stroke="#374151" opacity={0.1} />
                                             <XAxis type="number" stroke="#9CA3AF" />
-                                            <YAxis dataKey="vendedor" type="category" stroke="#9CA3AF" width={100} />
+                                            <YAxis dataKey="name" type="category" stroke="#9CA3AF" width={100} />
                                             <Tooltip
                                                 contentStyle={{
-                                                    backgroundColor: '#1F2937',
-                                                    border: '1px solid #374151',
-                                                    borderRadius: '8px'
+                                                    backgroundColor: '#fff',
+                                                    border: '1px solid #e5e7eb',
+                                                    borderRadius: '8px',
+                                                    color: '#374151'
                                                 }}
                                             />
                                             <Legend />
-                                            <Bar dataKey="ventas" fill="#F59E0B" name="Ventas (S/.)" />
+                                            <Bar dataKey="ventas" fill="#F59E0B" name="Ventas (S/.)" radius={[0, 4, 4, 0]} />
                                         </BarChart>
                                     </ResponsiveContainer>
                                 </div>
@@ -311,8 +342,8 @@ const ReportsPage: React.FC = () => {
                                                 cx="50%"
                                                 cy="50%"
                                                 labelLine={false}
-                                                label={(entry) => `${entry.name}: ${(entry.percent * 100).toFixed(0)}%`}
-                                                outerRadius={80}
+                                                label={({ name, percent }: any) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                                                outerRadius={100}
                                                 fill="#8884d8"
                                                 dataKey="value"
                                             >
@@ -329,54 +360,57 @@ const ReportsPage: React.FC = () => {
                     )}
 
                     {activeTab === 'pre' && (
-                        <div className="space-y-6">
+                        <div className="space-y-6 animate-fade-in">
                             {/* Pre-Test KPIs */}
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
                                 <StatCard
                                     title="Tiempo de Respuesta"
-                                    value={`${preTestData.avgResponseTime.toFixed(1)} días`}
+                                    value={formatTime(preTestData.avgResponseTime)}
                                     icon={<Clock />}
-                                    change="Promedio Pre-Test"
+                                    change="Promedio histórico"
                                     changeType="negative"
+                                    color="red"
                                 />
                                 <StatCard
                                     title="Tasa de Error"
                                     value={`${preTestData.errorRate.toFixed(2)}%`}
                                     icon={<AlertTriangle />}
-                                    change="Cotizaciones rechazadas"
+                                    change="Rechazo por errores"
                                     changeType="negative"
+                                    color="red"
                                 />
                                 <StatCard
-                                    title="Satisfacción"
+                                    title="Satisfacción Calc."
                                     value={`${preTestData.satisfaction}/10`}
                                     icon={<Users />}
-                                    change="Baseline"
+                                    change="Basado en aprobación"
                                     changeType="neutral"
+                                    color="yellow"
                                 />
                                 <StatCard
-                                    title="Eficiencia"
+                                    title="Eficiencia Calc."
                                     value={`${preTestData.efficiency}/10`}
                                     icon={<TrendingUp />}
-                                    change="Baseline"
+                                    change="Basado en tiempos"
                                     changeType="neutral"
+                                    color="yellow"
                                 />
                             </div>
 
                             {/* Pre-Test Charts */}
                             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                                {/* Distribution Scatter */}
                                 <div className="bg-white dark:bg-background-dark p-6 rounded-xl border border-gray-200 dark:border-gray-700">
                                     <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-gray-100">
-                                        Distribución de Tiempos de Respuesta
+                                        Dispersión de Tiempos (Muestreo)
                                     </h3>
                                     <ResponsiveContainer width="100%" height={300}>
                                         <ScatterChart>
-                                            <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+                                            <CartesianGrid strokeDasharray="3 3" stroke="#374151" opacity={0.1} />
                                             <XAxis dataKey="id" name="Cotización" stroke="#9CA3AF" />
-                                            <YAxis dataKey="days" name="Días" stroke="#9CA3AF" />
+                                            <YAxis dataKey="hours" name="Horas" stroke="#9CA3AF" />
                                             <ZAxis range={[60, 60]} />
                                             <Tooltip cursor={{ strokeDasharray: '3 3' }} />
-                                            <Scatter name="Tiempo (días)" data={preTestData.distribution} fill="#EF4444" />
+                                            <Scatter name="Tiempo (hrs)" data={preTestData.distribution} fill="#EF4444" />
                                         </ScatterChart>
                                     </ResponsiveContainer>
                                 </div>
@@ -388,14 +422,15 @@ const ReportsPage: React.FC = () => {
                                     </h3>
                                     <ResponsiveContainer width="100%" height={300}>
                                         <LineChart data={preTestData.salesByPeriod}>
-                                            <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+                                            <CartesianGrid strokeDasharray="3 3" stroke="#374151" opacity={0.1} />
                                             <XAxis dataKey="name" stroke="#9CA3AF" />
                                             <YAxis stroke="#9CA3AF" />
                                             <Tooltip
                                                 contentStyle={{
-                                                    backgroundColor: '#1F2937',
-                                                    border: '1px solid #374151',
-                                                    borderRadius: '8px'
+                                                    backgroundColor: '#fff',
+                                                    border: '1px solid #e5e7eb',
+                                                    borderRadius: '8px',
+                                                    color: '#374151'
                                                 }}
                                             />
                                             <Legend />
@@ -408,54 +443,57 @@ const ReportsPage: React.FC = () => {
                     )}
 
                     {activeTab === 'post' && (
-                        <div className="space-y-6">
+                        <div className="space-y-6 animate-fade-in">
                             {/* Post-Test KPIs */}
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
                                 <StatCard
                                     title="Tiempo de Respuesta"
-                                    value={`${postTestData.avgResponseTime.toFixed(1)} min`}
+                                    value={formatTime(postTestData.avgResponseTime)}
                                     icon={<Clock />}
-                                    change="Promedio Post-Test"
+                                    change="Optimizado"
                                     changeType="positive"
+                                    color="green"
                                 />
                                 <StatCard
                                     title="Tasa de Error"
                                     value={`${postTestData.errorRate.toFixed(2)}%`}
                                     icon={<CheckCircle />}
-                                    change="Cotizaciones rechazadas"
+                                    change="Minimizado"
                                     changeType="positive"
+                                    color="green"
                                 />
                                 <StatCard
-                                    title="Satisfacción"
+                                    title="Satisfacción Actual"
                                     value={`${postTestData.satisfaction}/10`}
                                     icon={<Users />}
-                                    change="Mejorado"
+                                    change="Mejora notable"
                                     changeType="positive"
+                                    color="green"
                                 />
                                 <StatCard
-                                    title="Eficiencia"
+                                    title="Eficiencia Actual"
                                     value={`${postTestData.efficiency}/10`}
                                     icon={<TrendingUp />}
-                                    change="Mejorado"
+                                    change="Alta eficiencia"
                                     changeType="positive"
+                                    color="green"
                                 />
                             </div>
 
                             {/* Post-Test Charts */}
                             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                                {/* Distribution Scatter */}
                                 <div className="bg-white dark:bg-background-dark p-6 rounded-xl border border-gray-200 dark:border-gray-700">
                                     <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-gray-100">
-                                        Distribución de Tiempos de Respuesta
+                                        Dispersión de Tiempos Actuales
                                     </h3>
                                     <ResponsiveContainer width="100%" height={300}>
                                         <ScatterChart>
-                                            <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+                                            <CartesianGrid strokeDasharray="3 3" stroke="#374151" opacity={0.1} />
                                             <XAxis dataKey="id" name="Cotización" stroke="#9CA3AF" />
                                             <YAxis dataKey="hours" name="Horas" stroke="#9CA3AF" />
                                             <ZAxis range={[60, 60]} />
                                             <Tooltip cursor={{ strokeDasharray: '3 3' }} />
-                                            <Scatter name="Tiempo (horas)" data={postTestData.distribution} fill="#10B981" />
+                                            <Scatter name="Tiempo (hrs)" data={postTestData.distribution} fill="#10B981" />
                                         </ScatterChart>
                                     </ResponsiveContainer>
                                 </div>
@@ -467,14 +505,15 @@ const ReportsPage: React.FC = () => {
                                     </h3>
                                     <ResponsiveContainer width="100%" height={300}>
                                         <LineChart data={postTestData.salesByPeriod}>
-                                            <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+                                            <CartesianGrid strokeDasharray="3 3" stroke="#374151" opacity={0.1} />
                                             <XAxis dataKey="name" stroke="#9CA3AF" />
                                             <YAxis stroke="#9CA3AF" />
                                             <Tooltip
                                                 contentStyle={{
-                                                    backgroundColor: '#1F2937',
-                                                    border: '1px solid #374151',
-                                                    borderRadius: '8px'
+                                                    backgroundColor: '#fff',
+                                                    border: '1px solid #e5e7eb',
+                                                    borderRadius: '8px',
+                                                    color: '#374151'
                                                 }}
                                             />
                                             <Legend />
@@ -487,12 +526,12 @@ const ReportsPage: React.FC = () => {
                     )}
 
                     {activeTab === 'comparative' && (
-                        <div className="space-y-6">
+                        <div className="space-y-6 animate-fade-in">
                             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                                 <ComparisonBarChart
                                     data={comparativeData}
-                                    title="Comparación Pre-Test vs Post-Test"
-                                    description="Métricas clave antes y después de la implementación del sistema web"
+                                    title="Pre-Test vs Post-Test"
+                                    description="Comparativa de indicadores clave de rendimiento"
                                 />
                                 <HypothesisRadarChart
                                     data={radarData}
@@ -502,13 +541,13 @@ const ReportsPage: React.FC = () => {
                             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                                 <TrendLineChart
                                     data={preTestData.salesByPeriod}
-                                    title="Tendencia Pre-Test"
+                                    title="Tendencia Inicial"
                                     dataKey="ventas"
                                     color="#EF4444"
                                 />
                                 <TrendLineChart
                                     data={postTestData.salesByPeriod}
-                                    title="Tendencia Post-Test"
+                                    title="Tendencia Actual"
                                     dataKey="ventas"
                                     color="#10B981"
                                 />
