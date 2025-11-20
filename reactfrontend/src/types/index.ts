@@ -28,6 +28,8 @@ export interface Equipo {
   material?: string;
   dimensiones?: string;
   imagen_url?: string;
+  ficha_tecnica_url?: string; // Agregado para compatibilidad con Admin
+  estado?: 'activo' | 'inactivo' | 'mantenimiento'; // Agregado para compatibilidad
   created_at?: string;
   updated_at?: string;
 }
@@ -38,6 +40,7 @@ export interface Categoria {
   nombre: string;
   descripcion?: string;
   equipment_count?: number;
+  estado?: 'activo' | 'inactivo'; // Agregado para compatibilidad
   created_at?: string;
   updated_at?: string;
 }
@@ -62,6 +65,17 @@ export interface Cart {
 
 // Cotización types
 export type CotizacionEstado = 'borrador' | 'enviada' | 'aprobada' | 'rechazada' | 'vencida';
+
+export interface CotizacionItem {
+  id?: number; // Opcional para creación
+  cotizacion_id?: number;
+  equipo_id: number;
+  equipo_nombre: string;
+  equipo_codigo: string;
+  cantidad: number;
+  precio_unitario: number;
+  subtotal: number;
+}
 
 export interface Cotizacion {
   id: number;
@@ -92,28 +106,25 @@ export interface CotizacionStats {
   vencida: number;
 }
 
+// MODIFICADO: Se agregaron campos de paginación y fechas
 export interface CotizacionFilters {
   search?: string;
-  estado?: CotizacionEstado | '';
-}
-
-export interface CotizacionItem {
-  id: number;
-  cotizacion_id: number;
-  equipo_id: number;
-  equipo_nombre: string;
-  equipo_codigo: string;
-  cantidad: number;
-  precio_unitario: number;
-  subtotal: number;
+  estado?: CotizacionEstado | '' | string;
+  page?: number;
+  limit?: number;
+  fecha_inicio?: string;
+  fecha_fin?: string;
 }
 
 // Filter types
+// MODIFICADO: Se agregaron campos de paginación
 export interface CatalogFilters {
   search?: string;
   categoria_id?: number;
   min_precio?: number;
   max_precio?: number;
+  page?: number;
+  limit?: number;
 }
 
 export interface CatalogStats {
@@ -142,7 +153,7 @@ export interface ApiResponse<T> {
 }
 
 export interface PaginatedResponse<T> {
-  success: boolean;
+  success?: boolean; // Opcional para flexibilidad
   data: T[];
   pagination: {
     page: number;
@@ -188,5 +199,5 @@ export interface SalesStatus {
   name: string;
   value: number;
   color: string;
-  [key: string]: any; // Index signature for chart compatibility
+  [key: string]: any;
 }

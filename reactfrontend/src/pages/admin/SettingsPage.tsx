@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { Save, Building, Mail, Phone, MapPin, Percent, CreditCard, Globe, Info } from 'lucide-react';
-import Sidebar from '../../components/dashboard/Sidebar';
+import { Save, Settings as SettingsIcon, Database, Bell } from 'lucide-react';
 import DashboardHeader from '../../components/dashboard/DashboardHeader';
 import Button from '../../components/common/Button';
 import Input from '../../components/common/Input';
@@ -8,158 +7,86 @@ import { useToast } from '../../contexts/ToastContext';
 
 const SettingsPage: React.FC = () => {
   const { showToast } = useToast();
-  const [saving, setSaving] = useState(false);
-  
   const [config, setConfig] = useState({
-    empresa_nombre: 'LC Service',
-    ruc: '20123456789',
-    direccion: 'Calle Inca Roca #1027',
-    telefono: '987952312',
-    email_contacto: 'contacto@lcservice.pe',
-    igv_porcentaje: 18,
+    empresaNombre: 'LC Service',
+    igv: '18',
     moneda: 'PEN',
-    website: 'www.lcservice.pe'
+    emailContacto: 'contacto@lcservice.pe'
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setConfig({ ...config, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
-    setSaving(true);
+    // Aquí conectarías con un endpoint real si tu backend soportara tabla de configuración
+    // Por ahora simulamos el guardado
     setTimeout(() => {
-      setSaving(false);
-      showToast('Configuración guardada correctamente', 'success');
-    }, 1000);
+      showToast('Configuración actualizada correctamente', 'success');
+    }, 500);
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-50 dark:bg-background-dark-secondary">
-      <Sidebar />
+    <div className="max-w-4xl">
+      <DashboardHeader title="Configuración del Sistema" />
 
-      <div className="flex-1 flex flex-col">
-        <DashboardHeader title="Configuración del Sistema" />
+      <div className="space-y-6">
+        {/* General Settings */}
+        <div className="bg-white dark:bg-background-dark rounded-lg shadow border border-gray-200 dark:border-gray-700 overflow-hidden">
+          <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex items-center gap-2 bg-gray-50 dark:bg-background-dark-tertiary">
+            <SettingsIcon className="w-5 h-5 text-gray-500" />
+            <h2 className="font-semibold text-gray-900 dark:text-gray-100">Parámetros Generales</h2>
+          </div>
 
-        <main className="flex-1 p-8 max-w-6xl mx-auto w-full">
-          <form onSubmit={handleSubmit} className="space-y-8">
-            
-            {/* Sección 1: Identidad Corporativa */}
-            <section>
-              <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
-                <Building className="w-5 h-5 text-primary" /> Identidad Corporativa
-              </h3>
-              <div className="bg-white dark:bg-background-dark rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
-                <Input
-                  label="Razón Social / Nombre"
-                  name="empresa_nombre"
-                  value={config.empresa_nombre}
-                  onChange={handleChange}
-                  fullWidth
-                />
-                <Input
-                  label="RUC"
-                  name="ruc"
-                  value={config.ruc}
-                  onChange={handleChange}
-                  fullWidth
-                />
-                <div className="md:col-span-2">
-                  <div className="relative">
-                    <Input
-                      label="Sitio Web"
-                      name="website"
-                      value={config.website}
-                      onChange={handleChange}
-                      fullWidth
-                      className="pl-10"
-                    />
-                    <Globe className="w-5 h-5 text-gray-400 absolute left-3 top-9" />
-                  </div>
-                </div>
-              </div>
-            </section>
+          <form onSubmit={handleSave} className="p-6 space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <Input
+                label="Nombre de la Empresa"
+                name="empresaNombre"
+                value={config.empresaNombre}
+                onChange={handleChange}
+              />
+              <Input
+                label="Email de Contacto (Sistema)"
+                name="emailContacto"
+                value={config.emailContacto}
+                onChange={handleChange}
+              />
+              <Input
+                label="Impuesto (IGV %)"
+                name="igv"
+                type="number"
+                value={config.igv}
+                onChange={handleChange}
+              />
+              <Input
+                label="Moneda Principal"
+                name="moneda"
+                value={config.moneda}
+                disabled
+                helperText="La moneda no se puede cambiar una vez iniciadas las operaciones."
+              />
+            </div>
 
-            {/* Sección 2: Contacto y Ubicación */}
-            <section>
-              <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
-                <MapPin className="w-5 h-5 text-primary" /> Contacto y Ubicación
-              </h3>
-              <div className="bg-white dark:bg-background-dark rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="relative md:col-span-2">
-                  <Input
-                    label="Dirección Fiscal"
-                    name="direccion"
-                    value={config.direccion}
-                    onChange={handleChange}
-                    fullWidth
-                    className="pl-10"
-                  />
-                  <MapPin className="w-5 h-5 text-gray-400 absolute left-3 top-9" />
-                </div>
-                <div className="relative">
-                  <Input
-                    label="Teléfono Principal"
-                    name="telefono"
-                    value={config.telefono}
-                    onChange={handleChange}
-                    fullWidth
-                    className="pl-10"
-                  />
-                  <Phone className="w-5 h-5 text-gray-400 absolute left-3 top-9" />
-                </div>
-                <div className="relative">
-                  <Input
-                    label="Email de Contacto"
-                    name="email_contacto"
-                    type="email"
-                    value={config.email_contacto}
-                    onChange={handleChange}
-                    fullWidth
-                    className="pl-10"
-                  />
-                  <Mail className="w-5 h-5 text-gray-400 absolute left-3 top-9" />
-                </div>
-              </div>
-            </section>
-
-            {/* Sección 3: Parámetros Comerciales */}
-            <section>
-              <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
-                <CreditCard className="w-5 h-5 text-primary" /> Parámetros Comerciales
-              </h3>
-              <div className="bg-white dark:bg-background-dark rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6 grid grid-cols-1 md:grid-cols-3 gap-6">
-                 <div className="relative">
-                  <Input
-                    label="IGV Global (%)"
-                    name="igv_porcentaje"
-                    type="number"
-                    value={config.igv_porcentaje}
-                    onChange={handleChange}
-                    fullWidth
-                    className="pl-10"
-                  />
-                  <Percent className="w-5 h-5 text-gray-400 absolute left-3 top-9" />
-                </div>
-                
-                <div className="col-span-2 flex items-center p-4 bg-blue-50 dark:bg-blue-900/20 text-blue-800 dark:text-blue-200 rounded-lg">
-                  <Info className="w-5 h-5 mr-3 flex-shrink-0" />
-                  <p className="text-sm">
-                    Cambiar el IGV afectará a todas las <strong>nuevas</strong> cotizaciones. Las cotizaciones antiguas mantendrán su valor histórico.
-                  </p>
-                </div>
-              </div>
-            </section>
-
-            {/* Barra de Acción Flotante o Fija */}
-            <div className="sticky bottom-0 bg-gray-50 dark:bg-background-dark-secondary p-4 -mx-8 -mb-8 border-t border-gray-200 dark:border-gray-700 flex justify-end">
-               <Button type="submit" size="lg" disabled={saving} className="shadow-lg">
-                  <Save className="w-5 h-5 mr-2" />
-                  {saving ? 'Guardando Cambios...' : 'Guardar Configuración'}
-                </Button>
+            <div className="flex justify-end pt-4 border-t border-gray-100 dark:border-gray-700">
+              <Button type="submit" variant="primary">
+                <Save className="w-4 h-4 mr-2" /> Guardar Cambios
+              </Button>
             </div>
           </form>
-        </main>
+        </div>
+
+        {/* System Maintenance (Placeholder) */}
+        <div className="bg-white dark:bg-background-dark rounded-lg shadow border border-gray-200 dark:border-gray-700 overflow-hidden opacity-75">
+          <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex items-center gap-2 bg-gray-50 dark:bg-background-dark-tertiary">
+            <Database className="w-5 h-5 text-gray-500" />
+            <h2 className="font-semibold text-gray-900 dark:text-gray-100">Mantenimiento (Próximamente)</h2>
+          </div>
+          <div className="p-6 text-sm text-gray-500">
+            <p>Las opciones de backup y restauración de base de datos estarán disponibles en futuras actualizaciones.</p>
+          </div>
+        </div>
       </div>
     </div>
   );

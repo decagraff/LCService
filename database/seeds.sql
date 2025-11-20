@@ -239,3 +239,7 @@ INSERT INTO cotizacion_detalles (cotizacion_id, equipo_id, cantidad, precio_unit
 
 -- COT-202511-0106 (La Mar - Borrador) - Mesas
 (16, 5, 2, 950.00, 1900.00); -- MT-CORTE-100 (ID 5)
+
+
+INSERT INTO users (email, password, nombre, apellido, telefono, empresa, role, estado) 
+VALUES ('publico@lcservice.pe', 'sin_acceso', 'Cliente', 'Mostrador', '000-000000', 'Venta Directa', 'cliente', 'activo');
