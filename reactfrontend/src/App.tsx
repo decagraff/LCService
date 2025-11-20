@@ -6,22 +6,18 @@ import { ThemeProvider } from './contexts/ThemeContext';
 import { ToastProvider } from './contexts/ToastContext';
 import { ToastContainer } from './components/common/Toast';
 import MainLayout from './components/layout/MainLayout';
-
-// Pages
+import VendedorInventoryPage from './pages/vendedor/VendedorInventoryPage';
+import VendedorReportsPage from './pages/vendedor/VendedorReportsPage';
+import QuoteDetailPage from './pages/QuoteDetailPage';
 import LandingPage from './pages/LandingPage';
 import LoginPage from './pages/LoginPage';
+import SettingsPage from './pages/admin/SettingsPage';
 import RegisterPage from './pages/RegisterPage';
 import DashboardPage from './pages/DashboardPage';
 import ProfilePage from './pages/ProfilePage';
 import CatalogPage from './pages/CatalogPage';
 import CotizacionesPage from './pages/CotizacionesPage';
 import NewQuotePage from './pages/NewQuotePage';
-import QuoteDetailPage from './pages/QuoteDetailPage';
-import EquipmentDetailPage from './pages/EquipmentDetailPage'; // IMPORTADO
-import ErrorPage from './pages/ErrorPage';
-import Loading from './components/common/Loading';
-
-// Admin Pages
 import UsersPage from './pages/admin/UsersPage';
 import UserEditPage from './pages/admin/UserEditPage';
 import EquipmentPage from './pages/admin/EquipmentPage';
@@ -29,15 +25,11 @@ import EquipmentFormPage from './pages/admin/EquipmentFormPage';
 import CategoriesPage from './pages/admin/CategoriesPage';
 import CategoryFormPage from './pages/admin/CategoryFormPage';
 import InventoryDashboardPage from './pages/admin/InventoryDashboardPage';
-import ReportsPage from './pages/admin/ReportsPage';
-import SettingsPage from './pages/admin/SettingsPage';
-
-// Vendedor Pages
-import VendedorInventoryPage from './pages/vendedor/VendedorInventoryPage';
-import VendedorReportsPage from './pages/vendedor/VendedorReportsPage';
+import ErrorPage from './pages/ErrorPage';
+import Loading from './components/common/Loading';
 
 // Protected Route Component
-const ProtectedRoute: React.FC<{ children: React.ReactNode; allowedRoles?: string[] }> = ({ children, allowedRoles }) => {
+const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { user, loading } = useAuth();
   const location = useLocation();
 
@@ -47,10 +39,6 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode; allowedRoles?: strin
 
   if (!user) {
     return <Navigate to="/auth/login" state={{ from: location }} replace />;
-  }
-
-  if (allowedRoles && !allowedRoles.includes(user.role)) {
-    return <Navigate to={`/${user.role}/dashboard`} replace />;
   }
 
   return <>{children}</>;
@@ -66,66 +54,252 @@ const AppRoutes: React.FC = () => {
       <Route path="/auth/register" element={<RegisterPage />} />
 
       {/* Protected Routes - Admin */}
-      <Route path="/admin" element={<ProtectedRoute allowedRoles={['admin']}><MainLayout /></ProtectedRoute>}>
-        <Route index element={<Navigate to="/admin/dashboard" replace />} />
-        <Route path="dashboard" element={<DashboardPage />} />
-        <Route path="perfil" element={<ProfilePage />} />
-
-        <Route path="users" element={<UsersPage />} />
-        <Route path="users/:id/edit" element={<UserEditPage />} />
-
-        <Route path="inventory" element={<InventoryDashboardPage />} />
-        <Route path="equipment" element={<EquipmentPage />} />
-        <Route path="equipment/new" element={<EquipmentFormPage />} />
-        <Route path="equipment/:id/edit" element={<EquipmentFormPage />} />
-        <Route path="categories" element={<CategoriesPage />} />
-        <Route path="categories/new" element={<CategoryFormPage />} />
-        <Route path="categories/:id/edit" element={<CategoryFormPage />} />
-
-        <Route path="catalogo" element={<CatalogPage />} />
-        {/* RUTA DETALLE (Admin) */}
-        <Route path="catalogo/equipo/:id" element={<EquipmentDetailPage />} />
-
-        <Route path="cotizaciones" element={<CotizacionesPage />} />
-        <Route path="cotizaciones/nueva" element={<NewQuotePage />} />
-        <Route path="cotizaciones/:id" element={<QuoteDetailPage />} />
-
-        <Route path="configuracion" element={<SettingsPage />} />
-        <Route path="reportes" element={<ReportsPage />} />
-      </Route>
+      <Route
+        path="/admin/dashboard"
+        element={
+          <ProtectedRoute>
+            <DashboardPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/perfil"
+        element={
+          <ProtectedRoute>
+            <ProfilePage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/users"
+        element={
+          <ProtectedRoute>
+            <UsersPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/users/:id/edit"
+        element={
+          <ProtectedRoute>
+            <UserEditPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/inventory"
+        element={
+          <ProtectedRoute>
+            <InventoryDashboardPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/equipment"
+        element={
+          <ProtectedRoute>
+            <EquipmentPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/equipment/new"
+        element={
+          <ProtectedRoute>
+            <EquipmentFormPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/equipment/:id/edit"
+        element={
+          <ProtectedRoute>
+            <EquipmentFormPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/categories"
+        element={
+          <ProtectedRoute>
+            <CategoriesPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/categories/new"
+        element={
+          <ProtectedRoute>
+            <CategoryFormPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/categories/:id/edit"
+        element={
+          <ProtectedRoute>
+            <CategoryFormPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/catalogo"
+        element={
+          <ProtectedRoute>
+            <CatalogPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/cotizaciones"
+        element={
+          <ProtectedRoute>
+            <CotizacionesPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/cotizaciones/nueva"
+        element={
+          <ProtectedRoute>
+            <NewQuotePage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/cotizaciones/:id"
+        element={
+          <ProtectedRoute>
+            <QuoteDetailPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/configuracion"
+        element={
+          <ProtectedRoute>
+            <SettingsPage />
+          </ProtectedRoute>
+        }
+      />
 
       {/* Protected Routes - Vendedor */}
-      <Route path="/vendedor" element={<ProtectedRoute allowedRoles={['vendedor']}><MainLayout /></ProtectedRoute>}>
-        <Route index element={<Navigate to="/vendedor/dashboard" replace />} />
-        <Route path="dashboard" element={<DashboardPage />} />
-        <Route path="perfil" element={<ProfilePage />} />
+      <Route
+        path="/vendedor/dashboard"
+        element={
+          <ProtectedRoute>
+            <DashboardPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/vendedor/perfil"
+        element={
+          <ProtectedRoute>
+            <ProfilePage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/vendedor/catalogo"
+        element={
+          <ProtectedRoute>
+            <CatalogPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/vendedor/cotizaciones"
+        element={
+          <ProtectedRoute>
+            <CotizacionesPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/vendedor/cotizaciones/nueva"
+        element={
+          <ProtectedRoute>
+            <NewQuotePage />
+          </ProtectedRoute>
+        }
+      />
 
-        <Route path="catalogo" element={<CatalogPage />} />
-        {/* RUTA DETALLE (Vendedor) */}
-        <Route path="catalogo/equipo/:id" element={<EquipmentDetailPage />} />
-
-        <Route path="cotizaciones" element={<CotizacionesPage />} />
-        <Route path="cotizaciones/nueva" element={<NewQuotePage />} />
-        <Route path="cotizaciones/:id" element={<QuoteDetailPage />} />
-
-        <Route path="inventario" element={<VendedorInventoryPage />} />
-        <Route path="reportes" element={<VendedorReportsPage />} />
-      </Route>
+      <Route
+        path="/vendedor/cotizaciones/:id"
+        element={
+          <ProtectedRoute>
+            <QuoteDetailPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/vendedor/inventario"
+        element={
+          <ProtectedRoute>
+            <VendedorInventoryPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/vendedor/reportes"
+        element={
+          <ProtectedRoute>
+            <VendedorReportsPage />
+          </ProtectedRoute>
+        }
+      />
 
       {/* Protected Routes - Cliente */}
-      <Route path="/cliente" element={<ProtectedRoute allowedRoles={['cliente']}><MainLayout /></ProtectedRoute>}>
-        <Route index element={<Navigate to="/cliente/dashboard" replace />} />
-        <Route path="dashboard" element={<DashboardPage />} />
-        <Route path="perfil" element={<ProfilePage />} />
+      <Route
+        path="/cliente/dashboard"
+        element={
+          <ProtectedRoute>
+            <DashboardPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/cliente/perfil"
+        element={
+          <ProtectedRoute>
+            <ProfilePage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/cliente/catalogo"
+        element={
+          <ProtectedRoute>
+            <CatalogPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/cliente/cotizaciones"
+        element={
+          <ProtectedRoute>
+            <CotizacionesPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/cliente/cotizaciones/nueva"
+        element={
+          <ProtectedRoute>
+            <NewQuotePage />
+          </ProtectedRoute>
+        }
+      />
 
-        <Route path="catalogo" element={<CatalogPage />} />
-        {/* RUTA DETALLE (Cliente) */}
-        <Route path="catalogo/equipo/:id" element={<EquipmentDetailPage />} />
-
-        <Route path="cotizaciones" element={<CotizacionesPage />} />
-        <Route path="cotizaciones/nueva" element={<NewQuotePage />} />
-        <Route path="cotizaciones/:id" element={<QuoteDetailPage />} />
-      </Route>
+      <Route
+        path="/cliente/cotizaciones/:id"
+        element={
+          <ProtectedRoute>
+            <QuoteDetailPage />
+          </ProtectedRoute>
+        }
+      />
 
       {/* Error Page */}
       <Route path="/error" element={<ErrorPage />} />
