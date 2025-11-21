@@ -80,7 +80,7 @@ const formatToolResultManually = (toolName, result, role) => {
             });
         }
 
-        response += `\n🔗 [Ver cotización completa](${baseUrl}/${role}/cotizaciones/${r.numero_cotizacion})`;
+        response += `\n\n👉 Ver cotización: ${baseUrl}/${role}/cotizaciones/${r.id}`;
         return response;
     }
 
@@ -88,8 +88,8 @@ const formatToolResultManually = (toolName, result, role) => {
         let response = `📋 **Tus últimas cotizaciones (${result.total}):**\n\n`;
         result.cotizaciones.forEach(c => {
             response += `• **${c.numero_cotizacion}** - ${c.estado} - S/. ${parseFloat(c.total).toFixed(2)}\n`;
+            response += `  👉 ${baseUrl}/${role}/cotizaciones/${c.id}\n`;
         });
-        response += `\n🔗 [Ver todas tus cotizaciones](${baseUrl}/${role}/cotizaciones)`;
         return response;
     }
 
@@ -99,7 +99,7 @@ const formatToolResultManually = (toolName, result, role) => {
             response += `• **${p.nombre}** (${p.codigo})\n`;
             response += `  Precio: S/. ${parseFloat(p.precio).toFixed(2)} | Stock: ${p.stock}\n`;
         });
-        response += `\n🔗 [Ver catálogo completo](${baseUrl}/${role}/catalogo)`;
+        response += `\n\n👉 Ver catálogo: ${baseUrl}/${role}/catalogo`;
         return response;
     }
 
@@ -111,25 +111,29 @@ const addLinksToResponse = (response, toolResult, role) => {
     const baseUrl = 'https://lc-service.decatron.net';
     let enhancedResponse = response;
 
-    // Si hay cotización, agregar link
-    if (toolResult?.resumen?.numero_cotizacion) {
+    // Si hay cotización, agregar link con ID
+    if (toolResult?.resumen?.id) {
+        const id = toolResult.resumen.id;
         const codigo = toolResult.resumen.numero_cotizacion;
         if (!response.includes(baseUrl)) {
-            enhancedResponse += `\n\n🔗 [Ver cotización ${codigo}](${baseUrl}/${role}/cotizaciones/${codigo})`;
+            enhancedResponse += `\n\n👉 Ver cotización ${codigo}: ${baseUrl}/${role}/cotizaciones/${id}`;
         }
     }
 
     // Si hay productos, agregar link al catálogo
     if (toolResult?.productos && toolResult.productos.length > 0) {
         if (!response.includes('/catalogo')) {
-            enhancedResponse += `\n\n🔗 [Explorar catálogo](${baseUrl}/${role}/catalogo)`;
+            enhancedResponse += `\n\n👉 Ver catálogo: ${baseUrl}/${role}/catalogo`;
         }
     }
 
-    // Si hay lista de cotizaciones
-    if (toolResult?.cotizaciones) {
-        if (!response.includes('/cotizaciones')) {
-            enhancedResponse += `\n\n🔗 [Ver todas mis cotizaciones](${baseUrl}/${role}/cotizaciones)`;
+    // Si hay lista de cotizaciones, agregar links individuales
+    if (toolResult?.cotizaciones && toolResult.cotizaciones.length > 0) {
+        if (!response.includes('/cotizaciones/')) {
+            enhancedResponse += `\n\n📋 Links directos:`;
+            toolResult.cotizaciones.slice(0, 3).forEach(c => {
+                enhancedResponse += `\n• ${c.numero_cotizacion}: ${baseUrl}/${role}/cotizaciones/${c.id}`;
+            });
         }
     }
 
@@ -272,9 +276,9 @@ const chatController = {
                     if (name === "buscarProductos") {
                         const q = args.query;
                         const [rows] = await pool.execute(
-                            `SELECT nombre, codigo, precio, stock, descripcion FROM equipos
+                            `SELECT id, nombre, codigo, precio, stock, descripcion FROM equipos
                              WHERE (nombre LIKE ? OR codigo LIKE ? OR descripcion LIKE ?)
-                             AND activo = 1 LIMIT 5`,
+                             AND estado = 'activo' LIMIT 5`,
                             [`%${q}%`, `%${q}%`, `%${q}%`]
                         );
                         toolResult = rows.length > 0
@@ -286,7 +290,7 @@ const chatController = {
 
                         // Query base con validación de permisos
                         let query = `
-                            SELECT c.numero_cotizacion, c.estado, c.total, c.created_at,
+                            SELECT c.id, c.numero_cotizacion, c.estado, c.total, c.created_at,
                                    u.nombre as cliente_nombre, u.empresa as cliente_empresa,
                                    c.cliente_id, c.vendedor_id
                             FROM cotizaciones c
@@ -333,7 +337,7 @@ const chatController = {
                         const estado = args.estado;
 
                         let query = `
-                            SELECT c.numero_cotizacion, c.estado, c.total, c.created_at,
+                            SELECT c.id, c.numero_cotizacion, c.estado, c.total, c.created_at,
                                    u.nombre as cliente_nombre
                             FROM cotizaciones c
                             JOIN users u ON c.cliente_id = u.id
