@@ -60,7 +60,7 @@ const CatalogFilters: React.FC<CatalogFiltersProps> = ({
   const globalMax = stats?.precio_max || 10000;
 
   return (
-    <div className="bg-white dark:bg-background-dark rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm w-full lg:w-72 flex-shrink-0">
+    <div className="bg-white dark:bg-background-dark rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm w-full lg:w-72 flex-shrink-0 lg:sticky lg:top-4 lg:self-start">
 
       {/* Header Móvil */}
       <div
