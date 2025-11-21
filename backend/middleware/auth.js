@@ -1,9 +1,26 @@
 const User = require('../models/User');
 
+// Helper para detectar si es una petición de API
+const isApiRequest = (req) => {
+    return req.xhr ||
+           req.headers.accept?.includes('application/json') ||
+           req.path.startsWith('/api/') ||
+           req.path.includes('/api/') ||
+           req.headers['content-type']?.includes('application/json');
+};
+
 // Middleware para verificar autenticación
 const requireAuth = async (req, res, next) => {
     try {
         if (!req.session.userId) {
+            // Para APIs, devolver JSON con 401
+            if (isApiRequest(req)) {
+                return res.status(401).json({
+                    success: false,
+                    error: 'No autenticado',
+                    message: 'Debe iniciar sesión para acceder a este recurso'
+                });
+            }
             return res.redirect('/auth/login');
         }
 
@@ -11,17 +28,33 @@ const requireAuth = async (req, res, next) => {
         const user = await User.findById(req.session.userId);
         if (!user) {
             req.session.destroy();
+            // Para APIs, devolver JSON con 401
+            if (isApiRequest(req)) {
+                return res.status(401).json({
+                    success: false,
+                    error: 'Sesión inválida',
+                    message: 'Su sesión ha expirado, por favor inicie sesión nuevamente'
+                });
+            }
             return res.redirect('/auth/login');
         }
 
         // Agregar usuario a la request
         req.user = user;
         res.locals.user = user.toSafeObject();
-        
+
         next();
     } catch (error) {
         console.error('Error en middleware de autenticación:', error);
         req.session.destroy();
+        // Para APIs, devolver JSON con 500
+        if (isApiRequest(req)) {
+            return res.status(500).json({
+                success: false,
+                error: 'Error de autenticación',
+                message: 'Error interno del servidor'
+            });
+        }
         res.redirect('/auth/login');
     }
 };
@@ -29,13 +62,16 @@ const requireAuth = async (req, res, next) => {
 // Middleware para verificar que NO esté autenticado (para login/register)
 const requireGuest = (req, res, next) => {
     if (req.session.userId) {
-        // Si es una petición de API, devolver JSON
-        if (req.xhr || req.headers.accept?.includes('application/json') || req.headers['content-type']?.includes('application/json')) {
+        // Para APIs, permitir el acceso (o devolver info del usuario)
+        if (isApiRequest(req)) {
+            // En APIs de login/register, si ya está autenticado, devolver error
             return res.status(400).json({
                 success: false,
-                error: 'Ya estás autenticado'
+                error: 'Ya autenticado',
+                message: 'Ya tiene una sesión activa'
             });
         }
+        return res.redirect('/dashboard');
     }
     next();
 };

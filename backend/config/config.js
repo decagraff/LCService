@@ -9,18 +9,15 @@ module.exports = {
 
     // Configuración de sesiones
     session: {
-        secret: process.env.SESSION_SECRET,
+        secret: process.env.SESSION_SECRET || 'default_secret_change_in_production',
         resave: false,
         saveUninitialized: false,
         cookie: {
             secure: process.env.NODE_ENV === 'production',
             httpOnly: true,
-            sameSite: process.env.NODE_ENV === 'production' ? 'lax' : 'lax',
-            maxAge: 24 * 60 * 60 * 1000 
-        },
-
-        proxy: process.env.NODE_ENV === 'production' // Confiar en el proxy (nginx)
-
+            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+            maxAge: 24 * 60 * 60 * 1000 // 24 horas
+        }
     },
 
     // Configuración de uploads
