@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { MessageSquare, X, Send, Sparkles, Bot, User } from 'lucide-react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
+import { MessageSquare, X, Send, Sparkles, Bot, User, Trash2 } from 'lucide-react';
 import api from '../../services/api';
 import { useAuth } from '../../contexts/AuthContext';
 
@@ -10,21 +10,99 @@ interface Message {
     timestamp: Date;
 }
 
+// Clave para localStorage (única por usuario)
+const getChatStorageKey = (userId: number | undefined) => `decatron_chat_${userId || 'guest'}`;
+
+// Convertir URLs en links clickeables
+const renderMessageText = (text: string) => {
+    // Regex para detectar URLs
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+    const parts = text.split(urlRegex);
+
+    return parts.map((part, index) => {
+        if (urlRegex.test(part)) {
+            // Reset regex lastIndex
+            urlRegex.lastIndex = 0;
+            return (
+                <a
+                    key={index}
+                    href={part}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-400 hover:text-blue-300 underline break-all"
+                    onClick={(e) => e.stopPropagation()}
+                >
+                    {part}
+                </a>
+            );
+        }
+        // Procesar negritas **texto**
+        return part.split('**').map((segment, i) =>
+            i % 2 === 1 ? <strong key={`${index}-${i}`}>{segment}</strong> : segment
+        );
+    });
+};
+
 const AIChatAssistant: React.FC = () => {
     const { user } = useAuth();
     const [isOpen, setIsOpen] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
     const [input, setInput] = useState('');
     const [isLoading, setIsLoading] = useState(false);
-    const [messages, setMessages] = useState<Message[]>([
-        {
-            id: 'welcome',
-            role: 'model',
-            // CAMBIO DE IDENTIDAD: Nombre Decatron
-            text: `¡Hola ${user?.nombre || ''}! 👋 Soy Decatron, tu asistente virtual de LC Service. ¿En qué puedo ayudarte hoy?`,
-            timestamp: new Date()
+
+    // Mensaje de bienvenida
+    const getWelcomeMessage = useCallback((): Message => ({
+        id: 'welcome',
+        role: 'model',
+        text: `¡Hola ${user?.nombre || ''}! 👋 Soy Decatron, tu asistente virtual de LC Service. ¿En qué puedo ayudarte hoy?`,
+        timestamp: new Date()
+    }), [user?.nombre]);
+
+    const [messages, setMessages] = useState<Message[]>([getWelcomeMessage()]);
+
+    // Cargar historial de localStorage al montar
+    useEffect(() => {
+        if (user?.id) {
+            const storageKey = getChatStorageKey(user.id);
+            const savedMessages = localStorage.getItem(storageKey);
+
+            if (savedMessages) {
+                try {
+                    const parsed = JSON.parse(savedMessages);
+                    // Convertir timestamps string a Date
+                    const restored = parsed.map((msg: Message) => ({
+                        ...msg,
+                        timestamp: new Date(msg.timestamp)
+                    }));
+                    setMessages(restored);
+                } catch (e) {
+                    console.error('Error loading chat history:', e);
+                    setMessages([getWelcomeMessage()]);
+                }
+            } else {
+                setMessages([getWelcomeMessage()]);
+            }
         }
-    ]);
+    }, [user?.id, getWelcomeMessage]);
+
+    // Guardar en localStorage cuando cambian los mensajes
+    useEffect(() => {
+        if (user?.id && messages.length > 1) {
+            const storageKey = getChatStorageKey(user.id);
+            // Solo guardar los últimos 50 mensajes para no saturar localStorage
+            const toSave = messages.slice(-50);
+            localStorage.setItem(storageKey, JSON.stringify(toSave));
+        }
+    }, [messages, user?.id]);
+
+    // Limpiar historial
+    const clearHistory = () => {
+        if (user?.id) {
+            const storageKey = getChatStorageKey(user.id);
+            localStorage.removeItem(storageKey);
+        }
+        setMessages([getWelcomeMessage()]);
+    };
 
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
@@ -105,7 +183,6 @@ const AIChatAssistant: React.FC = () => {
                                 <Bot className="w-5 h-5" />
                             </div>
                             <div>
-                                {/* CAMBIO DE NOMBRE VISUAL */}
                                 <h3 className="font-bold text-sm">Decatron AI</h3>
                                 <p className="text-xs text-blue-100 flex items-center gap-1">
                                     <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
@@ -113,12 +190,22 @@ const AIChatAssistant: React.FC = () => {
                                 </p>
                             </div>
                         </div>
-                        <button
-                            onClick={() => setIsOpen(false)}
-                            className="hover:bg-white/20 p-1 rounded-full transition-colors"
-                        >
-                            <X className="w-5 h-5" />
-                        </button>
+                        <div className="flex items-center gap-1">
+                            {/* Botón limpiar historial */}
+                            <button
+                                onClick={clearHistory}
+                                className="hover:bg-white/20 p-1.5 rounded-full transition-colors"
+                                title="Limpiar historial"
+                            >
+                                <Trash2 className="w-4 h-4" />
+                            </button>
+                            <button
+                                onClick={() => setIsOpen(false)}
+                                className="hover:bg-white/20 p-1.5 rounded-full transition-colors"
+                            >
+                                <X className="w-5 h-5" />
+                            </button>
+                        </div>
                     </div>
 
                     <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50 dark:bg-gray-900/50">
@@ -138,9 +225,7 @@ const AIChatAssistant: React.FC = () => {
                                             : 'bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 rounded-tl-none border border-gray-100 dark:border-gray-700'
                                         }`}>
                                         <p className="whitespace-pre-wrap leading-relaxed">
-                                            {msg.text.split('**').map((part, i) =>
-                                                i % 2 === 1 ? <strong key={i}>{part}</strong> : part
-                                            )}
+                                            {renderMessageText(msg.text)}
                                         </p>
                                         <span className="text-[10px] opacity-50 mt-1 block text-right">
                                             {msg.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}

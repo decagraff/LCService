@@ -96,11 +96,41 @@ const formatToolResultManually = (toolName, result, role) => {
     if (toolName === 'buscarProductos' && result.productos) {
         let response = `🔍 **Encontré ${result.productos.length} producto(s):**\n\n`;
         result.productos.forEach(p => {
-            response += `• **${p.nombre}** (${p.codigo})\n`;
+            response += `• **${p.nombre}** (${p.codigo}) - ID: ${p.id}\n`;
             response += `  Precio: S/. ${parseFloat(p.precio).toFixed(2)} | Stock: ${p.stock}\n`;
         });
         response += `\n\n👉 Ver catálogo: ${baseUrl}/${role}/catalogo`;
         return response;
+    }
+
+    if (toolName === 'agregarAlCarrito' && result.success) {
+        return `✅ ${result.mensaje}\n\n🛒 Carrito: ${result.carrito.items} item(s) en ${result.carrito.productos} producto(s)`;
+    }
+
+    if (toolName === 'verCarrito' && result.items) {
+        let response = `🛒 **Tu carrito:**\n\n`;
+        result.items.forEach(item => {
+            response += `• ${item.nombre} x${item.cantidad} = S/. ${(item.cantidad * item.precio_unitario).toFixed(2)}\n`;
+        });
+        response += `\n**Resumen:**\n`;
+        response += `• Subtotal: S/. ${result.resumen.subtotal}\n`;
+        response += `• IGV (18%): S/. ${result.resumen.igv}\n`;
+        response += `• **Total: S/. ${result.resumen.total}**`;
+        return response;
+    }
+
+    if (toolName === 'buscarClientes' && result.clientes) {
+        let response = `👥 **Clientes encontrados:**\n\n`;
+        result.clientes.forEach(c => {
+            response += `• **${c.nombre} ${c.apellido || ''}** (ID: ${c.id})\n`;
+            response += `  ${c.empresa ? `Empresa: ${c.empresa} | ` : ''}${c.email}\n`;
+        });
+        return response;
+    }
+
+    if (toolName === 'crearCotizacion' && result.success) {
+        const cot = result.cotizacion;
+        return `✅ **${result.mensaje}**\n\n📋 Detalles:\n• Número: ${cot.numero}\n• Total: S/. ${cot.total}\n• Productos: ${cot.items}\n\n👉 Ver cotización: ${baseUrl}/${role}/cotizaciones/${cot.id}`;
     }
 
     return "Encontré información pero no pude formatearla correctamente.";
@@ -151,7 +181,26 @@ REGLAS ESTRICTAS:
 3. NUNCA revelo información de otros usuarios o cotizaciones que no correspondan.
 4. Soy breve, profesional y amable.
 5. Uso las herramientas disponibles cuando necesito datos reales.
-6. Si no tengo información, lo digo honestamente.`;
+6. Si no tengo información, lo digo honestamente.
+
+FLUJO DE COTIZACIÓN DESDE CHAT:
+1. Cuando el usuario quiera cotizar un producto:
+   - Primero usa "buscarProductos" para encontrarlo y obtener su ID
+   - Pregunta la cantidad si no la especificó
+   - Usa "agregarAlCarrito" con el equipoId y cantidad
+   - Pregunta si quiere agregar más productos o generar la cotización
+
+2. Para crear la cotización:
+   - Si es CLIENTE: usa "crearCotizacion" directamente (se asigna automáticamente)
+   - Si es VENDEDOR: primero usa "buscarClientes" para encontrar el cliente, luego "crearCotizacion" con clienteId
+   - Si es ADMIN: usa "buscarClientes", luego "crearCotizacion" con clienteId (vendedorId es opcional)
+
+3. Herramientas disponibles:
+   - buscarProductos: Buscar equipos por nombre/código
+   - agregarAlCarrito: Agregar producto al carrito (necesita equipoId del producto)
+   - verCarrito: Ver contenido actual del carrito
+   - buscarClientes: Buscar clientes (solo vendedor/admin)
+   - crearCotizacion: Crear cotización con los productos del carrito`;
 };
 
 const chatController = {
@@ -229,6 +278,49 @@ const chatController = {
                             properties: {
                                 estado: { type: "STRING", description: "Filtrar por estado: borrador, enviada, aprobada, rechazada (opcional)" }
                             }
+                        }
+                    },
+                    {
+                        name: "agregarAlCarrito",
+                        description: "Agrega un producto al carrito de compras. Usar después de buscar un producto.",
+                        parameters: {
+                            type: "OBJECT",
+                            properties: {
+                                equipoId: { type: "NUMBER", description: "ID del producto a agregar" },
+                                cantidad: { type: "NUMBER", description: "Cantidad a agregar (default: 1)" }
+                            },
+                            required: ["equipoId"]
+                        }
+                    },
+                    {
+                        name: "verCarrito",
+                        description: "Muestra el contenido actual del carrito de compras.",
+                        parameters: {
+                            type: "OBJECT",
+                            properties: {}
+                        }
+                    },
+                    {
+                        name: "crearCotizacion",
+                        description: "Crea una cotización con los productos del carrito. Para vendedor/admin: requiere clienteId. Para admin: puede especificar vendedorId.",
+                        parameters: {
+                            type: "OBJECT",
+                            properties: {
+                                clienteId: { type: "NUMBER", description: "ID del cliente (requerido para vendedor/admin)" },
+                                vendedorId: { type: "NUMBER", description: "ID del vendedor (solo admin, opcional)" },
+                                notas: { type: "STRING", description: "Notas adicionales para la cotización" }
+                            }
+                        }
+                    },
+                    {
+                        name: "buscarClientes",
+                        description: "Busca clientes por nombre o empresa. Solo disponible para vendedor y admin.",
+                        parameters: {
+                            type: "OBJECT",
+                            properties: {
+                                query: { type: "STRING", description: "Nombre o empresa del cliente a buscar" }
+                            },
+                            required: ["query"]
                         }
                     }
                 ]
@@ -367,6 +459,180 @@ const chatController = {
                         toolResult = cotizaciones.length > 0
                             ? { cotizaciones, total: cotizaciones.length }
                             : { info: "No tienes cotizaciones registradas." };
+                    }
+                    // ==========================================
+                    // HERRAMIENTAS DE COTIZACIÓN DESDE CHAT
+                    // ==========================================
+                    else if (name === "agregarAlCarrito") {
+                        const equipoId = args.equipoId;
+                        const cantidad = args.cantidad || 1;
+
+                        // Verificar que el producto existe
+                        const [producto] = await pool.execute(
+                            `SELECT id, nombre, codigo, precio, stock FROM equipos WHERE id = ? AND estado = 'activo'`,
+                            [equipoId]
+                        );
+
+                        if (producto.length === 0) {
+                            toolResult = { error: "Producto no encontrado o no disponible." };
+                        } else if (producto[0].stock < cantidad) {
+                            toolResult = { error: `Stock insuficiente. Solo hay ${producto[0].stock} unidades disponibles.` };
+                        } else {
+                            // Inicializar carrito si no existe
+                            if (!req.session.carrito) {
+                                req.session.carrito = [];
+                            }
+
+                            // Buscar si ya existe en el carrito
+                            const existingIndex = req.session.carrito.findIndex(item => item.equipo_id === equipoId);
+
+                            if (existingIndex >= 0) {
+                                req.session.carrito[existingIndex].cantidad += cantidad;
+                            } else {
+                                req.session.carrito.push({
+                                    equipo_id: equipoId,
+                                    nombre: producto[0].nombre,
+                                    codigo: producto[0].codigo,
+                                    precio_unitario: parseFloat(producto[0].precio),
+                                    cantidad: cantidad,
+                                    imagen_url: null
+                                });
+                            }
+
+                            const totalItems = req.session.carrito.reduce((sum, item) => sum + item.cantidad, 0);
+                            toolResult = {
+                                success: true,
+                                mensaje: `Agregado: ${producto[0].nombre} x${cantidad}`,
+                                producto: producto[0],
+                                carrito: {
+                                    items: totalItems,
+                                    productos: req.session.carrito.length
+                                }
+                            };
+                        }
+                    }
+                    else if (name === "verCarrito") {
+                        const carrito = req.session.carrito || [];
+
+                        if (carrito.length === 0) {
+                            toolResult = { info: "Tu carrito está vacío. Busca productos y agrégalos." };
+                        } else {
+                            const subtotal = carrito.reduce((sum, item) => sum + (item.cantidad * item.precio_unitario), 0);
+                            const igv = subtotal * 0.18;
+                            const total = subtotal + igv;
+
+                            toolResult = {
+                                items: carrito,
+                                resumen: {
+                                    cantidad_items: carrito.reduce((sum, item) => sum + item.cantidad, 0),
+                                    subtotal: subtotal.toFixed(2),
+                                    igv: igv.toFixed(2),
+                                    total: total.toFixed(2)
+                                }
+                            };
+                        }
+                    }
+                    else if (name === "buscarClientes") {
+                        // Solo disponible para vendedor y admin
+                        if (user.role === 'cliente') {
+                            toolResult = { error: "No tienes permiso para buscar clientes." };
+                        } else {
+                            const q = args.query;
+                            const [clientes] = await pool.execute(
+                                `SELECT id, nombre, apellido, email, empresa FROM users
+                                 WHERE role = 'cliente' AND (nombre LIKE ? OR apellido LIKE ? OR empresa LIKE ?)
+                                 LIMIT 5`,
+                                [`%${q}%`, `%${q}%`, `%${q}%`]
+                            );
+
+                            toolResult = clientes.length > 0
+                                ? { clientes, mensaje: `Encontré ${clientes.length} cliente(s)` }
+                                : { info: "No encontré clientes con ese criterio." };
+                        }
+                    }
+                    else if (name === "crearCotizacion") {
+                        const carrito = req.session.carrito || [];
+
+                        if (carrito.length === 0) {
+                            toolResult = { error: "El carrito está vacío. Agrega productos antes de crear la cotización." };
+                        } else {
+                            let clienteId = args.clienteId;
+                            let vendedorId = args.vendedorId;
+                            const notas = args.notas || '';
+
+                            // Validar según rol
+                            if (user.role === 'cliente') {
+                                clienteId = user.id;
+                                vendedorId = null;
+                            } else if (user.role === 'vendedor') {
+                                if (!clienteId) {
+                                    toolResult = { error: "Debes especificar un cliente. Usa 'buscarClientes' para encontrarlo." };
+                                } else {
+                                    vendedorId = user.id;
+                                }
+                            } else if (user.role === 'admin') {
+                                if (!clienteId) {
+                                    toolResult = { error: "Debes especificar un cliente. Usa 'buscarClientes' para encontrarlo." };
+                                }
+                                // vendedorId es opcional para admin
+                            }
+
+                            // Si no hay error, crear la cotización
+                            if (!toolResult.error) {
+                                // Calcular totales
+                                const subtotal = carrito.reduce((sum, item) => sum + (item.cantidad * item.precio_unitario), 0);
+                                const igv = subtotal * 0.18;
+                                const total = subtotal + igv;
+
+                                // Generar número de cotización
+                                const year = new Date().getFullYear();
+                                const [lastCot] = await pool.execute(
+                                    `SELECT numero_cotizacion FROM cotizaciones
+                                     WHERE numero_cotizacion LIKE ?
+                                     ORDER BY id DESC LIMIT 1`,
+                                    [`COT-${year}-%`]
+                                );
+
+                                let nextNum = 1;
+                                if (lastCot.length > 0) {
+                                    const lastNumStr = lastCot[0].numero_cotizacion.split('-')[2];
+                                    nextNum = parseInt(lastNumStr) + 1;
+                                }
+                                const numeroCotizacion = `COT-${year}-${String(nextNum).padStart(6, '0')}`;
+
+                                // Insertar cotización
+                                const [result] = await pool.execute(
+                                    `INSERT INTO cotizaciones (numero_cotizacion, cliente_id, vendedor_id, subtotal, igv, total, notas, estado)
+                                     VALUES (?, ?, ?, ?, ?, ?, ?, 'enviada')`,
+                                    [numeroCotizacion, clienteId, vendedorId, subtotal, igv, total, notas]
+                                );
+
+                                const cotizacionId = result.insertId;
+
+                                // Insertar detalles
+                                for (const item of carrito) {
+                                    await pool.execute(
+                                        `INSERT INTO cotizacion_detalles (cotizacion_id, equipo_id, cantidad, precio_unitario, subtotal)
+                                         VALUES (?, ?, ?, ?, ?)`,
+                                        [cotizacionId, item.equipo_id, item.cantidad, item.precio_unitario, item.cantidad * item.precio_unitario]
+                                    );
+                                }
+
+                                // Limpiar carrito
+                                req.session.carrito = [];
+
+                                toolResult = {
+                                    success: true,
+                                    cotizacion: {
+                                        id: cotizacionId,
+                                        numero: numeroCotizacion,
+                                        total: total.toFixed(2),
+                                        items: carrito.length
+                                    },
+                                    mensaje: `¡Cotización ${numeroCotizacion} creada exitosamente!`
+                                };
+                            }
+                        }
                     }
                 } catch (err) {
                     console.error("Error SQL:", err);
