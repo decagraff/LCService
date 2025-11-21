@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import { PieChart, Activity, RefreshCw, TrendingUp, CheckCircle, DollarSign, ShoppingBag } from 'lucide-react';
 import DashboardHeader from '../../components/dashboard/DashboardHeader';
 import StatCard from '../../components/dashboard/StatCard';

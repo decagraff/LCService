@@ -85,7 +85,7 @@ const VendedorReportsPage: React.FC = () => {
         />
         <StatCard
           title="Cotizaciones Cerradas"
-          value={stats.cantidadVentas}
+          value={stats.cantidadVentas.toString()}
           icon={<CheckCircle className="w-6 h-6 text-white" />}
           color="blue"
           subtitle="Clientes convertidos"

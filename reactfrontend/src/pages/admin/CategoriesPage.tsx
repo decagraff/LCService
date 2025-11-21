@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { FolderOpen, Search, Plus, RefreshCw, Edit, Trash2, Package, ChevronLeft, ChevronRight } from 'lucide-react';
 import { inventoryService } from '../../services/inventoryService';
 import { useToast } from '../../contexts/ToastContext';

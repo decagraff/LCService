@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Printer, CheckCircle, XCircle, Send, User, Building, FileText } from 'lucide-react';
+import { ArrowLeft, Printer, CheckCircle, XCircle, Send, Building, FileText } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { cotizacionesService } from '../services/cotizacionesService';
 import { useToast } from '../contexts/ToastContext';
