@@ -58,7 +58,8 @@ const clienteRoutes = require('./routes/cliente');
 const catalogRoutes = require('./routes/catalog');
 
 // USAR RUTAS (ANTES de los middlewares de error)
-app.use('/auth', authRoutes);
+app.use('/api/auth', authRoutes);  // Changed from /auth to /api/auth
+app.use('/auth', authRoutes);       // Keep legacy route for compatibility
 app.use('/api/chat', chatRoutes);
 app.use('/dashboard', dashboardRoutes);
 app.use('/admin', adminRoutes);
