@@ -8,6 +8,9 @@ const { requireGuest, requireAuth } = require('../middleware/auth');
 router.post('/login', requireGuest, loginValidation, authController.processLogin);
 router.post('/register', requireGuest, registerValidation, authController.processRegister);
 
+// Ruta para obtener usuario actual (API)
+router.get('/me', authController.getCurrentUser);
+
 // Rutas protegidas (solo para usuarios autenticados)
 router.post('/logout', requireAuth, authController.logout);
 

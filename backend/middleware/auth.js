@@ -102,10 +102,61 @@ const requireAdmin = requireRole('admin');
 // Middleware para verificar que sea vendedor o admin
 const requireVendedor = requireRole('vendedor', 'admin');
 
+// Middleware para API - retorna JSON en lugar de redirect
+const requireAuthApi = async (req, res, next) => {
+    try {
+        if (!req.session.userId) {
+            return res.status(401).json({
+                success: false,
+                error: 'No autenticado'
+            });
+        }
+
+        // Verificar que el usuario aún existe y está activo
+        const user = await User.findById(req.session.userId);
+        if (!user) {
+            req.session.destroy();
+            return res.status(401).json({
+                success: false,
+                error: 'Sesión inválida'
+            });
+        }
+
+        // Agregar usuario a la request
+        req.user = user;
+        next();
+    } catch (error) {
+        console.error('Error en middleware de autenticación API:', error);
+        res.status(500).json({
+            success: false,
+            error: 'Error interno del servidor'
+        });
+    }
+};
+
+
+// Middleware para verificar si hay sesión activa (no falla si no hay)
+const checkAuth = async (req, res, next) => {
+    try {
+        if (req.session.userId) {
+            const user = await User.findById(req.session.userId);
+            if (user) {
+                req.user = user;
+            }
+        }
+        next();
+    } catch (error) {
+        console.error('Error en checkAuth:', error);
+        next();
+    }
+};
+
 module.exports = {
     requireAuth,
     requireGuest,
     requireRole,
     requireAdmin,
-    requireVendedor
+    requireVendedor,
+    requireAuthApi,
+    checkAuth
 };

@@ -8,13 +8,17 @@ const chatRoutes = require('./routes/chat');
 
 // Crear aplicación Express
 const app = express();
+if (process.env.NODE_ENV === 'production') {
 
+    app.set('trust proxy', 1);
+
+}
 // Configurar CORS (permitir React en desarrollo)
 const corsOptions = {
     origin: function (origin, callback) {
         // Permitir localhost en desarrollo y el dominio de producción
         const allowedOrigins = [
-            'http://localhost:5180', // Vite dev server (React)
+            'http://localhost:5190', // Vite dev server (React)
             'http://localhost:5173',
             'http://localhost:5174',
             'http://localhost:3000',

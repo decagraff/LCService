@@ -4,70 +4,69 @@ const { validationResult } = require('express-validator');
 const authController = {
     // Procesar login
     processLogin: async (req, res) => {
-        try {
-            const errors = validationResult(req);
-            if (!errors.isEmpty()) {
-                return res.status(400).json({
-                    success: false,
-                    errors: errors.array()
-                });
-            }
-
-            const { email, password } = req.body;
-
-            // Buscar usuario
-            const userData = await User.findByEmail(email);
-            if (!userData) {
-                return res.status(401).json({
-                    success: false,
-                    message: 'Credenciales incorrectas'
-                });
-            }
-
-            // Verificar que existe la contraseña
-            if (!userData.password) {
-                console.error('❌ Password no encontrado para usuario:', email);
-                return res.status(500).json({
-                    success: false,
-                    message: 'Error de configuración de usuario'
-                });
-            }
-
-            // Verificar contraseña
-            const isValidPassword = await User.verifyPassword(password, userData.password);
-            if (!isValidPassword) {
-                return res.status(401).json({
-                    success: false,
-                    message: 'Credenciales incorrectas'
-                });
-            }
-
-            // Crear sesión
-            req.session.userId = userData.id;
-            req.session.userRole = userData.role;
-
-            console.log(`✅ Usuario autenticado: ${userData.email} (${userData.role})`);
-
-            // Retornar datos del usuario (sin password)
-            const { password: _, ...userWithoutPassword } = userData;
-
-            res.json({
-                success: true,
-                message: 'Login exitoso',
-                user: userWithoutPassword,
-                redirectTo: userData.role === 'admin' ? '/admin/dashboard'
-                    : userData.role === 'vendedor' ? '/vendedor/dashboard'
-                    : '/cliente/dashboard'
-            });
-
-        } catch (error) {
-            console.error('Error en login:', error);
-            res.status(500).json({
+    try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({
                 success: false,
-                message: 'Error interno del servidor'
+                errors: errors.array()
             });
         }
-    },
+
+        const { email, password } = req.body;
+
+        // Buscar usuario
+        const userData = await User.findByEmail(email);
+        if (!userData) {
+            return res.status(401).json({
+                success: false,
+                message: 'Credenciales incorrectas'
+            });
+        }
+
+        // Verificar que existe la contraseña
+        if (!userData.password) {
+            console.error('❌ Password no encontrado para usuario:', email);
+            return res.status(500).json({
+                success: false,
+                message: 'Error de configuración de usuario'
+            });
+        }
+
+        // Verificar contraseña
+        const isValidPassword = await User.verifyPassword(password, userData.password);
+        if (!isValidPassword) {
+            return res.status(401).json({
+                success: false,
+                message: 'Credenciales incorrectas'
+            });
+        }
+
+        // Crear sesión
+        req.session.userId = userData.id;
+        req.session.userRole = userData.role;
+
+        console.log(`✅ Usuario autenticado: ${userData.email} (${userData.role})`);
+
+        // Retornar datos del usuario (sin password)
+        const { password: _, ...userWithoutPassword } = userData;
+
+        res.json({
+            success: true,
+            message: 'Login exitoso',
+            data: userWithoutPassword,
+            redirectUrl: userData.role === 'vendedor' ? '/vendedor/dashboard' : '/cliente/dashboard'
+        });
+
+    } catch (error) {
+        console.error('Error en login:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Error interno del servidor'
+        });
+    }
+},
+
 
     // Procesar registro
     processRegister: async (req, res) => {
@@ -105,6 +104,7 @@ const authController = {
                 success: true,
                 message: 'Usuario registrado exitosamente',
                 user: userWithoutPassword,
+                data: userWithoutPassword,
                 redirectTo: '/cliente/dashboard'
             });
 
@@ -145,6 +145,39 @@ const authController = {
                 message: 'Sesión cerrada exitosamente'
             });
         });
+		 },
+
+ 
+    // Obtener usuario actual
+    getCurrentUser: async (req, res) => {
+        try {
+            if (!req.session.userId) {
+                return res.status(401).json({
+                    success: false,
+                    error: 'No autenticado'
+                });
+            }
+
+            const user = await User.findById(req.session.userId);
+            if (!user) {
+                req.session.destroy();
+                return res.status(401).json({
+                    success: false,
+                    error: 'Usuario no encontrado'
+                });
+            }
+
+            res.json({
+                success: true,
+                data: user.toSafeObject()
+            });
+        } catch (error) {
+            console.error('Error obteniendo usuario actual:', error);
+            res.status(500).json({
+                success: false,
+                error: 'Error interno del servidor'
+            });
+        }
     }
 };
 
