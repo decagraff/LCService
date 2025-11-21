@@ -123,7 +123,7 @@ const ThesisCharts: React.FC<ThesisChartsProps> = ({ mode, thesisData, salesData
                                     <YAxis dataKey="name" type="category" width={100} tick={{ fill: '#6B7280' }} />
                                     <Tooltip cursor={{ fill: 'transparent' }} />
                                     <Bar dataKey="minutos" radius={[0, 6, 6, 0]} barSize={40}>
-                                        {timeData.map((entry, index) => (
+                                        {timeData.map((_entry, index) => (
                                             <Cell key={`cell-${index}`} fill={index === 0 ? '#94A3B8' : '#3B82F6'} />
                                         ))}
                                     </Bar>

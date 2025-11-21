@@ -62,7 +62,7 @@ const ClienteDashboard: React.FC = () => {
           title="Pendientes"
           value={loading ? "..." : stats.cotizaciones_pendientes.toString()}
           change="En revisión"
-          changeType="warning"
+          changeType="neutral"
           color="yellow"
         />
         <StatCard
