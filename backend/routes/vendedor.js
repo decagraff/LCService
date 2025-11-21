@@ -50,6 +50,9 @@ router.get('/api/categorias', requireAuth, requireVendedor, apiCatalogController
 router.get('/api/catalogo/stats', requireAuth, requireVendedor, apiCatalogController.getStats);
 router.get('/api/catalogo/:id', requireAuth, requireVendedor, apiCatalogController.getEquipoById);
 
+// Profile Stats API
+router.get('/api/profile/stats', requireAuth, requireVendedor, profileController.getStats);
+
 // Cotizaciones API
 router.get('/api/cotizaciones', requireAuth, requireVendedor, apiCotizacionController.getCotizaciones);
 router.get('/api/cotizaciones/stats', requireAuth, requireVendedor, apiCotizacionController.getStats);
