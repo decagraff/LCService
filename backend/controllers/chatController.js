@@ -56,6 +56,86 @@ Como administrador, tienes acceso completo:
     return configs[user.role] || configs.cliente;
 };
 
+// ==========================================
+// FUNCIONES AUXILIARES
+// ==========================================
+
+// Generar respuesta manual si la IA falla
+const formatToolResultManually = (toolName, result, role) => {
+    const baseUrl = 'https://lc-service.decatron.net';
+
+    if (toolName === 'consultarCotizacion' && result.resumen) {
+        const r = result.resumen;
+        const items = result.items || [];
+        let response = `📋 **Cotización ${r.numero_cotizacion}**\n\n`;
+        response += `• Estado: ${r.estado.toUpperCase()}\n`;
+        response += `• Cliente: ${r.cliente_nombre}${r.cliente_empresa ? ` (${r.cliente_empresa})` : ''}\n`;
+        response += `• Total: S/. ${parseFloat(r.total).toFixed(2)}\n`;
+        response += `• Fecha: ${new Date(r.created_at).toLocaleDateString('es-PE')}\n\n`;
+
+        if (items.length > 0) {
+            response += `**Productos (${items.length}):**\n`;
+            items.forEach(item => {
+                response += `  - ${item.nombre} x${item.cantidad} = S/. ${parseFloat(item.subtotal).toFixed(2)}\n`;
+            });
+        }
+
+        response += `\n🔗 [Ver cotización completa](${baseUrl}/${role}/cotizaciones/${r.numero_cotizacion})`;
+        return response;
+    }
+
+    if (toolName === 'misCotizaciones' && result.cotizaciones) {
+        let response = `📋 **Tus últimas cotizaciones (${result.total}):**\n\n`;
+        result.cotizaciones.forEach(c => {
+            response += `• **${c.numero_cotizacion}** - ${c.estado} - S/. ${parseFloat(c.total).toFixed(2)}\n`;
+        });
+        response += `\n🔗 [Ver todas tus cotizaciones](${baseUrl}/${role}/cotizaciones)`;
+        return response;
+    }
+
+    if (toolName === 'buscarProductos' && result.productos) {
+        let response = `🔍 **Encontré ${result.productos.length} producto(s):**\n\n`;
+        result.productos.forEach(p => {
+            response += `• **${p.nombre}** (${p.codigo})\n`;
+            response += `  Precio: S/. ${parseFloat(p.precio).toFixed(2)} | Stock: ${p.stock}\n`;
+        });
+        response += `\n🔗 [Ver catálogo completo](${baseUrl}/${role}/catalogo)`;
+        return response;
+    }
+
+    return "Encontré información pero no pude formatearla correctamente.";
+};
+
+// Agregar links relevantes a la respuesta de la IA
+const addLinksToResponse = (response, toolResult, role) => {
+    const baseUrl = 'https://lc-service.decatron.net';
+    let enhancedResponse = response;
+
+    // Si hay cotización, agregar link
+    if (toolResult?.resumen?.numero_cotizacion) {
+        const codigo = toolResult.resumen.numero_cotizacion;
+        if (!response.includes(baseUrl)) {
+            enhancedResponse += `\n\n🔗 [Ver cotización ${codigo}](${baseUrl}/${role}/cotizaciones/${codigo})`;
+        }
+    }
+
+    // Si hay productos, agregar link al catálogo
+    if (toolResult?.productos && toolResult.productos.length > 0) {
+        if (!response.includes('/catalogo')) {
+            enhancedResponse += `\n\n🔗 [Explorar catálogo](${baseUrl}/${role}/catalogo)`;
+        }
+    }
+
+    // Si hay lista de cotizaciones
+    if (toolResult?.cotizaciones) {
+        if (!response.includes('/cotizaciones')) {
+            enhancedResponse += `\n\n🔗 [Ver todas mis cotizaciones](${baseUrl}/${role}/cotizaciones)`;
+        }
+    }
+
+    return enhancedResponse;
+};
+
 // Instrucción de sistema con restricción de temas
 const getSystemInstruction = (roleConfig) => {
     return `${roleConfig.identity}
@@ -313,20 +393,34 @@ const chatController = {
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         contents: newContents,
-                        tools: tools
+                        tools: tools,
+                        system_instruction: {
+                            parts: [{ text: getSystemInstruction(roleConfig) }]
+                        }
                     })
                 });
 
                 const data2 = await response2.json();
 
                 // LOG PARA DEPURAR SI SALE VACÍO
-                if (!data2.candidates) {
+                if (!data2.candidates || !data2.candidates[0]?.content?.parts) {
                     console.error("❌ Google devolvió vacío en vuelta 2:", JSON.stringify(data2, null, 2));
+
+                    // Intentar generar respuesta manual con los datos obtenidos
+                    if (toolResult && !toolResult.error) {
+                        return res.json({
+                            text: formatToolResultManually(name, toolResult, user.role),
+                            data: toolResult
+                        });
+                    }
                     return res.json({ text: "Encontré los datos, pero tuve un problema al resumirlos. Intenta preguntar de nuevo." });
                 }
 
-                const finalAnswer = data2.candidates[0].content.parts[0].text;
-                return res.json({ text: finalAnswer });
+                const finalAnswer = data2.candidates[0]?.content?.parts?.[0]?.text || "No pude generar una respuesta.";
+
+                // Agregar links si hay datos relevantes
+                const responseWithLinks = addLinksToResponse(finalAnswer, toolResult, user.role);
+                return res.json({ text: responseWithLinks });
             }
 
             // Respuesta normal
