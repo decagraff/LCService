@@ -1,141 +1,185 @@
 import React, { useState, useEffect } from 'react';
-import { Search, FilterX, DollarSign, Folder } from 'lucide-react';
-import { useAuth } from '../../contexts/AuthContext';
+import { Filter, Search, X, ChevronDown, ChevronUp, DollarSign, Layers } from 'lucide-react';
 import type { Categoria, CatalogFilters as FilterType } from '../../types';
 import Input from '../common/Input';
-import Select from '../common/Select';
 import Button from '../common/Button';
 
 interface CatalogFiltersProps {
   categorias: Categoria[];
   onFilterChange: (filters: FilterType) => void;
-  initialFilters?: FilterType;
+  initialFilters: FilterType;
+  stats?: { // Añadimos prop opcional para recibir los límites reales
+    precio_min: number;
+    precio_max: number;
+  };
 }
 
-const CatalogFilters: React.FC<CatalogFiltersProps> = ({ categorias, onFilterChange, initialFilters }) => {
-  useAuth();
-  const [filters, setFilters] = useState<FilterType>(initialFilters || {});
+const CatalogFilters: React.FC<CatalogFiltersProps> = ({
+  categorias,
+  onFilterChange,
+  initialFilters,
+  stats
+}) => {
+  // Filtros locales
+  const [search, setSearch] = useState(initialFilters.search || '');
+  const [selectedCategory, setSelectedCategory] = useState<string>(initialFilters.categoria_id?.toString() || '');
+  const [minPrice, setMinPrice] = useState<string>(initialFilters.min_precio?.toString() || '');
+  const [maxPrice, setMaxPrice] = useState<string>(initialFilters.max_precio?.toString() || '');
 
+  // Estado para controlar colapso en móvil
+  const [isOpen, setIsOpen] = useState(false);
+
+  // Sincronizar si cambian los filtros externos o los stats iniciales
   useEffect(() => {
-    if (initialFilters) {
-      setFilters(initialFilters);
-    }
+    setSearch(initialFilters.search || '');
+    setSelectedCategory(initialFilters.categoria_id?.toString() || '');
+    setMinPrice(initialFilters.min_precio?.toString() || '');
+    setMaxPrice(initialFilters.max_precio?.toString() || '');
   }, [initialFilters]);
 
-  const handleFilterChange = (key: keyof FilterType, value: string | number | undefined) => {
-    const newFilters = { ...filters, [key]: value };
-    setFilters(newFilters);
+  const handleApplyFilters = () => {
+    onFilterChange({
+      search: search || undefined,
+      categoria_id: selectedCategory ? parseInt(selectedCategory) : undefined,
+      min_precio: minPrice ? parseFloat(minPrice) : undefined,
+      max_precio: maxPrice ? parseFloat(maxPrice) : undefined,
+    });
+    setIsOpen(false); // Cerrar en móvil al aplicar
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    onFilterChange(filters);
-  };
-
-  const handleClear = () => {
-    setFilters({});
+  const handleClearFilters = () => {
+    setSearch('');
+    setSelectedCategory('');
+    setMinPrice('');
+    setMaxPrice('');
     onFilterChange({});
+    setIsOpen(false);
   };
 
-  const categoriaOptions = categorias.map((cat) => ({
-    value: cat.id,
-    label: cat.nombre,
-  }));
+  const globalMin = stats?.precio_min || 0;
+  const globalMax = stats?.precio_max || 10000;
 
   return (
-    // FIX: Aplicamos 'sticky' directamente aquí y 'h-fit' o 'self-start' implícito.
-    <aside className="w-full lg:w-72 flex-shrink-0 space-y-6 lg:sticky lg:top-6">
-      <div className="bg-white dark:bg-background-dark rounded-xl border border-gray-200 dark:border-gray-700 p-5 shadow-sm">
+    <div className="bg-white dark:bg-background-dark rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm w-full lg:w-72 flex-shrink-0">
 
-        <div className="flex items-center justify-between mb-6">
-          <h3 className="font-bold text-gray-900 dark:text-gray-100 flex items-center gap-2">
-            <Search className="w-4 h-4" /> Filtros
-          </h3>
-          {(filters.search || filters.categoria_id || filters.min_precio) && (
-            <button onClick={handleClear} className="text-xs text-red-500 hover:underline flex items-center gap-1">
-              <FilterX className="w-3 h-3" /> Limpiar
-            </button>
-          )}
-        </div>
+      {/* Header Móvil */}
+      <div
+        className="p-4 flex items-center justify-between lg:hidden cursor-pointer"
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        <h3 className="font-bold text-gray-900 dark:text-gray-100 flex items-center gap-2">
+          <Filter className="w-4 h-4" /> Filtros
+        </h3>
+        {isOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+      </div>
 
-        <form onSubmit={handleSubmit} className="space-y-5">
-          <div>
+      {/* Contenido de Filtros */}
+      <div className={`${isOpen ? 'block' : 'hidden'} lg:block p-5 border-t lg:border-t-0 border-gray-200 dark:border-gray-700 space-y-6`}>
+
+        {/* Búsqueda */}
+        <div>
+          <label className="text-xs font-bold text-gray-500 uppercase mb-2 block">Búsqueda</label>
+          <div className="relative">
             <Input
               type="text"
-              placeholder="Buscar equipo..."
-              value={filters.search || ''}
-              onChange={(e) => handleFilterChange('search', e.target.value)}
-              fullWidth
-              className="bg-gray-50 dark:bg-gray-800"
+              placeholder="Nombre, código..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              onKeyPress={(e) => e.key === 'Enter' && handleApplyFilters()}
+              className="pl-9"
             />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
           </div>
+        </div>
 
-          <div>
-            <label className="text-xs font-semibold text-gray-500 uppercase mb-2 block">Categoría</label>
-            <Select
-              options={categoriaOptions}
-              placeholder="Todas las categorías"
-              value={filters.categoria_id || ''}
-              onChange={(e) => handleFilterChange('categoria_id', e.target.value ? Number(e.target.value) : undefined)}
-              fullWidth
-              className="bg-gray-50 dark:bg-gray-800"
-            />
-          </div>
-
-          <div>
-            <label className="text-xs font-semibold text-gray-500 uppercase mb-2 block flex items-center gap-1">
-              <DollarSign className="w-3 h-3" /> Rango de Precio
-            </label>
-            <div className="grid grid-cols-2 gap-2">
-              <Input
-                type="number"
-                placeholder="Mín"
-                value={filters.min_precio || ''}
-                onChange={(e) => handleFilterChange('min_precio', e.target.value ? Number(e.target.value) : undefined)}
-                min={0}
-                className="bg-gray-50 dark:bg-gray-800 text-sm"
+        {/* Categorías */}
+        <div>
+          <label className="text-xs font-bold text-gray-500 uppercase mb-2 flex items-center gap-2">
+            <Layers className="w-3 h-3" /> Categorías
+          </label>
+          <div className="space-y-2 max-h-48 overflow-y-auto custom-scrollbar pr-2">
+            <label className="flex items-center gap-2 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 p-2 rounded-lg transition-colors">
+              <input
+                type="radio"
+                name="category"
+                value=""
+                checked={selectedCategory === ''}
+                onChange={(e) => setSelectedCategory(e.target.value)}
+                className="text-primary focus:ring-primary rounded-full border-gray-300"
               />
+              <span className="text-sm text-gray-700 dark:text-gray-300">Todas</span>
+            </label>
+            {categorias.map((cat) => (
+              <label key={cat.id} className="flex items-center gap-2 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 p-2 rounded-lg transition-colors">
+                <input
+                  type="radio"
+                  name="category"
+                  value={cat.id}
+                  checked={selectedCategory === cat.id.toString()}
+                  onChange={(e) => setSelectedCategory(e.target.value)}
+                  className="text-primary focus:ring-primary rounded-full border-gray-300"
+                />
+                <span className="text-sm text-gray-700 dark:text-gray-300">{cat.nombre}</span>
+              </label>
+            ))}
+          </div>
+        </div>
+
+        {/* Rango de Precios */}
+        <div>
+          <label className="text-xs font-bold text-gray-500 uppercase mb-3 flex items-center gap-2">
+            <DollarSign className="w-3 h-3" /> Precio (S/.)
+          </label>
+
+          <div className="grid grid-cols-2 gap-3 mb-4">
+            <div>
+              <span className="text-[10px] text-gray-400 mb-1 block">Mínimo</span>
               <Input
                 type="number"
-                placeholder="Máx"
-                value={filters.max_precio || ''}
-                onChange={(e) => handleFilterChange('max_precio', e.target.value ? Number(e.target.value) : undefined)}
+                placeholder={globalMin.toString()}
+                value={minPrice}
+                onChange={(e) => setMinPrice(e.target.value)}
                 min={0}
-                className="bg-gray-50 dark:bg-gray-800 text-sm"
+                className="text-sm"
+              />
+            </div>
+            <div>
+              <span className="text-[10px] text-gray-400 mb-1 block">Máximo</span>
+              <Input
+                type="number"
+                placeholder={globalMax.toString()}
+                value={maxPrice}
+                onChange={(e) => setMaxPrice(e.target.value)}
+                min={0}
+                className="text-sm"
               />
             </div>
           </div>
 
-          <Button type="submit" variant="primary" fullWidth>
-            Aplicar Filtros
-          </Button>
-        </form>
-
-        {/* Lista rápida de categorías */}
-        <div className="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
-          <h4 className="text-xs font-bold text-gray-400 uppercase mb-3">Acceso Rápido</h4>
-          <div className="space-y-1 max-h-[300px] overflow-y-auto pr-1 scrollbar-thin">
-            {categorias.map((categoria) => (
-              <button
-                key={categoria.id}
-                onClick={() => {
-                  handleFilterChange('categoria_id', categoria.id);
-                  onFilterChange({ ...filters, categoria_id: categoria.id });
-                }}
-                className={`w-full text-left px-2 py-1.5 rounded text-sm transition-colors flex items-center gap-2
-                  ${filters.categoria_id === categoria.id
-                    ? 'bg-blue-50 dark:bg-blue-900/20 text-primary font-medium'
-                    : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800'
-                  }`}
-              >
-                <Folder className="w-3 h-3 opacity-50" />
-                <span className="truncate">{categoria.nombre}</span>
-              </button>
-            ))}
+          {/* Slider visual simple (Opcional, solo indicativo) */}
+          <div className="px-1">
+            <div className="h-1 w-full bg-gray-200 dark:bg-gray-700 rounded-full relative">
+              <div className="absolute left-0 top-0 h-full bg-primary rounded-full opacity-50 w-full"></div>
+            </div>
+            <div className="flex justify-between mt-1 text-[10px] text-gray-400">
+              <span>S/. {globalMin}</span>
+              <span>S/. {globalMax}</span>
+            </div>
           </div>
         </div>
+
+        {/* Botones de Acción */}
+        <div className="flex flex-col gap-2 pt-2">
+          <Button onClick={handleApplyFilters} fullWidth>
+            Aplicar Filtros
+          </Button>
+          <Button onClick={handleClearFilters} variant="secondary" fullWidth className="flex items-center justify-center gap-2">
+            <X className="w-3 h-3" /> Limpiar
+          </Button>
+        </div>
+
       </div>
-    </aside>
+    </div>
   );
 };
 

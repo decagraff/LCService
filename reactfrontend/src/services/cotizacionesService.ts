@@ -1,7 +1,6 @@
 import api, { handleApiError } from './api';
-import type { Cotizacion, CotizacionStats, CotizacionFilters, ApiResponse, UserRole } from '../types';
+import type { Cotizacion, CotizacionStats, CotizacionFilters, ApiResponse, UserRole, CotizacionEstado } from '../types';
 
-// Definimos la interfaz para los parámetros de creación
 interface CreateCotizacionParams {
   notas?: string;
   cliente_id?: number;
@@ -9,7 +8,7 @@ interface CreateCotizacionParams {
 }
 
 export const cotizacionesService = {
-  // Get all cotizaciones for user with filters and pagination
+  // Get all cotizaciones
   getCotizaciones: async (
     role: UserRole,
     filters?: CotizacionFilters & { page?: number; limit?: number }
@@ -49,6 +48,19 @@ export const cotizacionesService = {
     }
   },
 
+  // Update Estado (AGREGADO)
+  updateEstado: async (role: UserRole, id: number, estado: CotizacionEstado): Promise<Cotizacion> => {
+    try {
+      const response = await api.put<ApiResponse<Cotizacion>>(`/${role}/api/cotizaciones/${id}/estado`, { estado });
+      if (response.data.success && response.data.data) {
+        return response.data.data;
+      }
+      throw new Error(response.data.error || 'Error al actualizar estado');
+    } catch (error) {
+      throw new Error(handleApiError(error));
+    }
+  },
+
   // Get cotizaciones stats
   getStats: async (role: UserRole): Promise<CotizacionStats> => {
     try {
@@ -62,7 +74,7 @@ export const cotizacionesService = {
     }
   },
 
-  // Create nueva cotizacion from cart
+  // Create nueva cotizacion
   createCotizacion: async (role: UserRole, params: CreateCotizacionParams): Promise<Cotizacion> => {
     try {
       const response = await api.post<ApiResponse<Cotizacion>>(`/${role}/api/cotizaciones/nueva`, params);
@@ -76,7 +88,7 @@ export const cotizacionesService = {
     }
   },
 
-  // Delete cotizacion (only drafts)
+  // Delete cotizacion
   deleteCotizacion: async (role: UserRole, id: number): Promise<void> => {
     try {
       const response = await api.delete<ApiResponse<void>>(`/${role}/api/cotizaciones/${id}`);

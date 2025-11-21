@@ -8,11 +8,13 @@ export interface LoginCredentials {
 
 export interface RegisterData {
   nombre: string;
+  apellido: string; // Agregado (Requerido en DB)
   email: string;
   password: string;
   confirmPassword: string;
   telefono?: string;
   direccion?: string;
+  empresa?: string; // Agregado (Opcional en DB)
 }
 
 export const authService = {

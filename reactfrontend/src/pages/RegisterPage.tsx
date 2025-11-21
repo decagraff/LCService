@@ -10,10 +10,12 @@ import Button from '../components/common/Button';
 const RegisterPage: React.FC = () => {
   const [formData, setFormData] = useState({
     nombre: '',
+    apellido: '',
     email: '',
     password: '',
     confirmPassword: '',
     telefono: '',
+    empresa: '',
     direccion: '',
   });
   const [loading, setLoading] = useState(false);
@@ -31,8 +33,8 @@ const RegisterPage: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Validaciones
-    if (!formData.nombre || !formData.email || !formData.password) {
+    // Validaciones actualizadas (Apellido es requerido)
+    if (!formData.nombre || !formData.apellido || !formData.email || !formData.password) {
       showToast('Por favor completa los campos obligatorios', 'warning');
       return;
     }
@@ -51,10 +53,12 @@ const RegisterPage: React.FC = () => {
       setLoading(true);
       await authService.register({
         nombre: formData.nombre,
+        apellido: formData.apellido,
         email: formData.email,
         password: formData.password,
         confirmPassword: formData.confirmPassword,
         telefono: formData.telefono,
+        empresa: formData.empresa,
         direccion: formData.direccion,
       });
 
@@ -71,7 +75,7 @@ const RegisterPage: React.FC = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-background-dark-secondary px-4 py-12">
-      {/* Theme toggle button - top right */}
+      {/* Theme toggle button */}
       <button
         className="fixed top-4 right-4 z-50 p-3 rounded-lg bg-white dark:bg-background-dark-tertiary shadow-lg hover:shadow-xl transition-all border border-gray-200 dark:border-gray-700"
         onClick={toggleTheme}
@@ -84,7 +88,7 @@ const RegisterPage: React.FC = () => {
         )}
       </button>
 
-      <div className="w-full max-w-md">
+      <div className="w-full max-w-xl"> {/* Aumenté el ancho para acomodar dos columnas */}
         <div className="bg-white dark:bg-background-dark rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 p-8">
           {/* Header */}
           <div className="text-center mb-8">
@@ -97,18 +101,33 @@ const RegisterPage: React.FC = () => {
           </div>
 
           {/* Form */}
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <Input
-              type="text"
-              name="nombre"
-              label="Nombre Completo *"
-              placeholder="Ej: Juan Pérez"
-              value={formData.nombre}
-              onChange={handleChange}
-              required
-              fullWidth
-            />
+          <form onSubmit={handleSubmit} className="space-y-5">
 
+            {/* Fila 1: Nombre y Apellido */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <Input
+                type="text"
+                name="nombre"
+                label="Nombre *"
+                placeholder="Ej: Juan"
+                value={formData.nombre}
+                onChange={handleChange}
+                required
+                fullWidth
+              />
+              <Input
+                type="text"
+                name="apellido"
+                label="Apellido *"
+                placeholder="Ej: Pérez"
+                value={formData.apellido}
+                onChange={handleChange}
+                required
+                fullWidth
+              />
+            </div>
+
+            {/* Fila 2: Email */}
             <Input
               type="email"
               name="email"
@@ -120,38 +139,29 @@ const RegisterPage: React.FC = () => {
               fullWidth
             />
 
-            <Input
-              type="password"
-              name="password"
-              label="Contraseña *"
-              placeholder="Mínimo 6 caracteres"
-              value={formData.password}
-              onChange={handleChange}
-              required
-              fullWidth
-            />
+            {/* Fila 3: Empresa y Teléfono */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <Input
+                type="text"
+                name="empresa"
+                label="Empresa (Opcional)"
+                placeholder="Ej: Restaurante Central"
+                value={formData.empresa}
+                onChange={handleChange}
+                fullWidth
+              />
+              <Input
+                type="tel"
+                name="telefono"
+                label="Teléfono (Opcional)"
+                placeholder="+51 9..."
+                value={formData.telefono}
+                onChange={handleChange}
+                fullWidth
+              />
+            </div>
 
-            <Input
-              type="password"
-              name="confirmPassword"
-              label="Confirmar Contraseña *"
-              placeholder="Repite tu contraseña"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              required
-              fullWidth
-            />
-
-            <Input
-              type="tel"
-              name="telefono"
-              label="Teléfono (Opcional)"
-              placeholder="+51 987 654 321"
-              value={formData.telefono}
-              onChange={handleChange}
-              fullWidth
-            />
-
+            {/* Fila 4: Dirección */}
             <Input
               type="text"
               name="direccion"
@@ -162,11 +172,35 @@ const RegisterPage: React.FC = () => {
               fullWidth
             />
 
-            <Button type="submit" variant="primary" fullWidth disabled={loading}>
+            {/* Fila 5: Password y Confirmación */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <Input
+                type="password"
+                name="password"
+                label="Contraseña *"
+                placeholder="Mínimo 6 caracteres"
+                value={formData.password}
+                onChange={handleChange}
+                required
+                fullWidth
+              />
+              <Input
+                type="password"
+                name="confirmPassword"
+                label="Confirmar Contraseña *"
+                placeholder="Repite tu contraseña"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                required
+                fullWidth
+              />
+            </div>
+
+            <Button type="submit" variant="primary" fullWidth disabled={loading} className="mt-6">
               {loading ? 'Registrando...' : 'Crear Cuenta'}
             </Button>
 
-            <div className="text-center text-sm text-gray-600 dark:text-gray-400">
+            <div className="text-center text-sm text-gray-600 dark:text-gray-400 mt-4">
               <p>
                 ¿Ya tienes una cuenta?{' '}
                 <Link to="/auth/login" className="text-primary hover:underline font-medium">

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Sidebar from '../dashboard/Sidebar';
 import Header from './Header';
 import Cart from '../catalog/Cart';
+import AIChatAssistant from '../common/AIChatAssistant'; // <--- IMPORTAR AQUÍ
 
 interface DashboardLayoutProps {
     children: React.ReactNode;
@@ -17,10 +18,10 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
 
             {/* Sidebar oculto al imprimir */}
             <div className={`
-        fixed inset-y-0 left-0 z-40 transform transition-transform duration-300 ease-in-out
-        lg:relative lg:translate-x-0 print:hidden
-        ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
-      `}>
+                fixed inset-y-0 left-0 z-40 transform transition-transform duration-300 ease-in-out
+                lg:relative lg:translate-x-0 print:hidden
+                ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
+            `}>
                 <Sidebar />
             </div>
 
@@ -49,6 +50,11 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
             </div>
 
             <Cart isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
+
+            {/* CHATBOT FLOTANTE - AGREGADO AQUÍ (No visible en impresión por CSS del propio componente si fuera necesario, o puedes agregar print:hidden al div contenedor del chat si quieres asegurarte) */}
+            <div className="print:hidden">
+                <AIChatAssistant />
+            </div>
         </div>
     );
 };

@@ -1,147 +1,184 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { Users, ShoppingBag, FileText, AlertTriangle, TrendingUp, Package, Settings } from 'lucide-react';
 import StatCard from './StatCard';
 import DashboardHeader from './DashboardHeader';
 import { cotizacionesService } from '../../services/cotizacionesService';
-import { useAuth } from '../../contexts/AuthContext';
-import { useToast } from '../../contexts/ToastContext';
+import { userService } from '../../services/userService';
+import { inventoryService } from '../../services/inventoryService';
+import Loading from '../common/Loading';
 
-const ClienteDashboard: React.FC = () => {
-  const { user } = useAuth();
-  const { showToast } = useToast();
+const AdminDashboard: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState({
-    cotizaciones_solicitadas: 0,
+    ventas_totales: 0,
+    usuarios_total: 0,
     cotizaciones_pendientes: 0,
-    cotizaciones_aprobadas: 0,
-    total_invertido: 0
+    productos_bajo_stock: 0
   });
 
   useEffect(() => {
-    const fetchDashboardData = async () => {
-      if (!user) return;
-
+    const fetchAdminData = async () => {
       try {
         setLoading(true);
-        // 1. Obtener contadores de estado
-        const countStats = await cotizacionesService.getStats('cliente');
 
-        // 2. Obtener cotizaciones aprobadas (FIX: Desestructurar response.data)
-        const response = await cotizacionesService.getCotizaciones('cliente', { estado: 'aprobada', limit: 1000 });
-        const aprobadas = response.data || [];
-
-        const totalInvertido = aprobadas.reduce((acc, curr) => acc + Number(curr.total), 0);
+        // Carga paralela de todos los servicios clave para un dashboard rápido
+        const [cotizacionesStats, userStats, inventoryStats, reportKPIs] = await Promise.all([
+          cotizacionesService.getStats('admin'),           // Estado de cotizaciones
+          userService.getUserStats(),                      // Conteo de usuarios
+          inventoryService.getInventoryStats(),            // Alertas de inventario
+          cotizacionesService.getReportKPIs('admin')       // Datos financieros
+        ]);
 
         setStats({
-          cotizaciones_solicitadas: countStats.total,
-          cotizaciones_pendientes: countStats.enviada,
-          cotizaciones_aprobadas: countStats.aprobada,
-          total_invertido: totalInvertido
+          ventas_totales: reportKPIs.totalVentas || 0,
+          usuarios_total: userStats.total || 0,
+          cotizaciones_pendientes: cotizacionesStats.enviada || 0,
+          productos_bajo_stock: (inventoryStats.equipos_bajo_stock || 0) + (inventoryStats.equipos_sin_stock || 0)
         });
 
       } catch (error) {
-        console.error('Error fetching dashboard data:', error);
-        // No mostramos toast para evitar ruido en la carga inicial
+        console.error('Error cargando datos del dashboard admin:', error);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchDashboardData();
-  }, [user]);
+    fetchAdminData();
+  }, []);
+
+  if (loading) {
+    return <div className="flex h-96 items-center justify-center"><Loading message="Cargando panel administrativo..." /></div>;
+  }
 
   return (
-    <div className="flex-1 p-5 bg-gray-50 dark:bg-background-dark-secondary">
-      <DashboardHeader title="Mi Dashboard" />
+    <div className="space-y-6">
+      <DashboardHeader
+        title="Panel de Administración"
+        subtitle="Visión general del rendimiento y operaciones"
+      />
 
-      <div className="space-y-6">
-        {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
-          <StatCard
-            title="Cotizaciones Solicitadas"
-            value={loading ? "..." : stats.cotizaciones_solicitadas.toString()}
-            change="En total"
-            changeType="neutral"
-          />
-          <StatCard
-            title="Pendientes de Respuesta"
-            value={loading ? "..." : stats.cotizaciones_pendientes.toString()}
-            change="En proceso"
-            changeType="warning"
-          />
-          <StatCard
-            title="Aprobadas"
-            value={loading ? "..." : stats.cotizaciones_aprobadas.toString()}
-            change="Listas para compra"
-            changeType="positive"
-          />
-          <StatCard
-            title="Total Invertido"
-            value={loading ? "..." : `S/. ${stats.total_invertido.toLocaleString('es-PE', { minimumFractionDigits: 2 })}`}
-            change="En aprobadas"
-            changeType="neutral"
-          />
-        </div>
+      {/* KPIs Principales */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+        <StatCard
+          title="Ingresos Totales"
+          value={`S/. ${stats.ventas_totales.toLocaleString('es-PE', { minimumFractionDigits: 2 })}`}
+          icon={<TrendingUp className="w-6 h-6 text-white" />}
+          color="green"
+          subtitle="Ventas aprobadas"
+          changeType="positive"
+        />
+        <StatCard
+          title="Usuarios Activos"
+          value={stats.usuarios_total.toString()}
+          icon={<Users className="w-6 h-6 text-white" />}
+          color="blue"
+          subtitle="Clientes y Vendedores"
+          changeType="neutral"
+        />
+        <StatCard
+          title="Pendientes"
+          value={stats.cotizaciones_pendientes.toString()}
+          icon={<FileText className="w-6 h-6 text-white" />}
+          color="yellow"
+          subtitle="Cotizaciones por revisar"
+          changeType="neutral"
+        />
+        <StatCard
+          title="Alertas Stock"
+          value={stats.productos_bajo_stock.toString()}
+          icon={<AlertTriangle className="w-6 h-6 text-white" />}
+          color="red"
+          subtitle="Productos críticos"
+          changeType="negative"
+        />
+      </div>
 
-        {/* Welcome Section */}
-        <div className="bg-white dark:bg-background-dark rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
-          <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-            <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
-              ¿Qué necesitas hoy?
-            </h2>
-          </div>
-          <div className="p-6 space-y-6">
-            <div className="bg-gray-50 dark:bg-background-dark-secondary rounded-lg p-5">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
-                🍽️ Equipos de Cocina Industrial
-              </h3>
-              <p className="text-gray-600 dark:text-gray-400">
-                Explora nuestro catálogo de equipos de acero inoxidable para restaurantes, hoteles y cocinas industriales.
-                Solicita cotizaciones fácilmente y recibe respuestas rápidas de nuestros vendedores.
-              </p>
-            </div>
+      {/* Sección de Accesos Rápidos y Gestión */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-              <Link
-                to="/cliente/catalogo"
-                className="bg-primary hover:bg-blue-700 text-white text-center py-5 px-6 rounded-lg transition-colors font-medium"
-              >
-                📦 Ver Catálogo
-              </Link>
-              <Link
-                to="/cliente/cotizaciones/nueva"
-                className="bg-primary hover:bg-blue-700 text-white text-center py-5 px-6 rounded-lg transition-colors font-medium"
-              >
-                💰 Nueva Cotización
-              </Link>
-              <Link
-                to="/cliente/cotizaciones"
-                className="bg-gray-600 hover:bg-gray-700 dark:bg-gray-700 dark:hover:bg-gray-600 text-white text-center py-5 px-6 rounded-lg transition-colors font-medium"
-              >
-                📋 Mis Cotizaciones
-              </Link>
-              <Link
-                to="/cliente/perfil"
-                className="bg-gray-600 hover:bg-gray-700 dark:bg-gray-700 dark:hover:bg-gray-600 text-white text-center py-5 px-6 rounded-lg transition-colors font-medium"
-              >
-                👤 Mi Perfil
-              </Link>
-            </div>
-          </div>
-        </div>
-
-        {/* Recent Quotes Link */}
-        <div className="bg-white dark:bg-background-dark rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+        {/* Columna Izquierda: Operaciones Principales */}
+        <div className="lg:col-span-2 bg-white dark:bg-background-dark rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden">
           <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
-            <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
-              Mis Últimas Cotizaciones
-            </h2>
-            <Link
-              to="/cliente/cotizaciones"
-              className="text-sm text-gray-600 dark:text-gray-400 hover:text-primary dark:hover:text-primary font-medium transition-colors"
-            >
-              Ver todas
+            <h3 className="font-bold text-gray-900 dark:text-gray-100">Gestión Operativa</h3>
+          </div>
+          <div className="p-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <Link to="/admin/cotizaciones" className="flex items-center p-4 bg-blue-50 dark:bg-blue-900/10 rounded-xl border border-blue-100 dark:border-blue-800 hover:shadow-md transition-all group">
+              <div className="p-3 bg-blue-500 rounded-lg text-white mr-4 group-hover:scale-110 transition-transform">
+                <FileText className="w-6 h-6" />
+              </div>
+              <div>
+                <h4 className="font-bold text-gray-900 dark:text-gray-100">Gestionar Cotizaciones</h4>
+                <p className="text-sm text-gray-500 dark:text-gray-400">Revisar y aprobar solicitudes</p>
+              </div>
             </Link>
+
+            <Link to="/admin/inventory" className="flex items-center p-4 bg-purple-50 dark:bg-purple-900/10 rounded-xl border border-purple-100 dark:border-purple-800 hover:shadow-md transition-all group">
+              <div className="p-3 bg-purple-500 rounded-lg text-white mr-4 group-hover:scale-110 transition-transform">
+                <Package className="w-6 h-6" />
+              </div>
+              <div>
+                <h4 className="font-bold text-gray-900 dark:text-gray-100">Control de Inventario</h4>
+                <p className="text-sm text-gray-500 dark:text-gray-400">Ajustar stock y precios</p>
+              </div>
+            </Link>
+
+            <Link to="/admin/users" className="flex items-center p-4 bg-orange-50 dark:bg-orange-900/10 rounded-xl border border-orange-100 dark:border-orange-800 hover:shadow-md transition-all group">
+              <div className="p-3 bg-orange-500 rounded-lg text-white mr-4 group-hover:scale-110 transition-transform">
+                <Users className="w-6 h-6" />
+              </div>
+              <div>
+                <h4 className="font-bold text-gray-900 dark:text-gray-100">Directorio de Usuarios</h4>
+                <p className="text-sm text-gray-500 dark:text-gray-400">Administrar roles y accesos</p>
+              </div>
+            </Link>
+
+            <Link to="/admin/reportes" className="flex items-center p-4 bg-green-50 dark:bg-green-900/10 rounded-xl border border-green-100 dark:border-green-800 hover:shadow-md transition-all group">
+              <div className="p-3 bg-green-600 rounded-lg text-white mr-4 group-hover:scale-110 transition-transform">
+                <TrendingUp className="w-6 h-6" />
+              </div>
+              <div>
+                <h4 className="font-bold text-gray-900 dark:text-gray-100">Reportes Financieros</h4>
+                <p className="text-sm text-gray-500 dark:text-gray-400">Ver métricas y KPIs</p>
+              </div>
+            </Link>
+          </div>
+        </div>
+
+        {/* Columna Derecha: Resumen Rápido / Configuración */}
+        <div className="space-y-6">
+          {/* Estado del Sistema */}
+          <div className="bg-white dark:bg-background-dark rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm p-6">
+            <h3 className="font-bold text-gray-900 dark:text-gray-100 mb-4">Estado del Sistema</h3>
+            <div className="space-y-4">
+              <div className="flex justify-between items-center">
+                <span className="text-sm text-gray-600 dark:text-gray-400">Base de Datos</span>
+                <span className="px-2 py-1 bg-green-100 text-green-800 rounded text-xs font-medium">Conectado</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-sm text-gray-600 dark:text-gray-400">Versión API</span>
+                <span className="text-sm font-mono">v1.0.0</span>
+              </div>
+              <div className="pt-4 border-t border-gray-100 dark:border-gray-700">
+                <Link to="/admin/configuracion">
+                  <button className="w-full py-2 px-4 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-2">
+                    <Settings className="w-4 h-4" />
+                    Ir a Configuración
+                  </button>
+                </Link>
+              </div>
+            </div>
+          </div>
+
+          {/* Banner Informativo */}
+          <div className="bg-gradient-to-br from-blue-600 to-blue-800 rounded-xl shadow-lg p-6 text-white">
+            <h3 className="font-bold text-lg mb-2">¿Necesitas ayuda?</h3>
+            <p className="text-blue-100 text-sm mb-4">
+              Revisa la documentación técnica para gestionar los parámetros avanzados del sistema.
+            </p>
+            <button className="text-xs bg-white/20 hover:bg-white/30 px-3 py-1.5 rounded transition-colors">
+              Ver Documentación
+            </button>
           </div>
         </div>
       </div>
@@ -149,4 +186,4 @@ const ClienteDashboard: React.FC = () => {
   );
 };
 
-export default ClienteDashboard;
+export default AdminDashboard;

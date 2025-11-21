@@ -28,8 +28,8 @@ export interface Equipo {
   material?: string;
   dimensiones?: string;
   imagen_url?: string;
-  ficha_tecnica_url?: string; // Agregado para compatibilidad con Admin
-  estado?: 'activo' | 'inactivo' | 'mantenimiento'; // Agregado para compatibilidad
+  ficha_tecnica_url?: string;
+  estado?: 'activo' | 'inactivo' | 'mantenimiento';
   created_at?: string;
   updated_at?: string;
 }
@@ -40,7 +40,7 @@ export interface Categoria {
   nombre: string;
   descripcion?: string;
   equipment_count?: number;
-  estado?: 'activo' | 'inactivo'; // Agregado para compatibilidad
+  estado?: 'activo' | 'inactivo';
   created_at?: string;
   updated_at?: string;
 }
@@ -67,7 +67,7 @@ export interface Cart {
 export type CotizacionEstado = 'borrador' | 'enviada' | 'aprobada' | 'rechazada' | 'vencida';
 
 export interface CotizacionItem {
-  id?: number; // Opcional para creación
+  id?: number;
   cotizacion_id?: number;
   equipo_id: number;
   equipo_nombre: string;
@@ -81,11 +81,23 @@ export interface Cotizacion {
   id: number;
   numero_cotizacion: string;
   cliente_id: number;
+
+  // Campos extendidos del cliente
   cliente_nombre?: string;
+  cliente_apellido?: string; // Agregado
+  cliente_email?: string;    // Agregado
+  cliente_telefono?: string; // Agregado
+  cliente_empresa?: string;  // Agregado (alias de empresa_cliente o del usuario)
+
   empresa_cliente?: string;
   contacto_cliente?: string;
+
   vendedor_id?: number;
+  // Campos extendidos del vendedor
   vendedor_nombre?: string;
+  vendedor_apellido?: string; // Agregado
+  vendedor_email?: string;    // Agregado
+
   estado: CotizacionEstado;
   subtotal: number;
   igv: number;
@@ -94,7 +106,7 @@ export interface Cotizacion {
   created_at: string;
   updated_at?: string;
   fecha_vencimiento?: string;
-  items?: CotizacionItem[];
+  items: CotizacionItem[]; // Cambiado a obligatorio para evitar error en .map
 }
 
 export interface CotizacionStats {
@@ -106,7 +118,6 @@ export interface CotizacionStats {
   vencida: number;
 }
 
-// MODIFICADO: Se agregaron campos de paginación y fechas
 export interface CotizacionFilters {
   search?: string;
   estado?: CotizacionEstado | '' | string;
@@ -116,8 +127,6 @@ export interface CotizacionFilters {
   fecha_fin?: string;
 }
 
-// Filter types
-// MODIFICADO: Se agregaron campos de paginación
 export interface CatalogFilters {
   search?: string;
   categoria_id?: number;
@@ -134,7 +143,6 @@ export interface CatalogStats {
   precio_max: number;
 }
 
-// Inventory Stats types
 export interface InventoryStats {
   total_equipos: number;
   total_categorias: number;
@@ -144,7 +152,6 @@ export interface InventoryStats {
   equipos_sin_stock: number;
 }
 
-// API Response types
 export interface ApiResponse<T> {
   success: boolean;
   data?: T;
@@ -153,7 +160,7 @@ export interface ApiResponse<T> {
 }
 
 export interface PaginatedResponse<T> {
-  success?: boolean; // Opcional para flexibilidad
+  success?: boolean;
   data: T[];
   pagination: {
     page: number;
@@ -163,7 +170,6 @@ export interface PaginatedResponse<T> {
   };
 }
 
-// Toast types
 export type ToastType = 'success' | 'error' | 'warning' | 'info';
 
 export interface Toast {
@@ -173,10 +179,8 @@ export interface Toast {
   duration?: number;
 }
 
-// Theme types
 export type Theme = 'light' | 'dark';
 
-// Report types
 export interface ReportKPIs {
   totalVentas: number;
   totalOrdenes: number;
@@ -199,5 +203,4 @@ export interface SalesStatus {
   name: string;
   value: number;
   color: string;
-  [key: string]: any;
 }

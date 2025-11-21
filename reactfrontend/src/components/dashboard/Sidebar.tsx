@@ -16,7 +16,7 @@ const navigationItems: NavItem[] = [
   // Admin
   { label: 'Dashboard', path: '/admin/dashboard', icon: '📊', roles: ['admin'] },
   { label: 'Usuarios', path: '/admin/users', icon: '👥', roles: ['admin'] },
-  { label: 'Inventario', path: '/admin/inventory', icon: '📦', roles: ['admin'] },
+  { label: 'Inventario', path: '/admin/inventario', icon: '📦', roles: ['admin'] },
   { label: 'Cotizaciones', path: '/admin/cotizaciones', icon: '💰', roles: ['admin'] },
   { label: 'Reportes', path: '/admin/reportes', icon: '📈', roles: ['admin'] },
   { label: 'Configuración', path: '/admin/configuracion', icon: '⚙️', roles: ['admin'] },
@@ -82,7 +82,7 @@ const Sidebar: React.FC = () => {
           </div>
         ) : (
           <div className="flex flex-col items-center gap-3">
-             <Factory className="w-6 h-6 text-primary" />
+            <Factory className="w-6 h-6 text-primary" />
           </div>
         )}
       </div>
@@ -116,7 +116,7 @@ const Sidebar: React.FC = () => {
       <div className="p-4 border-t border-gray-200 dark:border-gray-700 flex-shrink-0">
         {!collapsed && (
           <div className="text-xs text-center text-gray-400">
-             v1.0.0
+            v1.0.0
           </div>
         )}
       </div>
