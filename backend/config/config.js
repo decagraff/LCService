@@ -14,8 +14,13 @@ module.exports = {
         saveUninitialized: false,
         cookie: {
             secure: process.env.NODE_ENV === 'production',
-            maxAge: 24 * 60 * 60 * 1000 // 24 horas
-        }
+            httpOnly: true,
+            sameSite: process.env.NODE_ENV === 'production' ? 'lax' : 'lax',
+            maxAge: 24 * 60 * 60 * 1000 
+        },
+
+        proxy: process.env.NODE_ENV === 'production' // Confiar en el proxy (nginx)
+
     },
 
     // Configuración de uploads
