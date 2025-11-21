@@ -21,7 +21,7 @@ const EquipmentPage: React.FC = () => {
 
   // Paginación
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(12); // 12 para grid de 3x4
+  const [itemsPerPage] = useState(12); // 12 para grid de 3x4
 
   const { showToast } = useToast();
   const navigate = useNavigate();

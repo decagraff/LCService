@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Save, Settings as SettingsIcon, Database, Bell } from 'lucide-react';
+import { Save, Settings as SettingsIcon, Database } from 'lucide-react';
 import DashboardHeader from '../../components/dashboard/DashboardHeader';
 import Button from '../../components/common/Button';
 import Input from '../../components/common/Input';

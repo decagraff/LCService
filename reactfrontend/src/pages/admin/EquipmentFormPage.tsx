@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Save, Package, Image as ImageIcon, DollarSign, Layers, Ruler, Box } from 'lucide-react';
 import { inventoryService, type CreateEquipmentData } from '../../services/inventoryService';
 import { useToast } from '../../contexts/ToastContext';
