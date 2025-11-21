@@ -32,9 +32,6 @@ graph TB
     contexto --> empresa
     empresa --> problema
 
-    style contexto fill:#3498db,stroke:#2980b9,color:#fff
-    style empresa fill:#2ecc71,stroke:#27ae60,color:#fff
-    style problema fill:#e74c3c,stroke:#c0392b,color:#fff
 ```
 
 ---
@@ -74,9 +71,6 @@ flowchart LR
     tradicional --> TD
     TD --> moderno
 
-    style tradicional fill:#e74c3c,stroke:#c0392b,color:#fff
-    style TD fill:#f39c12,stroke:#d68910,color:#fff
-    style moderno fill:#27ae60,stroke:#1e8449,color:#fff
 ```
 
 La **transformación digital** emerge como una solución estratégica para modernizar los procesos internos y mejorar la capacidad de respuesta al cliente.
@@ -143,8 +137,6 @@ graph TB
     S --> I3
     S --> I4
 
-    style S fill:#9b59b6,stroke:#8e44ad,color:#fff
-    style impacto fill:#34495e,stroke:#2c3e50,color:#fff
 ```
 
 ---

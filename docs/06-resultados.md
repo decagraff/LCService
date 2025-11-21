@@ -97,7 +97,6 @@ flowchart TB
     hipotesis --> resultados
     resultados --> decision
 
-    style decision fill:#27ae60,stroke:#1e8449,color:#fff
 ```
 
 | Indicador | t | gl | p-valor | Decisión |
@@ -128,8 +127,6 @@ graph TB
     SISTEMA --> M2
     SISTEMA --> M3
 
-    style SISTEMA fill:#9b59b6,stroke:#8e44ad,color:#fff
-    style mejoras fill:#27ae60,stroke:#1e8449,color:#fff
 ```
 
 ### Tabla Comparativa General
@@ -162,8 +159,6 @@ flowchart TB
     HE2 --> CONCLUSION
     HE3 --> CONCLUSION
 
-    style CONCLUSION fill:#27ae60,stroke:#1e8449,color:#fff
-    style hipotesis fill:#3498db,stroke:#2980b9,color:#fff
 ```
 
 ---

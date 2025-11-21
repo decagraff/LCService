@@ -40,9 +40,6 @@ graph TB
         N --> N2["Contrasta hipótesis"]
     end
 
-    style tipo fill:#3498db,stroke:#2980b9,color:#fff
-    style enfoque fill:#e74c3c,stroke:#c0392b,color:#fff
-    style nivel fill:#27ae60,stroke:#1e8449,color:#fff
 ```
 
 | Característica | Clasificación | Justificación |
@@ -81,8 +78,6 @@ flowchart LR
         X --> O2
     end
 
-    style diseño fill:#2c3e50,stroke:#34495e,color:#fff
-    style X fill:#9b59b6,stroke:#8e44ad,color:#fff
 ```
 
 ### Esquema del Diseño
@@ -135,8 +130,6 @@ graph TB
     C3 --> M
     C4 --> M
 
-    style criterios fill:#27ae60,stroke:#1e8449,color:#fff
-    style M fill:#3498db,stroke:#2980b9,color:#fff
 ```
 
 ---
@@ -175,9 +168,6 @@ flowchart TB
     I2 --> V2
     I3 --> V3
 
-    style tecnicas fill:#e74c3c,stroke:#c0392b,color:#fff
-    style instrumentos fill:#3498db,stroke:#2980b9,color:#fff
-    style variables fill:#27ae60,stroke:#1e8449,color:#fff
 ```
 
 ### Instrumentos Detallados
@@ -217,8 +207,6 @@ flowchart TB
     I2 -->|Sí| I3
     I2 -->|No| I4
 
-    style descriptivo fill:#3498db,stroke:#2980b9,color:#fff
-    style inferencial fill:#9b59b6,stroke:#8e44ad,color:#fff
 ```
 
 ### Criterios de Decisión
@@ -248,7 +236,6 @@ graph LR
     H2 --> U2
     H3 --> U3
 
-    style herramientas fill:#34495e,stroke:#2c3e50,color:#fff
 ```
 
 ---
@@ -269,7 +256,6 @@ graph TB
 
     R1 --> R2 --> R3 --> R4 --> R5 --> R6 --> R7
 
-    style resumen fill:#2c3e50,stroke:#34495e,color:#fff
 ```
 
 ---

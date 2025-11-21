@@ -38,9 +38,6 @@ flowchart TD
         H --> G
     end
 
-    style proceso fill:#2c3e50,stroke:#34495e,color:#fff
-    style C fill:#e74c3c,stroke:#c0392b,color:#fff
-    style G fill:#e74c3c,stroke:#c0392b,color:#fff
 ```
 
 ### Problemas Identificados
@@ -65,8 +62,6 @@ graph TB
     CAUSA --> P4
     CAUSA --> P5
 
-    style CAUSA fill:#c0392b,stroke:#a93226,color:#fff
-    style problemas fill:#34495e,stroke:#2c3e50,color:#fff
 ```
 
 ### Indicadores Críticos
@@ -131,8 +126,6 @@ graph LR
     SISTEMA --> J3
     SISTEMA --> J4
 
-    style SISTEMA fill:#3498db,stroke:#2980b9,color:#fff
-    style justificacion fill:#27ae60,stroke:#1e8449,color:#fff
 ```
 
 ### Justificación Metodológica
@@ -165,10 +158,6 @@ graph TB
     OE2 --> R2["📈 Error < 5%"]
     OE3 --> R3["⭐ Satisfacción > 80%"]
 
-    style OG fill:#9b59b6,stroke:#8e44ad,color:#fff
-    style OE1 fill:#3498db,stroke:#2980b9,color:#fff
-    style OE2 fill:#3498db,stroke:#2980b9,color:#fff
-    style OE3 fill:#3498db,stroke:#2980b9,color:#fff
 ```
 
 ---
@@ -211,8 +200,6 @@ graph TB
 
     vi -->|"Influye en"| vd
 
-    style vi fill:#3498db,stroke:#2980b9,color:#fff
-    style vd fill:#e74c3c,stroke:#c0392b,color:#fff
 ```
 
 ### Matriz de Operacionalización

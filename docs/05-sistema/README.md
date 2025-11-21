@@ -45,9 +45,6 @@ flowchart TB
     cliente <-->|"HTTPS/REST API"| servidor
     servidor <-->|"SQL Queries"| datos
 
-    style cliente fill:#61dafb,stroke:#20232a,color:#20232a
-    style servidor fill:#68a063,stroke:#3c873a,color:#fff
-    style datos fill:#00758f,stroke:#f29111,color:#fff
 ```
 
 ### Arquitectura de Despliegue
@@ -70,8 +67,6 @@ flowchart LR
     NGINX -->|/api/*| BE
     BE --> DB
 
-    style internet fill:#3498db,stroke:#2980b9,color:#fff
-    style servidor fill:#2c3e50,stroke:#34495e,color:#fff
 ```
 
 ---
@@ -97,7 +92,6 @@ graph TB
     TS --> TW
     TW --> V
 
-    style frontend fill:#20232a,stroke:#61dafb,color:#61dafb
 ```
 
 | Tecnología | Versión | Propósito |
@@ -127,7 +121,6 @@ graph TB
     E --> BC
     E --> ES
 
-    style backend fill:#3c873a,stroke:#68a063,color:#fff
 ```
 
 | Tecnología | Versión | Propósito |
@@ -153,7 +146,6 @@ graph LR
     TOOLS -->|Búsqueda| DB[("BD")]
     TOOLS -->|Cotización| COT["📋"]
 
-    style ai fill:#8e44ad,stroke:#9b59b6,color:#fff
 ```
 
 ---
@@ -270,10 +262,6 @@ flowchart TB
     auth --> roles
     roles --> modulos
 
-    style sistema fill:#2c3e50,stroke:#34495e,color:#fff
-    style auth fill:#e74c3c,stroke:#c0392b,color:#fff
-    style roles fill:#3498db,stroke:#2980b9,color:#fff
-    style modulos fill:#27ae60,stroke:#1e8449,color:#fff
 ```
 
 ### Matriz de Permisos por Rol

@@ -39,9 +39,6 @@ graph TB
     internacionales --> ESTUDIO
     nacionales --> ESTUDIO
 
-    style internacionales fill:#3498db,stroke:#2980b9,color:#fff
-    style nacionales fill:#e74c3c,stroke:#c0392b,color:#fff
-    style ESTUDIO fill:#27ae60,stroke:#1e8449,color:#fff
 ```
 
 ### Resumen de Antecedentes
@@ -86,8 +83,6 @@ flowchart TB
     GP --> VC
     VC --> TD
 
-    style teoria fill:#2c3e50,stroke:#34495e,color:#fff
-    style TD fill:#9b59b6,stroke:#8e44ad,color:#fff
 ```
 
 ### Sistema Web (Variable Independiente)
@@ -114,9 +109,6 @@ graph LR
     definicion --> caracteristicas
     caracteristicas --> capas
 
-    style definicion fill:#3498db,stroke:#2980b9,color:#fff
-    style caracteristicas fill:#27ae60,stroke:#1e8449,color:#fff
-    style capas fill:#e67e22,stroke:#d35400,color:#fff
 ```
 
 ### Gestión de Cotizaciones (Variable Dependiente)
@@ -160,9 +152,6 @@ graph TB
 
     TD --> R["📈 Competitividad<br/>Sostenible"]
 
-    style pilares fill:#34495e,stroke:#2c3e50,color:#fff
-    style TD fill:#9b59b6,stroke:#8e44ad,color:#fff
-    style R fill:#27ae60,stroke:#1e8449,color:#fff
 ```
 
 ---
@@ -198,7 +187,6 @@ graph TB
         SW --> TD
     end
 
-    style glosario fill:#2c3e50,stroke:#34495e,color:#fff
 ```
 
 ---

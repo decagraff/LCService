@@ -17,6 +17,7 @@
 ## Navegación del Documento
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#4f46e5', 'primaryTextColor': '#fff', 'primaryBorderColor': '#6366f1', 'lineColor': '#6366f1', 'secondaryColor': '#10b981', 'tertiaryColor': '#f59e0b'}}}%%
 flowchart TB
     subgraph docs["📚 DOCUMENTACIÓN DE TESIS"]
         direction TB
@@ -58,12 +59,6 @@ flowchart TB
     cap2 --> cap3
     cap3 --> cap4
     cap4 --> ref
-
-    style docs fill:#1a1a2e,stroke:#16213e,color:#fff
-    style cap1 fill:#0f3460,stroke:#e94560,color:#fff
-    style cap2 fill:#0f3460,stroke:#e94560,color:#fff
-    style cap3 fill:#0f3460,stroke:#e94560,color:#fff
-    style cap4 fill:#0f3460,stroke:#e94560,color:#fff
 ```
 
 ---
@@ -92,6 +87,7 @@ flowchart TB
 ## Resumen Ejecutivo
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#6366f1'}}}%%
 graph LR
     subgraph ANTES["❌ ANTES"]
         A1(("Excel<br/>disperso"))
@@ -113,10 +109,6 @@ graph LR
 
     ANTES -->|Transformación<br/>Digital| SISTEMA
     SISTEMA -->|Resultados| DESPUES
-
-    style ANTES fill:#ff6b6b,stroke:#c92a2a,color:#fff
-    style SISTEMA fill:#4dabf7,stroke:#1971c2,color:#fff
-    style DESPUES fill:#51cf66,stroke:#2f9e44,color:#fff
 ```
 
 ---
@@ -133,6 +125,7 @@ graph LR
 ## Stack Tecnológico
 
 ```mermaid
+%%{init: {'theme': 'neutral'}}%%
 graph TB
     subgraph Frontend["🎨 FRONTEND"]
         R[React 18]
@@ -158,11 +151,6 @@ graph TB
     Frontend <-->|REST API| Backend
     Backend <-->|Queries| Database
     Backend <-->|Chat| AI
-
-    style Frontend fill:#61dafb,stroke:#20232a,color:#20232a
-    style Backend fill:#68a063,stroke:#3c873a,color:#fff
-    style Database fill:#00758f,stroke:#f29111,color:#fff
-    style AI fill:#8e44ad,stroke:#9b59b6,color:#fff
 ```
 
 ---
