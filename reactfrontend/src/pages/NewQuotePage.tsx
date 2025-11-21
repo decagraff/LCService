@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ShoppingCart, Send, User, Search, Plus, Trash2, Minus, Package, FileText, CreditCard, AlertCircle, Check } from 'lucide-react';
+import { ShoppingCart, Send, User, Search, Plus, Trash2, Minus, Package, FileText, CreditCard, AlertCircle } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { useCart } from '../contexts/CartContext';
 import { useToast } from '../contexts/ToastContext';
@@ -38,7 +38,7 @@ const NewQuotePage: React.FC = () => {
 
   // UI States
   const [loading, setLoading] = useState(false);
-  const [loadingData, setLoadingData] = useState(false);
+  const [, setLoadingData] = useState(false);
 
   const isAdminOrVendor = user?.role === 'admin' || user?.role === 'vendedor';
 

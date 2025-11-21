@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Users, ShoppingBag, FileText, AlertTriangle, TrendingUp, Package, Settings } from 'lucide-react';
+import { Users, FileText, AlertTriangle, TrendingUp, Package, Settings } from 'lucide-react';
 import StatCard from './StatCard';
 import DashboardHeader from './DashboardHeader';
 import { cotizacionesService } from '../../services/cotizacionesService';
