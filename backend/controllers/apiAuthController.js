@@ -1,15 +1,7 @@
 const User = require('../models/User');
 const { validationResult } = require('express-validator');
 
-/**
- * Controlador de autenticación para API (React)
- * Devuelve respuestas JSON en lugar de vistas EJS
- */
 const apiAuthController = {
-    /**
-     * API Login - POST /auth/login
-     * Autentica usuario y devuelve datos en JSON
-     */
     login: async (req, res) => {
         try {
             const errors = validationResult(req);
@@ -32,7 +24,7 @@ const apiAuthController = {
                 });
             }
 
-            // Verificar que existe la contraseña
+            // Verificar password
             if (!userData.password) {
                 console.error('❌ Password no encontrado para usuario:', email);
                 return res.status(500).json({
@@ -41,7 +33,6 @@ const apiAuthController = {
                 });
             }
 
-            // Verificar contraseña
             const isValidPassword = await User.verifyPassword(password, userData.password);
             if (!isValidPassword) {
                 return res.status(401).json({
@@ -50,13 +41,11 @@ const apiAuthController = {
                 });
             }
 
-            // Crear sesión
             req.session.userId = userData.id;
             req.session.userRole = userData.role;
 
             console.log(`✅ Usuario autenticado (API): ${userData.email} (${userData.role})`);
 
-            // Devolver datos del usuario (sin password)
             const { password: _, ...userWithoutPassword } = userData;
 
             return res.json({
@@ -74,10 +63,7 @@ const apiAuthController = {
         }
     },
 
-    /**
-     * API Register - POST /auth/register
-     * Registra nuevo usuario y devuelve datos en JSON
-     */
+    // --- CORRECCIÓN PRINCIPAL AQUÍ ---
     register: async (req, res) => {
         try {
             const errors = validationResult(req);
@@ -89,24 +75,20 @@ const apiAuthController = {
                 });
             }
 
-            const { email, password, nombre, telefono, direccion } = req.body;
+            const { email, password, nombre, apellido, telefono, direccion, empresa } = req.body;
 
-            // Crear usuario (sin apellido para React)
             const newUser = await User.create({
                 email,
                 password,
                 nombre,
-                apellido: '', // Campo requerido en BD pero vacío para React
+                apellido: apellido || '',
                 telefono: telefono || null,
-                empresa: direccion || null // Usar direccion como empresa temporalmente
+                direccion: direccion || null,
+                empresa: empresa || null
             });
 
             console.log(`✅ Nuevo usuario registrado (API): ${newUser.email}`);
 
-            // NO hacer auto-login en el registro desde React
-            // El usuario debe ir al login después de registrarse
-
-            // Devolver datos del usuario (sin password)
             const { password: _, ...userWithoutPassword } = newUser;
 
             return res.status(201).json({
@@ -123,7 +105,7 @@ const apiAuthController = {
 
             if (error.message === 'El email ya está registrado') {
                 errorMessage = error.message;
-                statusCode = 400;
+                statusCode = 409; // Conflict
             }
 
             return res.status(statusCode).json({
@@ -133,10 +115,6 @@ const apiAuthController = {
         }
     },
 
-    /**
-     * API Logout - POST /auth/logout
-     * Cierra sesión y devuelve JSON
-     */
     logout: async (req, res) => {
         try {
             const userEmail = req.user ? req.user.email : 'Usuario desconocido';
@@ -149,9 +127,7 @@ const apiAuthController = {
                         error: 'Error al cerrar sesión'
                     });
                 }
-
                 console.log(`👋 Usuario desconectado (API): ${userEmail}`);
-
                 return res.json({
                     success: true,
                     message: 'Sesión cerrada exitosamente'
@@ -166,13 +142,8 @@ const apiAuthController = {
         }
     },
 
-    /**
-     * API Get Current User - GET /auth/me
-     * Obtiene datos del usuario actual desde la sesión
-     */
     getCurrentUser: async (req, res) => {
         try {
-            // Si no hay sesión activa
             if (!req.session.userId) {
                 return res.status(401).json({
                     success: false,
@@ -180,11 +151,9 @@ const apiAuthController = {
                 });
             }
 
-            // Buscar usuario por ID de sesión
             const userData = await User.findById(req.session.userId);
 
             if (!userData) {
-                // Si el usuario no existe, destruir sesión
                 req.session.destroy();
                 return res.status(401).json({
                     success: false,
@@ -192,7 +161,6 @@ const apiAuthController = {
                 });
             }
 
-            // Devolver datos del usuario (sin password)
             const { password: _, ...userWithoutPassword } = userData;
 
             return res.json({
