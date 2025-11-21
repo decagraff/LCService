@@ -13,5 +13,6 @@ router.get('/me', authController.getCurrentUser);
 
 // Rutas protegidas (solo para usuarios autenticados)
 router.post('/logout', requireAuth, authController.logout);
+router.post('/change-password', requireAuth, authController.changePassword);
 
 module.exports = router;

@@ -77,6 +77,9 @@ router.get('/api/categorias', requireAuth, requireAdmin, apiCatalogController.ge
 router.get('/api/catalogo/stats', requireAuth, requireAdmin, apiCatalogController.getStats);
 router.get('/api/catalogo/:id', requireAuth, requireAdmin, apiCatalogController.getEquipoById);
 
+// Profile Stats API
+router.get('/api/profile/stats', requireAuth, requireAdmin, profileController.getStats);
+
 // Cotizaciones API
 router.get('/api/cotizaciones', requireAuth, requireAdmin, apiCotizacionController.getCotizaciones);
 router.get('/api/cotizaciones/stats', requireAuth, requireAdmin, apiCotizacionController.getStats);

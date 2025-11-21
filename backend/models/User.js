@@ -92,6 +92,20 @@ static async findByEmail(email) {
         return await bcrypt.compare(plainPassword, hashedPassword);
     }
 
+    // Actualizar contraseña
+    static async updatePassword(userId, newPassword) {
+        try {
+            const hashedPassword = await bcrypt.hash(newPassword, 12);
+            await pool.execute(
+                'UPDATE users SET password = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?',
+                [hashedPassword, userId]
+            );
+            return true;
+        } catch (error) {
+            throw error;
+        }
+    }
+
     // Actualizar rol de usuario (solo admin)
     static async updateRole(userId, newRole) {
     try {

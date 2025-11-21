@@ -178,6 +178,71 @@ const authController = {
                 error: 'Error interno del servidor'
             });
         }
+    },
+
+    // Cambiar contraseña
+    changePassword: async (req, res) => {
+        try {
+            if (!req.session.userId) {
+                return res.status(401).json({
+                    success: false,
+                    error: 'No autenticado'
+                });
+            }
+
+            const { currentPassword, newPassword } = req.body;
+
+            if (!currentPassword || !newPassword) {
+                return res.status(400).json({
+                    success: false,
+                    error: 'Contraseña actual y nueva son requeridas'
+                });
+            }
+
+            if (newPassword.length < 6) {
+                return res.status(400).json({
+                    success: false,
+                    error: 'La nueva contraseña debe tener al menos 6 caracteres'
+                });
+            }
+
+            // Get user with password
+            const userData = await User.findById(req.session.userId);
+            if (!userData) {
+                return res.status(404).json({
+                    success: false,
+                    error: 'Usuario no encontrado'
+                });
+            }
+
+            // Get full user data including password
+            const fullUserData = await User.findByEmail(userData.email);
+
+            // Verify current password
+            const isValidPassword = await User.verifyPassword(currentPassword, fullUserData.password);
+            if (!isValidPassword) {
+                return res.status(401).json({
+                    success: false,
+                    error: 'La contraseña actual es incorrecta'
+                });
+            }
+
+            // Update password
+            await User.updatePassword(req.session.userId, newPassword);
+
+            console.log(`✅ Contraseña cambiada para usuario ID: ${req.session.userId}`);
+
+            res.json({
+                success: true,
+                message: 'Contraseña actualizada correctamente'
+            });
+        } catch (error) {
+            console.error('Error cambiando contraseña:', error);
+            res.status(500).json({
+                success: false,
+                error: 'Error interno del servidor'
+            });
+        }
     }
 };
 

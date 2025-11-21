@@ -78,4 +78,19 @@ export const authService = {
       throw new Error(handleApiError(error));
     }
   },
+
+  // Change password
+  changePassword: async (currentPassword: string, newPassword: string): Promise<void> => {
+    try {
+      const response = await api.post<ApiResponse<void>>('/api/auth/change-password', {
+        currentPassword,
+        newPassword,
+      });
+      if (!response.data.success) {
+        throw new Error(response.data.error || 'Error al cambiar contraseña');
+      }
+    } catch (error) {
+      throw new Error(handleApiError(error));
+    }
+  },
 };

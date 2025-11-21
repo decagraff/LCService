@@ -171,8 +171,16 @@ const addLinksToResponse = (response, toolResult, role) => {
 };
 
 // Instrucción de sistema con restricción de temas
-const getSystemInstruction = (roleConfig) => {
+const getSystemInstruction = (roleConfig, user) => {
+    const isCliente = user.role === 'cliente';
+
     return `${roleConfig.identity}
+
+INFORMACIÓN DEL USUARIO ACTUAL:
+- ID: ${user.id}
+- Nombre: ${user.nombre}
+- Rol: ${user.role}
+${isCliente ? `- IMPORTANTE: Como cliente, YA CONOZCO su ID (${user.id}). NUNCA le preguntes su ID de cliente.` : ''}
 
 REGLAS ESTRICTAS:
 1. SOLO respondo sobre LC Service, equipos gastronómicos, cotizaciones y temas del negocio.
@@ -182,21 +190,25 @@ REGLAS ESTRICTAS:
 4. Soy breve, profesional y amable.
 5. Uso las herramientas disponibles cuando necesito datos reales.
 6. Si no tengo información, lo digo honestamente.
+7. SIEMPRE proporciono el link directo cuando creo una cotización o busco una.
 
 FLUJO DE COTIZACIÓN DESDE CHAT:
 1. Cuando el usuario quiera cotizar un producto:
-   - Primero usa "buscarProductos" para encontrarlo y obtener su ID
+   - Busca el producto con "buscarProductos" (soy flexible con mayúsculas/minúsculas)
    - Pregunta la cantidad si no la especificó
    - Usa "agregarAlCarrito" con el equipoId y cantidad
    - Pregunta si quiere agregar más productos o generar la cotización
 
 2. Para crear la cotización:
-   - Si es CLIENTE: usa "crearCotizacion" directamente (se asigna automáticamente)
+   - Si es CLIENTE: usa "crearCotizacion" DIRECTAMENTE SIN PEDIR ID (ya sé que es cliente ID ${user.id})
    - Si es VENDEDOR: primero usa "buscarClientes" para encontrar el cliente, luego "crearCotizacion" con clienteId
    - Si es ADMIN: usa "buscarClientes", luego "crearCotizacion" con clienteId (vendedorId es opcional)
 
-3. Herramientas disponibles:
-   - buscarProductos: Buscar equipos por nombre/código
+3. Después de crear una cotización SIEMPRE incluye el link directo en el formato:
+   "Tu cotización ha sido creada. Puedes verla aquí: [link]"
+
+4. Herramientas disponibles:
+   - buscarProductos: Buscar equipos por nombre/código (case-insensitive)
    - agregarAlCarrito: Agregar producto al carrito (necesita equipoId del producto)
    - verCarrito: Ver contenido actual del carrito
    - buscarClientes: Buscar clientes (solo vendedor/admin)
@@ -339,7 +351,7 @@ const chatController = {
                     contents: contents,
                     tools: tools,
                     system_instruction: {
-                        parts: [{ text: getSystemInstruction(roleConfig) }]
+                        parts: [{ text: getSystemInstruction(roleConfig, user) }]
                     },
                     generationConfig: { maxOutputTokens: 800, temperature: 0.4 }
                 })
@@ -366,16 +378,16 @@ const chatController = {
 
                 try {
                     if (name === "buscarProductos") {
-                        const q = args.query;
+                        const q = args.query.toLowerCase().trim();
                         const [rows] = await pool.execute(
                             `SELECT id, nombre, codigo, precio, stock, descripcion FROM equipos
-                             WHERE (nombre LIKE ? OR codigo LIKE ? OR descripcion LIKE ?)
+                             WHERE (LOWER(nombre) LIKE LOWER(?) OR LOWER(codigo) LIKE LOWER(?) OR LOWER(descripcion) LIKE LOWER(?))
                              AND estado = 'activo' LIMIT 5`,
                             [`%${q}%`, `%${q}%`, `%${q}%`]
                         );
                         toolResult = rows.length > 0
                             ? { productos: rows, mensaje: `Encontré ${rows.length} producto(s)` }
-                            : { info: "No encontré productos con ese criterio. Intenta con otro término." };
+                            : { info: "No encontré productos con ese criterio. Intenta con otro término o categoría." };
                     }
                     else if (name === "consultarCotizacion") {
                         const codigo = args.codigo;
@@ -537,12 +549,13 @@ const chatController = {
                         if (user.role === 'cliente') {
                             toolResult = { error: "No tienes permiso para buscar clientes." };
                         } else {
-                            const q = args.query;
+                            const q = args.query.toLowerCase().trim();
                             const [clientes] = await pool.execute(
                                 `SELECT id, nombre, apellido, email, empresa FROM users
-                                 WHERE role = 'cliente' AND (nombre LIKE ? OR apellido LIKE ? OR empresa LIKE ?)
+                                 WHERE role = 'cliente' AND estado = 'activo'
+                                 AND (LOWER(nombre) LIKE ? OR LOWER(apellido) LIKE ? OR LOWER(empresa) LIKE ? OR LOWER(email) LIKE ?)
                                  LIMIT 5`,
-                                [`%${q}%`, `%${q}%`, `%${q}%`]
+                                [`%${q}%`, `%${q}%`, `%${q}%`, `%${q}%`]
                             );
 
                             toolResult = clientes.length > 0
@@ -665,7 +678,7 @@ const chatController = {
                         contents: newContents,
                         tools: tools,
                         system_instruction: {
-                            parts: [{ text: getSystemInstruction(roleConfig) }]
+                            parts: [{ text: getSystemInstruction(roleConfig, user) }]
                         }
                     })
                 });
