@@ -16,7 +16,7 @@ class Cotizacion {
         this.notas = data.notas;
         this.created_at = data.created_at;
         this.updated_at = data.updated_at;
-        
+
         // Datos relacionados si están disponibles
         this.cliente_nombre = data.cliente_nombre;
         this.cliente_email = data.cliente_email;
@@ -28,12 +28,12 @@ class Cotizacion {
     static async generateQuoteNumber() {
         const year = new Date().getFullYear();
         const month = String(new Date().getMonth() + 1).padStart(2, '0');
-        
+
         const [rows] = await pool.execute(
             'SELECT COUNT(*) as count FROM cotizaciones WHERE YEAR(created_at) = ?',
             [year]
         );
-        
+
         const sequence = (rows[0].count + 1).toString().padStart(4, '0');
         return `COT-${year}${month}-${sequence}`;
     }
@@ -43,29 +43,29 @@ class Cotizacion {
         if (userRole === 'vendedor') {
             return userId; // El vendedor se asigna a sí mismo
         }
-        
+
         if (userRole === 'admin' && selectedVendedorId) {
             return selectedVendedorId; // Admin selecciona vendedor específico
         }
-        
+
         // Cliente o admin sin selección específica: vendedor aleatorio
         const [vendedores] = await pool.execute(
             'SELECT id FROM users WHERE role = "vendedor" AND estado = "activo" ORDER BY RAND() LIMIT 1'
         );
-        
+
         return vendedores.length > 0 ? vendedores[0].id : null;
     }
 
     // Crear nueva cotización
     static async create(cotizacionData, detalles, userRole, userId) {
         const connection = await pool.getConnection();
-        
+
         try {
             await connection.beginTransaction();
 
             const numero_cotizacion = await this.generateQuoteNumber();
             const vendedor_id = await this.assignVendedor(userRole, userId, cotizacionData.vendedor_id);
-            
+
             if (!vendedor_id) {
                 throw new Error('No hay vendedores disponibles para asignar la cotización');
             }
@@ -75,7 +75,7 @@ class Cotizacion {
             for (const detalle of detalles) {
                 subtotal += detalle.cantidad * detalle.precio_unitario;
             }
-            
+
             const igv = subtotal * 0.18; // 18% IGV
             const total = subtotal + igv;
 
@@ -108,7 +108,7 @@ class Cotizacion {
             // Insertar detalles
             for (const detalle of detalles) {
                 const subtotalDetalle = detalle.cantidad * detalle.precio_unitario;
-                
+
                 await connection.execute(
                     `INSERT INTO cotizacion_detalles 
                      (cotizacion_id, equipo_id, cantidad, precio_unitario, subtotal) 
@@ -133,7 +133,8 @@ class Cotizacion {
         try {
             const [rows] = await pool.execute(
                 `SELECT c.*, 
-                        cliente.nombre as cliente_nombre, cliente.apellido as cliente_apellido, cliente.email as cliente_email,
+                        cliente.nombre as cliente_nombre, cliente.apellido as cliente_apellido, 
+                        cliente.email as cliente_email, cliente.telefono as cliente_telefono, cliente.empresa as cliente_empresa_db,
                         vendedor.nombre as vendedor_nombre, vendedor.apellido as vendedor_apellido, vendedor.email as vendedor_email
                  FROM cotizaciones c
                  LEFT JOIN users cliente ON c.cliente_id = cliente.id
@@ -141,18 +142,27 @@ class Cotizacion {
                  WHERE c.id = ?`,
                 [id]
             );
-            
+
             if (rows.length === 0) return null;
-            
+
+            // Mapear campos al objeto
             const cotizacion = new Cotizacion({
                 ...rows[0],
                 cliente_nombre: `${rows[0].cliente_nombre} ${rows[0].cliente_apellido}`,
-                vendedor_nombre: `${rows[0].vendedor_nombre} ${rows[0].vendedor_apellido}`
+                cliente_apellido: rows[0].cliente_apellido,
+                cliente_email: rows[0].cliente_email,
+                cliente_telefono: rows[0].cliente_telefono,
+                // Usamos la empresa de la tabla usuarios si la de la cotización está vacía
+                cliente_empresa: rows[0].empresa_cliente || rows[0].cliente_empresa_db,
+
+                vendedor_nombre: `${rows[0].vendedor_nombre} ${rows[0].vendedor_apellido}`,
+                vendedor_apellido: rows[0].vendedor_apellido,
+                vendedor_email: rows[0].vendedor_email
             });
-            
+
             // Obtener detalles
             cotizacion.detalles = await this.getDetalles(id);
-            
+
             return cotizacion;
         } catch (error) {
             throw error;
@@ -170,7 +180,7 @@ class Cotizacion {
                  ORDER BY cd.id`,
                 [cotizacionId]
             );
-            
+
             return rows;
         } catch (error) {
             throw error;
@@ -221,7 +231,7 @@ class Cotizacion {
             }
 
             const [rows] = await pool.execute(query, params);
-            
+
             return rows.map(row => new Cotizacion({
                 ...row,
                 cliente_nombre: `${row.cliente_nombre} ${row.cliente_apellido}`,
@@ -252,7 +262,7 @@ class Cotizacion {
             if (userRole === 'cliente' && this.cliente_id !== userId) {
                 throw new Error('No tienes permisos para modificar esta cotización');
             }
-            
+
             if (userRole === 'vendedor' && this.vendedor_id !== userId) {
                 throw new Error('No tienes permisos para modificar esta cotización');
             }
@@ -286,7 +296,7 @@ class Cotizacion {
             query += ' GROUP BY estado';
 
             const [rows] = await pool.execute(query, params);
-            
+
             const stats = {
                 total: 0,
                 borrador: 0,

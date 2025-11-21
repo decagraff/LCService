@@ -4,6 +4,7 @@ const cors = require('cors');
 const path = require('path');
 const { testConnection } = require('./config/database');
 const config = require('./config/config');
+const chatRoutes = require('./routes/chat');
 
 // Crear aplicación Express
 const app = express();
@@ -54,11 +55,13 @@ const catalogRoutes = require('./routes/catalog');
 
 // USAR RUTAS (ANTES de los middlewares de error)
 app.use('/auth', authRoutes);
+app.use('/api/chat', chatRoutes);
 app.use('/dashboard', dashboardRoutes);
 app.use('/admin', adminRoutes);
 app.use('/vendedor', vendedorRoutes);
 app.use('/cliente', clienteRoutes);
 app.use('/api', require('./routes/api'));
+
 
 // Ruta de prueba (API info)
 app.get('/', (req, res) => {

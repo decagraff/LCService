@@ -15,7 +15,7 @@ class Equipo {
         this.estado = data.estado;
         this.created_at = data.created_at;
         this.updated_at = data.updated_at;
-        
+
         // Datos de la categoría si están disponibles
         this.categoria_nombre = data.categoria_nombre;
     }
@@ -24,7 +24,7 @@ class Equipo {
     static async create(data) {
         try {
             const { categoria_id, codigo, nombre, descripcion, material, dimensiones, precio, stock, imagen_url } = data;
-            
+
             const [result] = await pool.execute(
                 `INSERT INTO equipos (categoria_id, codigo, nombre, descripcion, material, dimensiones, precio, stock, imagen_url) 
                  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
@@ -117,12 +117,12 @@ class Equipo {
         try {
             let query = 'SELECT id FROM equipos WHERE codigo = ?';
             let params = [codigo];
-            
+
             if (excludeId) {
                 query += ' AND id != ?';
                 params.push(excludeId);
             }
-            
+
             const [rows] = await pool.execute(query, params);
             return rows.length > 0;
         } catch (error) {
@@ -134,7 +134,7 @@ class Equipo {
     async update(data) {
         try {
             const { categoria_id, codigo, nombre, descripcion, material, dimensiones, precio, stock, imagen_url } = data;
-            
+
             await pool.execute(
                 `UPDATE equipos SET 
                  categoria_id = ?, codigo = ?, nombre = ?, descripcion = ?, 
@@ -154,7 +154,7 @@ class Equipo {
             this.precio = parseFloat(precio);
             this.stock = parseInt(stock);
             this.imagen_url = imagen_url;
-            
+
             return this;
         } catch (error) {
             throw error;
@@ -189,27 +189,33 @@ class Equipo {
         }
     }
 
-    // Obtener estadísticas del inventario
+    // Obtener estadísticas del inventario (CORREGIDO: Nombres de columnas y Valor Inventario)
     static async getInventoryStats() {
         try {
             const [rows] = await pool.execute(`
                 SELECT 
                     COUNT(*) as total_equipos,
                     SUM(stock) as total_stock,
-                    COUNT(CASE WHEN stock = 0 THEN 1 END) as sin_stock,
-                    COUNT(CASE WHEN stock <= 5 THEN 1 END) as stock_bajo,
+                    SUM(precio * stock) as valor_inventario,
+                    COUNT(CASE WHEN stock = 0 THEN 1 END) as equipos_sin_stock,
+                    COUNT(CASE WHEN stock <= 5 THEN 1 END) as equipos_bajo_stock,
                     AVG(precio) as precio_promedio,
                     MIN(precio) as precio_minimo,
                     MAX(precio) as precio_maximo
                 FROM equipos 
                 WHERE estado = 'activo'
             `);
-            
+
+            // Obtenemos total de categorías activas por separado
+            const [catRows] = await pool.execute("SELECT COUNT(*) as total FROM categorias WHERE estado = 'activo'");
+
             return {
                 total_equipos: rows[0].total_equipos,
-                total_stock: rows[0].total_stock,
-                sin_stock: rows[0].sin_stock,
-                stock_bajo: rows[0].stock_bajo,
+                total_categorias: catRows[0].total,
+                total_stock: parseInt(rows[0].total_stock || 0),
+                valor_inventario: parseFloat(rows[0].valor_inventario || 0),
+                equipos_sin_stock: rows[0].equipos_sin_stock,
+                equipos_bajo_stock: rows[0].equipos_bajo_stock,
                 precio_promedio: parseFloat(rows[0].precio_promedio || 0),
                 precio_minimo: parseFloat(rows[0].precio_minimo || 0),
                 precio_maximo: parseFloat(rows[0].precio_maximo || 0)

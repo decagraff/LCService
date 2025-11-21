@@ -2,12 +2,19 @@ const express = require('express');
 const router = express.Router();
 const catalogController = require('../controllers/catalogController');
 
-// Rutas públicas del catálogo
-router.get('/', catalogController.showCatalog);
-router.get('/equipo/:id', catalogController.showEquipmentDetail);
-router.get('/categoria/:id', catalogController.showCategoryEquipment);
+// === CORRECCIÓN: Actualizar nombres de métodos ===
+
+// Antes: showCatalog -> Ahora: getEquipos
+router.get('/', catalogController.getEquipos);
+
+// Antes: showEquipmentDetail -> Ahora: getEquipoById
+router.get('/equipo/:id', catalogController.getEquipoById);
+
+// La ruta de categoría específica ya no es necesaria porque se filtra por URL query (?categoria=X)
+// router.get('/categoria/:id', ...); 
 
 // API para búsqueda rápida
-router.get('/api/buscar', catalogController.searchEquipment);
+// Antes: searchEquipment -> Ahora: search
+router.get('/api/buscar', catalogController.search);
 
 module.exports = router;

@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const dashboardController = require('../controllers/dashboardController');
 const profileController = require('../controllers/profileController');
-const catalogController = require('../controllers/catalogController');
+const catalogController = require('../controllers/catalogController'); // Controlador actualizado
 const apiCatalogController = require('../controllers/apiCatalogController');
 const apiCotizacionController = require('../controllers/apiCotizacionController');
 const { requireAuth } = require('../middleware/auth');
@@ -17,10 +17,15 @@ router.get('/dashboard', requireAuth, dashboardController.clienteDashboard);
 router.get('/perfil', requireAuth, profileController.showProfile);
 router.post('/perfil', requireAuth, profileValidation, profileController.updateProfile);
 
-// CATÁLOGO PARA CLIENTES
-router.get('/catalogo', requireAuth, catalogController.showCatalog);
-router.get('/catalogo/equipo/:id', requireAuth, catalogController.showEquipmentDetail);
-router.get('/catalogo/categoria/:id', requireAuth, catalogController.showCategoryEquipment);
+// === CORRECCIÓN AQUÍ: Actualizar a los nuevos métodos del controlador ===
+// Antes: showCatalog -> Ahora: getEquipos
+router.get('/catalogo', requireAuth, catalogController.getEquipos);
+
+// Antes: showEquipmentDetail -> Ahora: getEquipoById
+router.get('/catalogo/equipo/:id', requireAuth, catalogController.getEquipoById);
+
+// Eliminamos la ruta antigua de categoría por ID en favor del filtrado por API
+// router.get('/catalogo/categoria/:id', ...);
 
 // Rutas de cotizaciones
 router.get('/cotizaciones', requireAuth, cotizacionController.listCotizaciones);
@@ -49,7 +54,7 @@ router.get('/api/cotizaciones', requireAuth, apiCotizacionController.getCotizaci
 router.get('/api/cotizaciones/stats', requireAuth, apiCotizacionController.getStats);
 router.get('/api/cotizaciones/:id', requireAuth, apiCotizacionController.getCotizacionById);
 router.post('/api/cotizaciones/nueva', requireAuth, apiCotizacionController.createCotizacion);
-router.put('/api/cotizaciones/:id/estado', requireAuth, apiCotizacionController.updateEstado); 
+router.put('/api/cotizaciones/:id/estado', requireAuth, apiCotizacionController.updateEstado);
 router.delete('/api/cotizaciones/:id', requireAuth, apiCotizacionController.deleteCotizacion);
 
 module.exports = router;

@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const dashboardController = require('../controllers/dashboardController');
 const profileController = require('../controllers/profileController');
-const catalogController = require('../controllers/catalogController');
+const catalogController = require('../controllers/catalogController'); // Controlador actualizado
 const apiCatalogController = require('../controllers/apiCatalogController');
 const apiCotizacionController = require('../controllers/apiCotizacionController');
 const { requireAuth, requireVendedor } = require('../middleware/auth');
@@ -17,11 +17,16 @@ router.get('/dashboard', requireAuth, requireVendedor, dashboardController.vende
 router.get('/perfil', requireAuth, requireVendedor, profileController.showProfile);
 router.post('/perfil', requireAuth, requireVendedor, profileValidation, profileController.updateProfile);
 
-// CATÁLOGO PARA VENDEDORES (solo lectura)
-router.get('/catalogo', requireAuth, requireVendedor, catalogController.showCatalog);
-router.get('/catalogo/equipo/:id', requireAuth, requireVendedor, catalogController.showEquipmentDetail);
-router.get('/catalogo/categoria/:id', requireAuth, requireVendedor, catalogController.showCategoryEquipment);
+// === CORRECCIÓN AQUÍ: Actualizar a los nuevos métodos del controlador ===
+// Antes: showCatalog -> Ahora: getEquipos
+router.get('/catalogo', requireAuth, requireVendedor, catalogController.getEquipos);
 
+// Antes: showEquipmentDetail -> Ahora: getEquipoById
+router.get('/catalogo/equipo/:id', requireAuth, requireVendedor, catalogController.getEquipoById);
+
+// La ruta de categoría específica (/catalogo/categoria/:id) se elimina o redirige
+// porque el nuevo getEquipos ya maneja el filtro por query param (?categoria=X).
+// router.get('/catalogo/categoria/:id', requireAuth, requireVendedor, ...); 
 
 // Rutas de cotizaciones
 router.get('/cotizaciones', requireAuth, requireVendedor, cotizacionController.listCotizaciones);
@@ -39,7 +44,7 @@ router.delete('/api/carrito', requireAuth, requireVendedor, cotizacionController
 // API ROUTES FOR REACT FRONTEND
 // ==========================================
 
-// Catálogo API
+// Catálogo API (Accesos directos)
 router.get('/api/catalogo', requireAuth, requireVendedor, apiCatalogController.getEquipos);
 router.get('/api/categorias', requireAuth, requireVendedor, apiCatalogController.getCategorias);
 router.get('/api/catalogo/stats', requireAuth, requireVendedor, apiCatalogController.getStats);
